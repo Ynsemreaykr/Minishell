@@ -1,0 +1,21 @@
+# =======================================================
+# minishell projesi için Valgrind Suppression Dosyası
+# Readline ve Tinfo kütüphanelerinden gelen bilinen
+# sızıntıları bastırmak için kullanılır.
+# =======================================================
+
+{
+   readline_library_leaks
+   Memcheck:Leak
+   ...
+   obj:*/lib/x86_64-linux-gnu/libreadline.so.*
+   ...
+}
+
+{
+   tinfo_library_leaks
+   Memcheck:Leak
+   ...
+   obj:*/lib/x86_64-linux-gnu/libtinfo.so.*
+   ...
+}
