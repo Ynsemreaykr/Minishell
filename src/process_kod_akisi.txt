@@ -1,0 +1,5 @@
+
+
+                        -> handle_pipeline -> exec_pipeline -> first_heredoc_process // her şeyden önce heredocları işler
+                                                            
+
