@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// Enhanced token parsing with proper quote and redirection operator handling
+// Gelişmiş token parsing - quote ve redirection operatör işleme ile
 char **split_tokens(const char *input, int last_exit, t_shell *shell)
 {
     int token_count = count_tokens(input);
@@ -22,39 +22,66 @@ char **split_tokens(const char *input, int last_exit, t_shell *shell)
         
         // Check for redirection operators first
         if (!check_redirection_operator(input, i)) {
-            // Not a redirection, process as regular token
+            // Redirection değil, normal token olarak işle
             int start = i;
             int in_quote = 0;
             char quote_char = 0;
             
-            // Process the entire token (including quoted content)
-            while (input[i] && ((input[i] != ' ' && input[i] != '\t') || in_quote)) {
-                if (!in_quote && check_redirection_operator(input, i)) {
-                    break;
+            // Bu bir quoted string mi kontrol et
+            if (input[i] == '"' || input[i] == '\'') {
+                quote_char = input[i];
+                in_quote = 1;
+                start = i;
+                i++; // Açılış quote'unu atla
+                
+                // Kapanış quote'unu bul
+                while (input[i] && input[i] != quote_char) {
+                    i++;
+                }
+                if (input[i] == quote_char) {
+                    i++; // Kapanış quote'unu atla
                 }
                 
-                // Handle quotes
-                if ((input[i] == '"' || input[i] == '\'') && !in_quote) {
-                    quote_char = input[i];
-                    in_quote = 1;
-                    i++;
-                } else if (input[i] == quote_char && in_quote) {
-                    in_quote = 0;
-                    quote_char = 0;
-                    i++;
-                } else {
-                    i++;
+                // Quoted string'i tek token olarak işle
+                if (i > start) {
+                    args[argc] = process_token_content(input, start, i, last_exit, shell);
+                    if (args[argc]) {
+                        argc++;
+                    }
                 }
-            }
-            
-            if (i > start) {
-                args[argc] = process_token_content(input, start, i, last_exit, shell);
-                if (args[argc]) {
-                    argc++;
+            } else {
+                // Normal token'ı işle (quoted content dahil)
+                while (input[i] && ((input[i] != ' ' && input[i] != '\t') || in_quote)) {
+                    if (!in_quote && check_redirection_operator(input, i)) {
+                        break;
+                    }
+                    
+                    // Quote'ları işle
+                    if ((input[i] == '"' || input[i] == '\'') && !in_quote) {
+                        quote_char = input[i];
+                        in_quote = 1;
+                        i++;
+                    } else if (input[i] == quote_char && in_quote) {
+                        in_quote = 0;
+                        quote_char = 0;
+                        i++;
+                    } else {
+                        i++;
+                    }
+                }
+                
+                if (i > start) { // Token'ın başlangıcından sonuna kadar karakter varsa token say
+                    args[argc] = process_token_content(input, start, i, last_exit, shell);
+                    if (args[argc] && ft_strlen(args[argc]) > 0) {
+                        argc++;
+                    } else if (args[argc]) {
+                        // Boş token'ı temizle
+                        ft_free(args[argc]);
+                    }
                 }
             }
         } else {
-            // Process redirection operator
+            // Redirection operatörünü işle
             int redir_len = get_redirection_length(input, i);
             if (redir_len > 0) {
                 char *redir_token = ft_malloc(redir_len + 1, __FILE__, __LINE__);
@@ -63,20 +90,26 @@ char **split_tokens(const char *input, int last_exit, t_shell *shell)
                 args[argc++] = redir_token;
                 i += redir_len;
                 
-                // If this is a heredoc (<<), the next token should preserve quotes
+                // Eğer bu bir heredoc (<<) ise, sonraki token quote'ları korumalı
                 if (redir_len == 2 && input[i-2] == '<' && input[i-1] == '<') {
-                    // Skip whitespace
+                    // Boşlukları atla
                     i = skip_whitespace(input, i);
                     
-                    // Process heredoc delimiter with quotes preserved
+                    // Heredoc delimiter'ı quote'lar korunarak işle
                     if (input[i]) {
                         int start = i;
                         int in_quote = 0;
                         char quote_char = 0;
                         
-                        // Process the entire delimiter (including quoted content)
+                        // Tüm delimiter'ı işle (quoted content dahil)
                         while (input[i] && ((input[i] != ' ' && input[i] != '\t') || in_quote)) {
-                            // Handle quotes
+                            // Sonraki redirection operatörünü kontrol et
+                            if (!in_quote && i + 1 < (int)strlen(input) && 
+                                input[i] == '<' && input[i+1] == '<') {
+                                break; // Sonraki heredoc operatöründe dur
+                            }
+                            
+                            // Quote'ları işle
                             if ((input[i] == '"' || input[i] == '\'') && !in_quote) {
                                 quote_char = input[i];
                                 in_quote = 1;
@@ -91,7 +124,7 @@ char **split_tokens(const char *input, int last_exit, t_shell *shell)
                         }
                         
                         if (i > start) {
-                            // Copy the delimiter exactly as is (with quotes preserved)
+                            // Delimiter'ı tam olarak kopyala (quote'lar korunarak)
                             int delim_len = i - start;
                             char *delim_token = ft_malloc(delim_len + 1, __FILE__, __LINE__);
                             ft_strncpy(delim_token, input + start, delim_len);
@@ -114,7 +147,7 @@ static int process_regular_token(const char *input, int *pos, int *in_quote, cha
     int start_pos = *pos;
     
     while (input[*pos] && ((input[*pos] != ' ' && input[*pos] != '\t') || *in_quote)) {
-        // Stop at redirection operators
+        // Redirection operatörlerinde dur
         if (!*in_quote && check_redirection_operator(input, *pos)) {
             break;
         }
@@ -129,7 +162,7 @@ static int process_regular_token(const char *input, int *pos, int *in_quote, cha
     return token_count;
 }
 
-// Count tokens in input string
+// Input string'deki token sayısını say
 int count_tokens(const char *input)
 {
     int token_count = 0;
@@ -141,23 +174,26 @@ int count_tokens(const char *input)
         i = skip_whitespace(input, i);
         if (!input[i]) break;
         
-
-        
-        // Process quotes first to update quote state
+        // Quote'ları önce işle ve quote state'ini güncelle
         if ((input[i] == '"' || input[i] == '\'') && !in_quote) {
             quote_char = input[i];
             in_quote = 1;
             i++;
-            continue;
-        } 
-        else if (input[i] == quote_char && in_quote) {
+            // Quoted string'i token olarak say
+            token_count++;
+            // Quote kapanana kadar ilerle
+            while (input[i] && input[i] != quote_char) {
+                i++;
+            }
+            if (input[i] == quote_char) {
+                i++; // Closing quote'u atla
+            }
             in_quote = 0;
             quote_char = 0;
-            i++;
             continue;
         }
         
-        // Handle redirection operators - count as separate tokens
+        // Redirection operatörlerini işle - ayrı token olarak say
         if (!in_quote && check_redirection_operator(input, i)) {
             int redir_len = get_redirection_length(input, i);
             if (redir_len > 0) {

@@ -147,14 +147,16 @@ static int process_command_from_input(const char *input, t_shell *shell)
     }
     
     // Eğer argv yok ama heredoc varsa (örn: <<aa durumu) bu normal
-    if (cmds && !cmds->argv && !(cmds->heredoc && cmds->heredoc->enabled)) {
+    if (cmds && !cmds->argv && !cmds->heredocs) {
         // Parse error durumunda sadece temizlik yap
         free_cmds(cmds);
         return 0; // Error
     }
     
     if (cmds && cmds->argv && cmds->argv[0] && ft_strlen(cmds->argv[0]) == 0) {
-        // Parse error durumunda sadece temizlik yap
+        // Boş string komut - command not found hatası ver
+        ft_putstr_fd(": command not found\n", 2);
+        shell->last_exit = 127; // Command not found exit code
         free_cmds(cmds);
         return 0; // Error
     }

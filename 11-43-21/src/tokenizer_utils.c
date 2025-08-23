@@ -130,11 +130,9 @@ void expand_exit_status(char *buf, int *b, int last_exit)
 // $_ değişkenini genişlet
 void expand_last_arg(char *buf, int *b)
 {
-    extern t_global g_shell;
-    if (g_shell.last_arg) {
-        ft_strcat(buf, g_shell.last_arg);
-        *b += ft_strlen(g_shell.last_arg);
-    }
+    (void)buf;
+    (void)b;
+    return;
 }
 
 // Environment değişkenini genişlet

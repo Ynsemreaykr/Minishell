@@ -3,27 +3,42 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <readline/readline.h>
+#include <fcntl.h>
 
-// read() ile line-by-line okuma yapan yardımcı fonksiyon
-static char *read_line_from_fd(int fd, char *buffer, int buffer_size)
+// Dynamic buffer ile line-by-line okuma (rget_next_line benzeri)
+char *read_line_dynamic(int fd)
 {
-    int i = 0;
-    char c;
+    char *line = NULL;
+    int line_size = 0;
+    char buffer[1];  // Tek karakter oku
+    ssize_t bytes_read;
     
-    while (i < buffer_size - 1) {
-        int bytes_read = read(fd, &c, 1);
-        if (bytes_read <= 0) {
-            // EOF veya hata
-            if (i == 0) return NULL;
-            break;
+    while ((bytes_read = read(fd, buffer, 1)) > 0) {
+        if (buffer[0] == '\n') {
+            break;  // Line sonu
         }
-        if (c == '\n') {
-            break;
+        
+        // Line'a karakter ekle
+        char *new_line = ft_malloc(line_size + 2, __FILE__, __LINE__);
+        if (!new_line) {
+            if (line) ft_free(line);
+            return NULL;
         }
-        buffer[i++] = c;
+        
+        if (line) {
+            ft_strncpy(new_line, line, line_size);
+            ft_free(line);
+        } else {
+            new_line[0] = '\0';
+        }
+        
+        new_line[line_size] = buffer[0];
+        new_line[line_size + 1] = '\0';
+        line = new_line;
+        line_size++;
     }
-    buffer[i] = '\0';
-    return buffer;
+    
+    return line;
 }
 
 static char *expand_variable_in_heredoc(const char *line, t_shell *shell)
@@ -190,141 +205,107 @@ static char *expand_variable_in_heredoc(const char *line, t_shell *shell)
     return expanded;
 }
 
-// Multiple heredoc handling - sequential olarak tüm heredoc'ları okur, son content'i döndürür
-int multiple_heredoc_input(char **delimiters, char **cleaned_delimiters, int *quoted_flags, int count, t_shell *shell)
+// Multiple heredoc handling - tek bir heredoc'u işler
+int multiple_heredoc_input(t_heredoc *heredoc, t_shell *shell)
 {
     int pipefd[2];
-    pipe(pipefd); // pipe ile ayrılmıi iki komut arası iletişim kurar
-    char *final_content = NULL; // son herodocun içeriğini saklar
+    if (pipe(pipefd) != 0) {
+        return -1;  // Pipe oluşturulamadı
+    }
     
     // Heredoc başladı - özel sinyal handler'ları kur
     setup_heredoc_signals();
     
-    // Tüm heredoc'ları sequential olarak oku
-    for (int h = 0; h < count; h++)     
+    char *content = NULL; // heredoc'un içeriğini geçici olarak toplar
+    int content_size = 0; // içeriğin toplam uzunluğunu tutar
+    char *line = NULL; // readline ile okunan her satır
+    int error_occurred = 0; // ctrl c / ctrl d hatalarını tutar
+
+    char *end_delimiter; // heredoc'un bitişini belirleyen delimiter
+    if (heredoc->quoted_flag) // delimiter tırnaklı ise heredoc tan çıkış için temiz halini kullan
     {
-        char *content = NULL; // o an işlenen her herodcun içeriğini geçici olarak toplar
-        int content_size = 0; // içeriğin toplam uzunluğunu tutar
-        char *line = NULL; // readline ile okunan her satır
-        int error_occurred = 0; // ctrl c / ctrl d hatalarını tutar
+        // Quoted delimiter - cleaned version kullan
+        end_delimiter = heredoc->cleaned_delimiter;
+    } 
+    else // delimiter tırnaksız; direk kullan
+    {
+        // Unquoted delimiter - original kullan
+        end_delimiter = heredoc->delimiter;
+    }
     
-
-        char *end_delimiter; // herodocun bitişini belirleyen delimiter
-        if (quoted_flags[h]) // delimiter tırnaklı ise temiz halini kullan
+    while (1) 
+    {
+        // Ctrl+C kontrolü
+        if (g_signal_number == SIGINT) 
         {
-            // Quoted delimiter - cleaned version kullan
-            end_delimiter = cleaned_delimiters[h];
-        } 
-        else // delimiter tırnaksız; direk kullan
-        {
-            // Unquoted delimiter - original kullan
-            end_delimiter = delimiters[h];
+            error_occurred = 1;
+            break;
         }
         
-        while (1) 
-        {
-            // Ctrl+C kontrolü
-            if (g_signal_number == SIGINT) 
-            {
-                error_occurred = 1;
-                break;
-            }
-            
-            // eğer stdin bir terminal ise readline kullan
-            if (isatty(STDIN_FILENO)) // KOŞUL KALDIRILABİLİR Mİ
-            {
-                line = readline("> ");
-                if (!line) {
-                    // Ctrl+D ile çıkış durumunda
-                    error_occurred = 1;
-                    break;
-                }
-            } 
-            else // KOŞUL KALDIRILABİLİR Mİ
-            {
-                // Non-interactive mode - stdin'den direkt oku
-                char buffer[1024];
-                if (!read_line_from_fd(0, buffer, sizeof(buffer))) 
-                {
-                    // EOF veya hata
-                    error_occurred = 1;
-                    break;
-                }
-                line = ft_strdup(buffer);
-            }
-            
+        line = readline("> ");
+        if (!line) {
+            // Ctrl+D ile çıkış durumunda
+            error_occurred = 1;
+            break;
+        }
+        
 
-            if (ft_strcmp(line, end_delimiter) == 0) // delimiter ile karşılaştır 
-            {
-                ft_free(line);
-                break;
-            }
-            
-            char *content_line; // expand yapılacak veya yapılmayacak veri
-            if (quoted_flags[h] != 0) // expand yapılmaz çünkü tırnaklı
-            {
-                // Quoted delimiter - expansion yapılmaz
-                content_line = ft_strdup(line);
-            }  
-            else // expand yapılır çünkü tırnaksız
-            {
-                // Unquoted delimiter - expansion yapılır
-                content_line = expand_variable_in_heredoc(line, shell);
-            }
-            
-            int line_len = ft_strlen(content_line) + 1;
-            char *new_content = ft_malloc(content_size + line_len + 1, __FILE__, __LINE__);
-            if (content) 
-            {
-                ft_strcpy(new_content, content);
-                ft_free(content);
-            } 
-            else 
-            {
-                new_content[0] = 0;
-            }
-            ft_strcat(new_content, content_line);
-            ft_strcat(new_content, "\n");
-            content = new_content;
-            content_size += line_len;
-            ft_free(content_line);
+        if (ft_strcmp(line, end_delimiter) == 0) // delimiter ile karşılaştır 
+        {
             ft_free(line);
+            break;
         }
         
-        if (error_occurred) 
+        char *content_line; // expand yapılacak veya yapılmayacak veri
+        if (heredoc->quoted_flag != 0) // expand yapılmaz çünkü tırnaklı
         {
-            if (content) 
-                ft_free(content);
-            if (final_content) 
-                ft_free(final_content);
-            close(pipefd[0]);
-            close(pipefd[1]);
-            // Heredoc bitti - t_heredoc->enabled ile takip ediliyor
-            return -1;
+            // Quoted delimiter - expansion yapılmaz
+            content_line = ft_strdup(line);
+        }  
+        else // expand yapılır çünkü tırnaksız
+        {
+            // Unquoted delimiter - expansion yapılır
+            content_line = expand_variable_in_heredoc(line, shell);
         }
         
-        // Son heredoc değilse content'i free le
-        if (h < count - 1) 
+        int line_len = ft_strlen(content_line) + 1;
+        char *new_content = ft_malloc(content_size + line_len + 1, __FILE__, __LINE__);
+        if (content) 
         {
-            if (content) 
-                ft_free(content);
+            ft_strcpy(new_content, content);
+            ft_free(content);
         } 
         else 
         {
-            // Son heredoc - content'i final olarak sakla
-            final_content = content;
+            new_content[0] = 0;
         }
+        ft_strcat(new_content, content_line);
+        ft_strcat(new_content, "\n");
+        content = new_content;
+        content_size += line_len;
+        ft_free(content_line);
+        ft_free(line);
     }
     
-    // Son content'i pipe'a yaz
-    if (final_content) 
+    if (error_occurred) 
     {
-        write(pipefd[1], final_content, ft_strlen(final_content));
-        ft_free(final_content);
+        if (content) 
+            ft_free(content);
+        close(pipefd[0]);
+        close(pipefd[1]);
+        // Heredoc bitti - hata durumu
+        return -1;
+    }
+    
+    // Content'i pipe'a yaz
+    if (content) 
+    {
+        write(pipefd[1], content, ft_strlen(content));
+        ft_free(content);
     }
     close(pipefd[1]);
     
-    // Heredoc bitti - t_heredoc->enabled ile takip ediliyor
+    // Heredoc bitti - read fd döndür
     
     return pipefd[0];
 }

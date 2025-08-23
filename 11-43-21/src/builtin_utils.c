@@ -25,6 +25,10 @@ int ft_cd(char **argv, t_shell *shell)
         return 1;
     }
     
+    // Boş string kontrolü - boş string'ler mevcut dizinde kalır
+    if (argv[1] && (ft_strlen(argv[1]) == 0))
+        return 0;
+    
     // Mevcut dizini al ve OLDPWD olarak kaydet
     char current_dir[1024];
     if (getcwd(current_dir, sizeof(current_dir)) != NULL)
@@ -66,6 +70,8 @@ static int is_valid_identifier(const char *name)
     }
     return 1;
 }
+
+
 
 int ft_export(char **argv, t_shell *shell)
 {

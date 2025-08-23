@@ -7,9 +7,10 @@ int handle_pipeline(t_cmd *cmds, t_shell *shell)
 {
     int status = exec_pipeline(cmds, shell->envp, shell);
     
-    if (status == 512) {
-        // Syntax error in pipeline
-        shell->last_exit = 2;
+    if (status == 1) {
+        // Heredoc hatası (Ctrl+C)
+        shell->last_exit = 130; // Ctrl+C için exit code 130
+        return 0; // Hata durumu
     } else if (WIFEXITED(status)) {
         shell->last_exit = WEXITSTATUS(status);
     }
@@ -50,9 +51,10 @@ int handle_normal_command(t_cmd *cmds, t_shell *shell)
 {
     int status = exec_pipeline(cmds, shell->envp, shell);
     
-    if (status == 512) {
-        // Syntax error
-        shell->last_exit = 2;
+    if (status == 1) {
+        // Heredoc hatası (Ctrl+C)
+        shell->last_exit = 130; // Ctrl+C için exit code 130
+        return 0; // Hata durumu
     } else if (WIFEXITED(status)) {
         shell->last_exit = WEXITSTATUS(status);
     }
@@ -78,6 +80,11 @@ int determine_command_type(t_cmd *cmds, t_shell *shell)
     
     // Builtin kontrolü
     if (cmds->argv && cmds->argv[0] && is_builtin(cmds->argv[0])) {
+        return handle_builtin(cmds, shell);
+    }
+    
+    // Sadece redirection + dosya adı durumu (örn: > file, >> file)
+    if (!cmds->argv && cmds->redirs) {
         return handle_builtin(cmds, shell);
     }
     

@@ -80,9 +80,9 @@ void ft_mem_cleanup(void)
     
     while (current) {
         next = current->next;
-        // Bellek sızıntısı varsa yazdır
-        printf("LEAK: %p (%zu bytes) allocated at %s:%d\n", 
-               current->ptr, current->size, current->file, current->line);
+        // Bellek sızıntısı varsa yazdır (debug için)
+        // printf("LEAK: %p (%zu bytes) allocated at %s:%d\n", 
+        //        current->ptr, current->size, current->file, current->line);
         // Gerçek temizlik yap
         free(current->file);
         free(current->ptr);

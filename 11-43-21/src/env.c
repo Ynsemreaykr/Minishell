@@ -11,14 +11,18 @@ static char *create_env_string(const char *name, const char *value)
         // Değeri olan değişken (boş string de olsa)
         int name_len = ft_strlen(name);
         int value_len = ft_strlen(value);
-        char *env_str = malloc(name_len + value_len + 2);
+        char *env_str = ft_malloc(name_len + value_len + 2, __FILE__, __LINE__);
+        if (!env_str)
+            return NULL;
         ft_strcpy(env_str, name);
         ft_strcat(env_str, "=");
         ft_strcat(env_str, value);
         return env_str;
     } else {
         // Sadece ismi olan değişken (export NAME gibi) - = karakteri yok
-        char *env_str = malloc(ft_strlen(name) + 1);
+        char *env_str = ft_malloc(ft_strlen(name) + 1, __FILE__, __LINE__);
+        if (!env_str)
+            return NULL;
         ft_strcpy(env_str, name);
         return env_str;
     }
@@ -33,7 +37,7 @@ static int add_new_env_var(const char *name, const char *value, t_shell *shell)
         count++;
     
     // Yeni environment array'i oluştur
-    char **new_env = malloc(sizeof(char *) * (count + 2));
+    char **new_env = ft_malloc(sizeof(char *) * (count + 2), __FILE__, __LINE__);
     if (!new_env)
         return -1;
     
@@ -49,7 +53,7 @@ static int add_new_env_var(const char *name, const char *value, t_shell *shell)
     new_env[count + 1] = NULL;
     
     // Eski environment'ı temizle ve yenisini ata
-    free(shell->env);
+    ft_free(shell->env);
     shell->env = new_env;
     
     return 0;
@@ -76,7 +80,7 @@ void init_env(char **envp, t_shell *shell)
 {
     if (!envp || !envp[0]) {
         // env -i ile başlatıldığında temel değişkenleri ekle
-        shell->env = malloc(sizeof(char *) * 1);
+        shell->env = ft_malloc(sizeof(char *) * 1, __FILE__, __LINE__);
         shell->env[0] = NULL;
         add_basic_env_vars(shell);
         return;
@@ -88,14 +92,31 @@ void init_env(char **envp, t_shell *shell)
         count++;
     
     // Array için yer aç (count + 1 for NULL terminator)
-    shell->env = malloc(sizeof(char *) * (count + 1));
+    shell->env = ft_malloc(sizeof(char *) * (count + 1), __FILE__, __LINE__);
     
-    // Her string için ayrı yer aç
+    // Her string için ayrı yer aç ve PATH optimizasyonu yap
     int i = 0;
     while (i < count) {
-        int len = ft_strlen(envp[i]);
-        shell->env[i] = malloc(len + 1);
-        ft_strcpy(shell->env[i], envp[i]);
+        // PATH değişkenini optimize et
+        if (!ft_strncmp(envp[i], "PATH=", 5)) {
+            char *optimized_path = optimize_path(envp);
+            if (!optimized_path) {
+                // PATH optimize edilemezse hata ver ve çık
+                ft_putstr_fd("minishell: PATH optimization failed\n", 2);
+                return;
+            }
+            // PATH= + optimized_path
+            int len = 5 + ft_strlen(optimized_path);
+            shell->env[i] = ft_malloc(len + 1, __FILE__, __LINE__);
+            ft_strcpy(shell->env[i], "PATH=");
+            ft_strcat(shell->env[i], optimized_path);
+            ft_free(optimized_path);
+        } else {
+            // Diğer environment variable'ları normal şekilde kopyala
+            int len = ft_strlen(envp[i]);
+            shell->env[i] = ft_malloc(len + 1, __FILE__, __LINE__);
+            ft_strcpy(shell->env[i], envp[i]);
+        }
         i++;
     }
     
@@ -108,10 +129,10 @@ void cleanup_env(t_shell *shell)
     if (shell->env) {
         int i = 0;
         while (shell->env[i]) {
-            free(shell->env[i]);
+            ft_free(shell->env[i]);
             i++;
         }
-        free(shell->env);
+        ft_free(shell->env);
         shell->env = NULL;
     }
 }
@@ -160,7 +181,7 @@ int set_env_var(const char *name, const char *value, t_shell *shell)
     
     // Mevcut değişkeni güncelle
     if (existing_index != -1) {
-        free(shell->env[existing_index]);
+        ft_free(shell->env[existing_index]);
         shell->env[existing_index] = create_env_string(name, value);
         return 0;
     }
@@ -182,7 +203,7 @@ int unset_env_var(const char *name, t_shell *shell)
         if (ft_strncmp(shell->env[i], name, name_len) == 0 && 
             (shell->env[i][name_len] == '=' || shell->env[i][name_len] == '\0')) {
             // Değişkeni sil
-            free(shell->env[i]);
+            ft_free(shell->env[i]);
             // Sonraki değişkenleri öne kaydır
             int j = i;
             while (shell->env[j]) {
@@ -218,5 +239,5 @@ void update_shlvl(t_shell *shell)
     set_env_var("SHLVL", new_shlvl, shell);
     
     // Geçici string'i temizle
-    free(new_shlvl);
+    ft_free(new_shlvl);
 } 

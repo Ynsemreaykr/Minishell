@@ -33,9 +33,10 @@ void heredoc_signal_handler(int signo)
     
     // Yeni satıra geç ve heredoc'tan çık
     write(STDOUT_FILENO, "\n", 1);
-    
+    rl_on_new_line();
+    rl_redisplay();
+    rl_done = 1;
     // Heredoc'tan çık
-    exit(1);
 }
 
 // Komut çalışırken sinyal handler'ı

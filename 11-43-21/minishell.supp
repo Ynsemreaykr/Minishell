@@ -1,21 +1,97 @@
-# =======================================================
-# minishell projesi için Valgrind Suppression Dosyası
-# Readline ve Tinfo kütüphanelerinden gelen bilinen
-# sızıntıları bastırmak için kullanılır.
-# =======================================================
-
 {
-   readline_library_leaks
-   Memcheck:Leak
-   ...
-   obj:*/lib/x86_64-linux-gnu/libreadline.so.*
-   ...
+	readline_leak_1
+	Memcheck:Leak
+	...
+	obj:*/Libreadline.so*
+}
+{
+	readline_leak_2
+	Memcheck:Leak
+	...
+	fun:*readline*
+}
+{
+	readline_leak_3
+	Memcheck:Leak
+	...
+	obj:*/libtinfo.so*
+}
+{
+	readline_leak_4
+	Memcheck:Leak
+	...
+	fun:rl_*
+}
+{
+	readline_leak_5
+	Memcheck:Leak
+	...
+	fun:xmalloc
+	obj:*/Libreadline.so*
+}
+{
+	readline_leak_6
+	Memcheck:Leak
+	...
+	fun:xrealloc
+	obj:*/Libreadline.so*
+}
+{
+	readline_add_history_leak
+	Memcheck:Leak
+	match-leak-kinds: reachable
+	...
+	fun:add_history
+}
+{
+	readline_xmalloc_add_history
+	Memcheck:Leak
+	match-leak-kinds: reachable
+	...
+	fun:xmalloc
+	fun:add_history
+}
+{
+	readline_xmalloc_general
+	Memcheck:Leak
+	match-leak-kinds: reachable
+	...
+	fun:xmalloc
+	obj:*/libreadline.so*
+}
+{
+	readline_all_leaks
+	Memcheck:Leak
+	match-leak-kinds: all
+	...
+	obj:*/libreadline.so*
+}
+{
+	readline_malloc_leaks
+	Memcheck:Leak
+	match-leak-kinds: all
+	...
+	fun:malloc
+	...
+	obj:*/libreadline.so*
+}
+{
+	readline_calloc_leaks
+	Memcheck:Leak
+	match-leak-kinds: all
+	...
+	fun:calloc
+	...
+	obj:*/libreadline.so*
+}
+{
+	readline_realloc_leaks
+	Memcheck:Leak
+	match-leak-kinds: all
+	...
+	fun:realloc
+	...
+	obj:*/libreadline.so*
 }
 
-{
-   tinfo_library_leaks
-   Memcheck:Leak
-   ...
-   obj:*/lib/x86_64-linux-gnu/libtinfo.so.*
-   ...
-}
+

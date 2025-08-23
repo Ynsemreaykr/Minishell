@@ -57,35 +57,7 @@ static int pipe_check(const char *input)
     return 1; // Valid pipe syntax
 }
 
-// Quote'ları kaldır fonksiyonu - redirection dosya isimleri için
-static char *remove_quotes(const char *str)
-{
-    if (!str)
-        return NULL;
-        
-    int len = ft_strlen(str);
-    if (len == 0)
-        return ft_strdup(str);
-    
-    // Eğer string tek tırnak ile başlayıp bitiyorsa
-    if (len >= 2 && str[0] == '\'' && str[len-1] == '\'') {
-        char *result = ft_malloc(len - 1, __FILE__, __LINE__);
-        ft_strncpy(result, str + 1, len - 2);
-        result[len - 2] = '\0';
-        return result;
-    }
-    
-    // Eğer string çift tırnak ile başlayıp bitiyorsa
-    if (len >= 2 && str[0] == '"' && str[len-1] == '"') {
-        char *result = ft_malloc(len - 1, __FILE__, __LINE__);
-        ft_strncpy(result, str + 1, len - 2);
-        result[len - 2] = '\0';
-        return result;
-    }
-    
-    // Quote yok, orijinal string'i kopyala
-    return ft_strdup(str);
-}
+
 
 // Quote type'ını detect et ve delimiter'ı temizle
 static int detect_quote_type_and_clean_delimiter(char **delimiter)
@@ -121,33 +93,16 @@ static int detect_quote_type_and_clean_delimiter(char **delimiter)
     return 0; // Quote yok
 }
 
-// Heredoc sayısını say
-static int count_heredocs_in_argv(char **argv)
-{
-    if (!argv)
-        return 0;
-    
-    int count = 0;
-    int i = 0;
-    
-    while (argv[i]) {
-        if (!ft_strcmp(argv[i], "<<")) {
-            count++;
-        }
-        i++;
-    }
-    
-    return count;
-}
+
 
 static void handle_in_redir(t_cmd *cmd, char **argv, int *i)
 {
     if (argv[*i + 1]) {
-        // Önceki infile'ı temizle (multiple redirection için)
-        if (cmd->infile) {
-            ft_free(cmd->infile);
+        // Redirection listesine ekle
+        t_redir *redir = create_redir(REDIR_IN, argv[*i + 1]);
+        if (redir) {
+            add_redir(cmd, redir);
         }
-        cmd->infile = ft_strdup(argv[*i + 1]);
         
         *i += 2;
     }
@@ -170,39 +125,11 @@ static void cleanup_and_return_null(t_cmd *cmd, char **cmd_strings, int cmd_coun
         }
         
         // Heredoc temizliği
-        if (cmd->heredoc) {
-            if (cmd->heredoc->delimiters) {
-                int i = 0;
-                while (i < cmd->heredoc->count && cmd->heredoc->delimiters[i]) {
-                    ft_free(cmd->heredoc->delimiters[i]);
-                    i++;
-                }
-                ft_free(cmd->heredoc->delimiters);
-            }
-            if (cmd->heredoc->cleaned_delimiters) {
-                int i = 0;
-                while (i < cmd->heredoc->count && cmd->heredoc->cleaned_delimiters[i]) {
-                    ft_free(cmd->heredoc->cleaned_delimiters[i]);
-                    i++;
-                }
-                ft_free(cmd->heredoc->cleaned_delimiters);
-            }
-            if (cmd->heredoc->quoted_flags) {
-                ft_free(cmd->heredoc->quoted_flags);
-            }
-            if (cmd->heredoc->temp_filename) {
-                ft_free(cmd->heredoc->temp_filename);
-            }
-            ft_free(cmd->heredoc);
+        if (cmd->heredocs) {
+            free_heredoc_list(cmd->heredocs);
         }
         
-        // Redirection dosya isimlerini temizle
-        if (cmd->infile) {
-            ft_free(cmd->infile);
-        }
-        if (cmd->outfile) {
-            ft_free(cmd->outfile);
-        }
+
         
         ft_free(cmd);
     }
@@ -247,10 +174,11 @@ static void parse_redirections_and_heredoc(t_cmd *cmd)
         {
             if (cmd->argv[i + 1]) 
             {
-                if (cmd->outfile) // eğer outfile varsa free lenir çünkü birden fazla girdide
-                    ft_free(cmd->outfile); // echo hello > yunus.txt > emre.txt => son dosyaya yani emre.txt ye hello yazılır
-                cmd->outfile = ft_strdup(cmd->argv[i + 1]);
-                cmd->append = 0;
+                // Redirection listesine ekle
+                t_redir *redir = create_redir(REDIR_OUT, cmd->argv[i + 1]);
+                if (redir) {
+                    add_redir(cmd, redir);
+                }
             }
             i += 2;
         } 
@@ -260,10 +188,11 @@ static void parse_redirections_and_heredoc(t_cmd *cmd)
         {
             if (cmd->argv[i + 1]) 
             {
-                if (cmd->outfile) 
-                    ft_free(cmd->outfile);
-                cmd->outfile = ft_strdup(cmd->argv[i + 1]);
-                cmd->append = 1;
+                // Redirection listesine ekle
+                t_redir *redir = create_redir(REDIR_APPEND, cmd->argv[i + 1]);
+                if (redir) {
+                    add_redir(cmd, redir);
+                }
             }
             i += 2;
         } 
@@ -276,27 +205,14 @@ static void parse_redirections_and_heredoc(t_cmd *cmd)
         
         else if (!ft_strcmp(cmd->argv[i], "<<")) 
         {
-            // t_heredoc yapısını hazırla
-            if (!cmd->heredoc)
-            {
-                cmd->heredoc = ft_malloc(sizeof(t_heredoc), __FILE__, __LINE__);
-                 ft_memset(cmd->heredoc, 0, sizeof(t_heredoc));
-                // Heredoc sayısını başta hesapla
-                int heredoc_count = count_heredocs_in_argv(cmd->argv);
-                if (heredoc_count > 0)
-               {
-                        cmd->heredoc->delimiters = ft_malloc(sizeof(char *) * heredoc_count, __FILE__, __LINE__);
-                        cmd->heredoc->cleaned_delimiters = ft_malloc(sizeof(char *) * heredoc_count, __FILE__, __LINE__);
-                        cmd->heredoc->quoted_flags = ft_malloc(sizeof(int) * heredoc_count, __FILE__, __LINE__);
+            if (cmd->argv[i + 1]) {
+                // Yeni heredoc oluştur
+                int quote_type = detect_quote_type_and_clean_delimiter(&cmd->argv[i + 1]);
+                t_heredoc *heredoc = create_heredoc(cmd->argv[i + 1], cmd->argv[i + 1], quote_type);
+                if (heredoc) {
+                    add_heredoc(cmd, heredoc);
                 }
             }
-            cmd->heredoc->enabled = 1;
-            int quote_type = detect_quote_type_and_clean_delimiter(&cmd->argv[i + 1]);
-            cmd->heredoc->delimiters[cmd->heredoc->count] = ft_strdup(cmd->argv[i + 1]);
-            cmd->heredoc->cleaned_delimiters[cmd->heredoc->count] = ft_strdup(cmd->argv[i + 1]);
-            cmd->heredoc->quoted_flags[cmd->heredoc->count] = quote_type;
-            cmd->heredoc->count++;
-            
             i += 2;
         } else {
             new_argv[j++] = ft_strdup(cmd->argv[i++]);
@@ -318,43 +234,9 @@ static void parse_redirections_and_heredoc(t_cmd *cmd)
         cmd->argv = NULL;
         
         // Eğer heredoc varsa, onu koruyalım (örn: <<aa durumu)
-        if (cmd->heredoc && cmd->heredoc->enabled) {
+        if (cmd->heredocs) {
             // Heredoc'u koruyoruz, diğer redirection'ları temizliyoruz
-            if (cmd->infile) {
-                ft_free(cmd->infile);
-                cmd->infile = NULL;
-            }
-            if (cmd->outfile) {
-                ft_free(cmd->outfile);
-                cmd->outfile = NULL;
-            }
-        } else {
-            // Clean up redirection file names since no command arguments remain
-            if (cmd->infile) {
-                ft_free(cmd->infile);
-                cmd->infile = NULL;
-            }
-            if (cmd->outfile) {
-                ft_free(cmd->outfile);
-                cmd->outfile = NULL;
-            }
-            
-            // Clean up heredoc memory since no command arguments remain
-            if (cmd->heredoc) {
-                if (cmd->heredoc->count > 0) {
-                    int k = 0;
-                    while (k < cmd->heredoc->count) {
-                        ft_free(cmd->heredoc->delimiters[k]);
-                        ft_free(cmd->heredoc->cleaned_delimiters[k]);
-                        k++;
-                    }
-                    ft_free(cmd->heredoc->delimiters);
-                    ft_free(cmd->heredoc->cleaned_delimiters);
-                    ft_free(cmd->heredoc->quoted_flags);
-                }
-                ft_free(cmd->heredoc);
-                cmd->heredoc = NULL;
-            }
+            // Heredoc listesi zaten mevcut, temizlemeye gerek yok
         }
     } else {
         cmd->argv = new_argv;
@@ -396,7 +278,7 @@ t_cmd *parse_commands(const char *input, int last_exit, t_shell *shell) // komut
 
         // Parse error durumunda cmd'yi temizle ve devam et
         // Ama heredoc varsa (örn: <<aa durumu) bu normal
-        if (!cmd->argv && !(cmd->heredoc && cmd->heredoc->enabled)) {
+        if (!cmd->argv && !cmd->heredocs) {
             ft_putstr_fd("minishell: syntax error near unexpected token\n", 2);
             cleanup_and_return_null(cmd, cmd_strings, cmd_count);
             return NULL;
@@ -430,24 +312,13 @@ t_cmd *parse_commands(const char *input, int last_exit, t_shell *shell) // komut
         
         // Parse redirections error kontrolü
         // Ama heredoc varsa (örn: <<aa durumu) bu normal
-        if (!cmd->argv && !(cmd->heredoc && cmd->heredoc->enabled)) {
+        if (!cmd->argv && !cmd->heredocs) {
             // Syntax error durumunda cmd'yi temizle ve devam et
             cleanup_and_return_null(cmd, cmd_strings, cmd_count);
             return NULL;
         }
         
-        // Quote'ları kaldır (sadece redirection dosya isimleri için)
-        if (cmd->infile) {
-            char *unquoted = remove_quotes(cmd->infile);
-            ft_free(cmd->infile);
-            cmd->infile = unquoted;
-        }
-        
-        if (cmd->outfile) {
-            char *unquoted = remove_quotes(cmd->outfile);
-            ft_free(cmd->outfile);
-            cmd->outfile = unquoted;
-        }
+
         
         cmd->next = NULL;
         

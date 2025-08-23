@@ -12,26 +12,39 @@
 // Global olarak sadece sinyal numarası
 extern volatile sig_atomic_t g_signal_number;
 
-// Heredoc bilgilerini tek bir yerde tutan yapı
-// Hem tek hem çoklu heredoc'u destekler
+// Redirection türleri
+typedef enum e_redir_type
+{
+    REDIR_IN,           // <
+    REDIR_OUT,          // >
+    REDIR_APPEND,       // >>
+    REDIR_HEREDOC       // <<
+}   t_redir_type;
+
+// Tek bir redirection bilgisi
+typedef struct s_redir
+{
+    t_redir_type    type;           // Redirection türü
+    char            *filename;      // Dosya adı
+    struct s_redir  *next;          // Sonraki redirection
+}   t_redir;
+
+// Tek bir heredoc bilgisi
 typedef struct s_heredoc
 {
-    int     enabled;                    // heredoc aktif mi
-    int     count;                      // kaç heredoc var
-    char    **delimiters;               // orijinal delimiter'lar (tırnaklı)
-    char    **cleaned_delimiters;       // temizlenmiş delimiter'lar (tırnaksız)
-    int     *quoted_flags;              // quoted bayrakları
-    char    *temp_filename;             // geçici dosya adı (pipeline öncesi heredoc için)
+    char    *delimiter;                 // orijinal delimiter (tırnaklı)
+    char    *cleaned_delimiter;         // temizlenmiş delimiter (tırnaksız)
+    int     quoted_flag;                // quoted bayrağı
+    char    *content;                   // heredoc içeriği
+    struct s_heredoc *next;             // sonraki heredoc
 }   t_heredoc;
 
     // Komut ve argümanları tutan yapı
 typedef struct s_cmd
 {
     char    **argv;         // Komut ve argümanlar
-    char    *infile;        // < input dosyası
-    char    *outfile;       // > veya >> output dosyası
-    int     append;         // >> için 1, > için 0
-    t_heredoc *heredoc;     // heredoc bilgileri (ayrı yapı)
+    t_redir *redirs;        // Redirection listesi (sıralı)
+    t_heredoc *heredocs;    // heredoc listesi (sıralı)
     struct s_cmd *next;     // Pipe ile bağlı bir sonraki komut
 }   t_cmd;
 
@@ -102,6 +115,8 @@ void expand_env_vars(const char *src, char *dst, int dstsize, char **envp, int l
 char *ft_expand_env_vars(const char *src, char *dst, int last_exit, char **envp);
 char *ft_expand_tilde(const char *str);
 char *ft_itoa(int n);
+char **ft_split(const char *s, char c);
+void ft_split_free(char **split_result);
 
 
 
@@ -149,13 +164,26 @@ char **split_by_pipes(const char *input, int *count);
 char **split_tokens(const char *input, int last_exit, t_shell *shell);
 
 // heredoc.c
-int multiple_heredoc_input(char **delimiters, char **cleaned_delimiters, int *quoted_flags, int count, t_shell *shell);
+int multiple_heredoc_input(t_heredoc *heredoc, t_shell *shell);
+char *read_line_dynamic(int fd);
 
 // utils.c
 void free_args(char **args);
 void free_cmds(t_cmd *cmd);
 char *find_path(char *cmd, char **envp);
+char *optimize_path(char **envp);
 void update_last_arg(char **argv, t_shell *shell);
+
+// redirection utils
+t_redir *create_redir(t_redir_type type, char *filename);
+void add_redir(t_cmd *cmd, t_redir *redir);
+void free_redir_list(t_redir *redirs);
+
+// heredoc utils
+t_heredoc *create_heredoc(char *delimiter, char *cleaned_delimiter, int quoted_flag);
+void add_heredoc(t_cmd *cmd, t_heredoc *heredoc);
+void free_heredoc_list(t_heredoc *heredocs);
+int count_heredocs(t_heredoc *heredocs);
 
 int check_quotes(const char *input);
 int check_redirection_syntax(const char *input);

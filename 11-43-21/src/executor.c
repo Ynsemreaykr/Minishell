@@ -8,6 +8,39 @@
 #include <sys/stat.h>
 #include <sys/unistd.h>
 
+// Heredoc content'ini oku ve string olarak döndür
+static char *read_heredoc_content(int fd)
+{
+    char *content = NULL;
+    int content_size = 0;
+    char *line;
+    
+    while ((line = read_line_dynamic(fd)) != NULL) {
+        int line_len = ft_strlen(line) + 1;  // +1 for newline
+        char *new_content = ft_malloc(content_size + line_len + 1, __FILE__, __LINE__);
+        if (!new_content) {
+            if (content) ft_free(content);
+            ft_free(line);
+            return NULL;
+        }
+        
+        if (content) {
+            ft_strcpy(new_content, content);
+            ft_free(content);
+        } else {
+            new_content[0] = '\0';
+        }
+        
+        ft_strcat(new_content, line);
+        ft_strcat(new_content, "\n");
+        content = new_content;
+        content_size += line_len;
+        ft_free(line);
+    }
+    
+    return content;
+}
+
 // 1. Fork işlemi - Yeni process yarat
 static pid_t create_child_process(void)
 {
@@ -20,53 +53,42 @@ static pid_t create_child_process(void)
     return pid;
 }
 
+
 // Pipeline öncesi tüm heredoc'ları işle
-static int process_all_heredocs_before_pipeline(t_cmd *cmds, t_shell *shell)
+static int first_heredoc_process(t_cmd *cmds, t_shell *shell)
 {
     t_cmd *current = cmds;
     
     while (current) 
     {
-        if (current->heredoc && current->heredoc->enabled) 
+        if (current->heredocs) 
         {
-            // Heredoc'u işle ve input hazırla
-            int hfd = multiple_heredoc_input(
-                current->heredoc->delimiters,
-                current->heredoc->cleaned_delimiters,
-                current->heredoc->quoted_flags,
-                current->heredoc->count,
-                shell
-            );
-            
-            if (hfd < 0) 
+            // Her heredoc için ayrı ayrı işlem yap
+            t_heredoc *heredoc = current->heredocs;
+            while (heredoc) 
             {
-                // Heredoc hatası
-                return 0;
-            }
-            
-            // Heredoc input'unu geçici dosyaya yaz
-            char temp_filename[64];
-            snprintf(temp_filename, sizeof(temp_filename), "/tmp/heredoc_%d_%p", getpid(), (void*)current);
-            
-            // Heredoc content'ini geçici dosyaya kopyala
-            int temp_fd = open(temp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-            if (temp_fd >= 0) {
-                char buffer[1024];
-                ssize_t bytes_read;
+                // Heredoc'u işle ve fd al
+                int hfd = multiple_heredoc_input(heredoc, shell);
                 
-                // Heredoc content'ini geçici dosyaya kopyala
-                lseek(hfd, 0, SEEK_SET); // Dosya pointer'ı başa al
-                while ((bytes_read = read(hfd, buffer, sizeof(buffer))) > 0) {
-                    write(temp_fd, buffer, bytes_read);
+                if (hfd < 0) 
+                {
+                    // Heredoc hatası
+                    return 0;
                 }
-                close(temp_fd);
+                
+                // Heredoc content'ini oku ve yapıda sakla
+                char *content = read_heredoc_content(hfd);
                 close(hfd);
                 
-                // Geçici dosya adını heredoc yapısında sakla
-                if (current->heredoc->temp_filename) {
-                    free(current->heredoc->temp_filename);
+                if (content) {
+                    // Eski content varsa temizle
+                    if (heredoc->content) {
+                        ft_free(heredoc->content);
+                    }
+                    heredoc->content = content;
                 }
-                current->heredoc->temp_filename = ft_strdup(temp_filename);
+                
+                heredoc = heredoc->next;
             }
         }
         current = current->next;
@@ -74,20 +96,22 @@ static int process_all_heredocs_before_pipeline(t_cmd *cmds, t_shell *shell)
     
     return 1; // Başarılı
 }
-
-// Geçici heredoc dosyalarını temizle
-static void cleanup_heredoc_temp_files(t_cmd *cmds)
+// Heredoc content'lerini temizle
+static void cleanup_heredoc_content(t_cmd *cmds)
 {
     t_cmd *current = cmds;
     
     while (current) {
-        if (current->heredoc && current->heredoc->enabled && current->heredoc->temp_filename) {
-            // Geçici dosyayı sil
-            unlink(current->heredoc->temp_filename);
-            
-            // Belleği temizle
-            free(current->heredoc->temp_filename);
-            current->heredoc->temp_filename = NULL;
+        if (current->heredocs) {
+            t_heredoc *heredoc = current->heredocs;
+            while (heredoc) {
+                if (heredoc->content) {
+                    // Content'i temizle
+                    ft_free(heredoc->content);
+                    heredoc->content = NULL;
+                }
+                heredoc = heredoc->next;
+            }
         }
         current = current->next;
     }
@@ -96,58 +120,84 @@ static void cleanup_heredoc_temp_files(t_cmd *cmds)
 // 2. Dup2 işlemi - stdout/stderr/stdin yönlendir
 static void setup_redirections(t_cmd *cmd, int fd_in, int *pipefd)
 {
+    int input_redirected = 0;
+    int output_redirected = 0;
+    
     // Heredoc yönlendirmesi - zaten pipeline öncesi işlendi
-    if (cmd->heredoc && cmd->heredoc->enabled) {
-        // Heredoc zaten pipeline öncesi işlendi
-        // Sadece hazır input'u kullan
-        if (cmd->heredoc->temp_filename) {
-            int hfd = open(cmd->heredoc->temp_filename, O_RDONLY);
-            if (hfd >= 0) {
-                dup2(hfd, 0);
-                close(hfd);
+    if (cmd->heredocs) {
+        // İlk heredoc'u kullan (en son eklenen)
+        t_heredoc *current = cmd->heredocs;
+        while (current->next) {
+            current = current->next;
+        }
+        if (current->content) {
+            // Heredoc content'ini stdin'e yaz
+            int pipefd[2];
+            if (pipe(pipefd) == 0) {
+                write(pipefd[1], current->content, ft_strlen(current->content));
+                close(pipefd[1]);
+                dup2(pipefd[0], 0);
+                close(pipefd[0]);
+                input_redirected = 1;
             }
         }
     }
-    // Input dosya yönlendirmesi
-    else if (cmd->infile) 
-    {
-        // Input dosyası var mı kontrol et
-        if (access(cmd->infile, F_OK) != 0) {
-            ft_putstr_fd(cmd->infile, 2);
-            ft_putstr_fd(": Böyle bir dosya ya da dizin yok\n", 2);
-            _exit(1);
+    
+    // Redirection listesini işle (soldan sağa sırayla)
+    if (cmd->redirs) {
+        t_redir *current = cmd->redirs;
+        while (current) {
+            if (current->type == REDIR_IN) {
+                // Input dosyası var mı kontrol et
+                if (access(current->filename, F_OK) != 0) {
+                    ft_putstr_fd(current->filename, 2);
+                    ft_putstr_fd(": No such file or directory\n", 2);
+                    ft_mem_cleanup();
+                    _exit(1);
+                }
+                
+                int in = open(current->filename, O_RDONLY);
+                if (in < 0) { 
+                    ft_mem_cleanup();
+                    _exit(1);
+                }
+                dup2(in, 0); 
+                close(in);
+                input_redirected = 1;
+            } else if (current->type == REDIR_OUT) {
+                int out = open(current->filename, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+                if (out < 0) { 
+                    perror(current->filename); 
+                    ft_mem_cleanup(); 
+                    _exit(1); 
+                }
+                dup2(out, 1); 
+                close(out);
+                output_redirected = 1;
+            } else if (current->type == REDIR_APPEND) {
+                int out = open(current->filename, O_WRONLY|O_CREAT|O_APPEND, 0644);
+                if (out < 0) { 
+                    perror(current->filename); 
+                    ft_mem_cleanup(); 
+                    _exit(1); 
+                }
+                dup2(out, 1); 
+                close(out);
+                output_redirected = 1;
+            }
+            current = current->next;
         }
-        
-        int in = open(cmd->infile, O_RDONLY);
-        if (in < 0) 
-        { 
-            _exit(1); // Error already handled by parent/builtin redirection
-        }
-        dup2(in, 0); 
-        close(in);
     }
-    // Pipe input yönlendirmesi
-    else if (fd_in != 0) 
+    
+    // Pipe input yönlendirmesi (sadece input redirect edilmemişse)
+    if (!input_redirected && fd_in != 0) 
     { 
         dup2(fd_in, 0); 
         close(fd_in); 
     }
     
-    // Output dosya yönlendirmesi
-    if (cmd->outfile) 
-    {
-        int out = open(cmd->outfile, cmd->append ? 
-            O_WRONLY|O_CREAT|O_APPEND : O_WRONLY|O_CREAT|O_TRUNC, 0644);
-        if (out < 0) 
-        { 
-            perror(cmd->outfile); 
-            _exit(1); 
-        }
-        dup2(out, 1); 
-        close(out);
-    }
-    // Pipe output yönlendirmesi
-    else if (cmd->next) 
+    // Pipe output yönlendirmesi (sadece output redirect edilmemişse)
+    if (!output_redirected && cmd->next) 
     { 
         dup2(pipefd[1], 1); 
         close(pipefd[1]); 
@@ -165,6 +215,7 @@ static void execute_command(t_cmd *cmd, char **envp)
     if (!path) { 
         ft_putstr_fd(cmd->argv[0], 2);
         ft_putstr_fd(": command not found\n", 2); 
+        ft_mem_cleanup(); // Child process'te memory temizle
         _exit(127); 
     }
     
@@ -173,15 +224,16 @@ static void execute_command(t_cmd *cmd, char **envp)
         if (access(path, F_OK) != 0) {
             ft_putstr_fd(cmd->argv[0], 2);
             ft_putstr_fd(": No such file or directory\n", 2);
+            ft_mem_cleanup(); // Child process'te memory temizle
             _exit(127);
         }
     }
-    
-    // Directory check
+     // Directory check
     struct stat st;
     if (stat(path, &st) == 0 && S_ISDIR(st.st_mode)) {
         ft_putstr_fd(cmd->argv[0], 2);
         ft_putstr_fd(": Is a directory\n", 2);
+        ft_mem_cleanup(); // Child process'te memory temizle
         _exit(126);
     }
     
@@ -189,11 +241,13 @@ static void execute_command(t_cmd *cmd, char **envp)
     if (access(path, X_OK) != 0) {
         ft_putstr_fd(cmd->argv[0], 2);
         ft_putstr_fd(": Permission denied\n", 2);
+        ft_mem_cleanup(); // Child process'te memory temizle
         _exit(126);
     }
-    
+
     execve(path, cmd->argv, envp);
     perror("execve"); 
+    ft_mem_cleanup(); // Execve başarısız olduğunda memory temizle
     _exit(127);
 }
 
@@ -213,21 +267,18 @@ static void run_child_process(t_cmd *cmd, char **envp, int fd_in, int *pipefd, t
     // Redirections'ları ayarla
     setup_redirections(cmd, fd_in, pipefd);
     
-    // Eğer komut yoksa (sadece heredoc/redirection varsa), cat gibi davran
+    // Eğer komut yoksa (sadece heredoc/redirection varsa), hiçbir çıktı verme
     if (!cmd->argv || !cmd->argv[0]) {
-        // Stdin'den stdout'a kopyala (cat benzeri davranış)
-        char buffer[1024];
-        ssize_t bytes_read;
-        while ((bytes_read = read(0, buffer, sizeof(buffer))) > 0) {
-            write(1, buffer, bytes_read);
-        }
+        // Sadece heredoc/redirection varsa, hiçbir çıktı verme
+        ft_mem_cleanup(); // Memory temizle
         exit(0);
     }
     
     // Önce builtin komut kontrolü yap
     if (is_builtin(cmd->argv[0])) {
         int result = exec_builtin(cmd, shell);
-        // Builtin komutlar için normal exit kullan
+        // Builtin komutlar için memory temizle ve exit
+        ft_mem_cleanup();
         exit(result);
     }
     
@@ -261,55 +312,83 @@ static int wait_for_children(void)
 
 // Builtin komutlar için redirection ayarları
 static int setup_builtin_redirections(t_cmd *cmd, int *old_stdin, int *old_stdout, 
-                                     int *hfd, int *outfd)
+                                     int *outfd)
 {
     int error_count = 0;
-    
-    // Input file redirection kontrolü
-    if (cmd->infile && !(cmd->heredoc && cmd->heredoc->enabled)) {
-        *old_stdin = dup(0);
-        
-        // Input dosyası var mı kontrol et
-        if (access(cmd->infile, F_OK) != 0) {
-            ft_putstr_fd(cmd->infile, 2);
-            ft_putstr_fd(": Böyle bir dosya ya da dizin yok\n", 2);
-            error_count++;
-        } else {
-            int infd = open(cmd->infile, O_RDONLY);
-            if (infd < 0) {
-                error_count++;
-            } else {
-                dup2(infd, 0);
-                close(infd);
-            }
-        }
-    }
+    int input_redirected = 0;
+    int output_redirected = 0;
     
     // Heredoc yönlendirmesi
-    if (cmd->heredoc && cmd->heredoc->enabled) {
+    if (cmd->heredocs) {
         *old_stdin = dup(0);
         
         // Heredoc zaten pipeline öncesi işlendi
         // Sadece hazır input'u kullan
-        if (cmd->heredoc->temp_filename) {
-            *hfd = open(cmd->heredoc->temp_filename, O_RDONLY);
-            if (*hfd >= 0) {
-                dup2(*hfd, 0);
-                close(*hfd);
+        t_heredoc *current = cmd->heredocs;
+        while (current->next) {
+            current = current->next;
+        }
+        if (current->content) {
+            // Heredoc content'ini stdin'e yaz
+            int pipefd[2];
+            if (pipe(pipefd) == 0) {
+                write(pipefd[1], current->content, ft_strlen(current->content));
+                close(pipefd[1]);
+                dup2(pipefd[0], 0);
+                close(pipefd[0]);
+                input_redirected = 1;
             }
         }
     }
     
-    // Output dosya yönlendirmesi
-    if (cmd->outfile) {
-        *old_stdout = dup(1);
-        *outfd = open(cmd->outfile, cmd->append ? 
-            O_WRONLY|O_CREAT|O_APPEND : O_WRONLY|O_CREAT|O_TRUNC, 0644);
-        if (*outfd < 0) { 
-            error_count++;
-        } else { 
-            dup2(*outfd, 1); 
-            close(*outfd); 
+    // Redirection listesini işle (builtin için)
+    if (cmd->redirs) {
+        t_redir *current = cmd->redirs;
+        while (current) {
+            if (current->type == REDIR_IN && !input_redirected) {
+                *old_stdin = dup(0);
+                
+                // Input dosyası var mı kontrol et
+                if (access(current->filename, F_OK) != 0) {
+                    ft_putstr_fd(current->filename, 2);
+                    ft_putstr_fd(": No such file or directory\n", 2);
+                    error_count++;
+                } else {
+                    int infd = open(current->filename, O_RDONLY);
+                    if (infd < 0) {
+                        error_count++;
+                    } else {
+                        dup2(infd, 0);
+                        close(infd);
+                        input_redirected = 1;
+                    }
+                }
+            } else if (current->type == REDIR_OUT) {
+                if (!output_redirected) {
+                    *old_stdout = dup(1);
+                    output_redirected = 1;
+                }
+                *outfd = open(current->filename, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+                if (*outfd < 0) { 
+                    error_count++;
+                } else { 
+                    dup2(*outfd, 1); 
+                    close(*outfd); 
+                }
+            } else if (current->type == REDIR_APPEND) {
+                if (!output_redirected) {
+                    *old_stdout = dup(1);
+                    output_redirected = 1;
+                }
+                *outfd = open(current->filename, O_WRONLY|O_CREAT|O_APPEND, 0644);
+                if (*outfd < 0) { 
+                    error_count++;
+                } else { 
+                    dup2(*outfd, 1); 
+                    close(*outfd); 
+                }
+            }
+            current = current->next;
         }
     }
     
@@ -319,14 +398,16 @@ static int setup_builtin_redirections(t_cmd *cmd, int *old_stdin, int *old_stdou
 // Builtin komutlar için redirection geri yükleme
 static void restore_builtin_redirections(t_cmd *cmd, int old_stdin, int old_stdout)
 {
-    if (cmd->outfile && old_stdout != -1) {
+    // Redirection yapıldıysa geri yükle
+    if (old_stdout != -1) {
         dup2(old_stdout, 1);
         close(old_stdout);
     }
-    if (cmd->heredoc && cmd->heredoc->enabled && old_stdin != -1) {
+    if (old_stdin != -1) {
         dup2(old_stdin, 0);
         close(old_stdin);
     }
+    (void)cmd; // Unused parameter
 }
 
 // Pipeline execution - Ana execute fonksiyonu
@@ -341,20 +422,12 @@ int exec_pipeline(t_cmd *cmds, char **envp, t_shell *shell)
     setup_command_signals();
     
     // ÖNCE: Tüm komutların heredoc'larını işle
-    if (!process_all_heredocs_before_pipeline(cmds, shell)) {
+    if (!first_heredoc_process(cmds, shell)) {
         setup_normal_signals(); // Normal sinyallere dön
         return 1; // Heredoc hatası
     }
     
-    // Önce tüm command'larda syntax error kontrolü yap
-    cmd = cmds;
-    while (cmd) 
-    {
-        // Syntax error kontrolü - artık NULL argv'yi kabul ediyoruz (sadece heredoc/redirection için)
-        cmd = cmd->next;
-    }
-    
-    cmd = cmds;
+    cmd = cmds; 
     while (cmd) 
     {
         // Pipe oluştur (eğer sonraki komut varsa, son pipe a geldiysek açma)
@@ -367,17 +440,17 @@ int exec_pipeline(t_cmd *cmds, char **envp, t_shell *shell)
         if (pid == 0) 
         {
             // Child process
-            run_child_process(cmd, envp, fd_in, pipefd, shell);
+            run_child_process(cmd, envp, fd_in, pipefd, shell); // child lar komutu çalıştırır
         } 
         else if (pid > 0) 
         {
             // Parent process
-            if (fd_in != 0)  // önceki komutun  okuma ucunu kapa
+            if (fd_in != 0)  // soldaki pipe ın okuma ucunu kapa
                 close(fd_in);
             if (cmd->next) 
             { 
-                close(pipefd[1]); // yeni pipe ın yazma ucunu kapa
-                fd_in = pipefd[0]; // sonraki pipe ın okuma ucu olarak kullanılacak bu yüzden sakla
+                close(pipefd[1]); // yeni pipe geçeceğiz yeni pipe ın yazma ucunu kapa, child yazma ucunu açacak
+                fd_in = pipefd[0]; // sağdaki pipe ın okuma ucunu sakla şuanki pipe ın yazma ucuna ata. çünkü sonraki child sonraki komutta kullanacak
             }
         }
         
@@ -387,8 +460,8 @@ int exec_pipeline(t_cmd *cmds, char **envp, t_shell *shell)
     // 4. Wait işlemi
     int result = wait_for_children();
     
-    // Geçici heredoc dosyalarını temizle
-    cleanup_heredoc_temp_files(cmds);
+    // Heredoc content'lerini temizle
+    cleanup_heredoc_content(cmds);
     
     // Komut tamamlandı - normal sinyallere dön
     setup_normal_signals();
@@ -424,13 +497,13 @@ int exec_builtin(t_cmd *cmd, t_shell *shell)
 int exec_builtin_with_redirections(t_cmd *cmd, t_shell *shell)
 {
     int old_stdin = -1, old_stdout = -1;
-    int hfd = -1, outfd = -1;
+    int outfd = -1;
     
     // Komut çalışmaya başladı - sinyal handler'ları güncelle
     setup_command_signals();
     
     // Redirections ayarla ve hata kontrolü yap
-    int redir_errors = setup_builtin_redirections(cmd, &old_stdin, &old_stdout, &hfd, &outfd);
+    int redir_errors = setup_builtin_redirections(cmd, &old_stdin, &old_stdout, &outfd);
     
 
     

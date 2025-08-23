@@ -18,44 +18,20 @@ void free_args(char **args)
 void free_cmds(t_cmd *cmd)
 {
     t_cmd *tmp;
-    int i;
     
     while (cmd)
     {
         tmp = cmd->next;
         free_args(cmd->argv);
-        if (cmd->infile)
-            ft_free(cmd->infile);
-        if (cmd->outfile)
-            ft_free(cmd->outfile);
+        
+        // Redirection listesini temizle
+        if (cmd->redirs) {
+            free_redir_list(cmd->redirs);
+        }
         // Free heredoc structure
-        if (cmd->heredoc)
+        if (cmd->heredocs)
         {
-            if (cmd->heredoc->delimiters)
-            {
-                i = 0;
-                while (i < cmd->heredoc->count)
-                {
-                    if (cmd->heredoc->delimiters[i])
-                        ft_free(cmd->heredoc->delimiters[i]);
-                    i++;
-                }
-                ft_free(cmd->heredoc->delimiters);
-            }
-            if (cmd->heredoc->cleaned_delimiters)
-            {
-                i = 0;
-                while (i < cmd->heredoc->count)
-                {
-                    if (cmd->heredoc->cleaned_delimiters[i])
-                        ft_free(cmd->heredoc->cleaned_delimiters[i]);
-                    i++;
-                }
-                ft_free(cmd->heredoc->cleaned_delimiters);
-            }
-            if (cmd->heredoc->quoted_flags)
-                ft_free(cmd->heredoc->quoted_flags);
-            ft_free(cmd->heredoc);
+            free_heredoc_list(cmd->heredocs);
         }
         
 
@@ -68,13 +44,52 @@ void free_cmds(t_cmd *cmd)
 
 
 
+// PATH değişkenini optimize et - sadece ilk path'i al
+char *optimize_path(char **envp)
+{
+    int i;
+    char *env_path = NULL;
+    
+    // PATH değişkenini bul
+    for (i = 0; envp[i]; i++) {
+        if (!ft_strncmp(envp[i], "PATH=", 5)) {
+            env_path = envp[i] + 5;
+            break;
+        }
+    }
+    
+    if (!env_path)
+        return NULL;
+    
+    // PATH'i : karakterinden ayır ve sadece ilk path'i al
+    char **path_parts = ft_split(env_path, ':');
+    if (!path_parts || !path_parts[0] || ft_strlen(path_parts[0]) == 0) {
+        if (path_parts)
+            ft_split_free(path_parts);
+        return NULL;
+    }
+    
+    // İlk path'i kopyala
+    char *first_path = ft_strdup(path_parts[0]);
+    
+    // Memory temizle
+    ft_split_free(path_parts);
+    
+    return first_path;
+}
+
 char *find_path(char *cmd, char **envp)
 {
     char *env_path = NULL;
     char *token;
     char buf[1024];
     int i;
-    if (!cmd || strchr(cmd, '/'))
+    
+    // Boş string kontrolü - boş string'ler command not found hatası verir
+    if (!cmd || ft_strlen(cmd) == 0)
+        return NULL;
+    
+    if (strchr(cmd, '/'))
         return ft_strdup(cmd);
     for (i = 0; envp[i]; i++)
         if (!ft_strncmp(envp[i], "PATH=", 5))
@@ -225,4 +240,111 @@ int check_redirection_syntax(const char *input)
     return 1; // Syntax geçerli
 }
 
- 
+// Redirection yardımcı fonksiyonları
+t_redir *create_redir(t_redir_type type, char *filename)
+{
+    t_redir *redir = ft_malloc(sizeof(t_redir), __FILE__, __LINE__);
+    if (!redir)
+        return NULL;
+    
+    redir->type = type;
+    redir->filename = ft_strdup(filename);
+    redir->next = NULL;
+    
+    return redir;
+}
+
+void add_redir(t_cmd *cmd, t_redir *redir)
+{
+    if (!cmd || !redir)
+        return;
+    
+    // Liste sonuna ekle (sıra korunur)
+    if (!cmd->redirs) {
+        cmd->redirs = redir;
+    } else {
+        t_redir *current = cmd->redirs;
+        while (current->next) {
+            current = current->next;
+        }
+        current->next = redir;
+    }
+}
+
+void free_redir_list(t_redir *redirs)
+{
+    t_redir *current = redirs;
+    t_redir *next;
+    
+    while (current) {
+        next = current->next;
+        if (current->filename)
+            ft_free(current->filename);
+        ft_free(current);
+        current = next;
+    }
+}
+
+// Heredoc yardımcı fonksiyonları
+t_heredoc *create_heredoc(char *delimiter, char *cleaned_delimiter, int quoted_flag)
+{
+    t_heredoc *heredoc = ft_malloc(sizeof(t_heredoc), __FILE__, __LINE__);
+    if (!heredoc)
+        return NULL;
+    
+    heredoc->delimiter = ft_strdup(delimiter);
+    heredoc->cleaned_delimiter = ft_strdup(cleaned_delimiter);
+    heredoc->quoted_flag = quoted_flag;
+    heredoc->content = NULL;
+    heredoc->next = NULL;
+    
+    return heredoc;
+}
+
+void add_heredoc(t_cmd *cmd, t_heredoc *heredoc)
+{
+    if (!cmd || !heredoc)
+        return;
+    
+    // Liste sonuna ekle (sıra korunur)
+    if (!cmd->heredocs) {
+        cmd->heredocs = heredoc;
+    } else {
+        t_heredoc *current = cmd->heredocs;
+        while (current->next) {
+            current = current->next;
+        }
+        current->next = heredoc;
+    }
+}
+
+void free_heredoc_list(t_heredoc *heredocs)
+{
+    t_heredoc *current = heredocs;
+    t_heredoc *next;
+    
+    while (current) {
+        next = current->next;
+        if (current->delimiter)
+            ft_free(current->delimiter);
+        if (current->cleaned_delimiter)
+            ft_free(current->cleaned_delimiter);
+        if (current->content)
+            ft_free(current->content);
+        ft_free(current);
+        current = next;
+    }
+}
+
+int count_heredocs(t_heredoc *heredocs)
+{
+    int count = 0;
+    t_heredoc *current = heredocs;
+    
+    while (current) {
+        count++;
+        current = current->next;
+    }
+    
+    return count;
+}

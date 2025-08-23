@@ -29,6 +29,17 @@ void process_variable_expansion_in_quotes(const char *input, int *i, int end, ch
 {
     (*i)++; // Skip $
     int name_start = *i;
+    
+    // $_ değişkeni için özel kontrol
+    if (input[name_start] == '_') {
+        (*i)++; // Skip _
+        if (shell->last_arg) {
+            ft_strcpy(processed + *proc_len, shell->last_arg);
+            *proc_len += ft_strlen(shell->last_arg);
+        }
+        return;
+    }
+    
     while (*i < end && input[*i] != '"' && (ft_isalnum(input[*i]) || input[*i] == '_')) {
         (*i)++;
     }
@@ -58,6 +69,17 @@ void process_variable_expansion_outside_quotes(const char *input, int *i, int en
 {
     (*i)++; // Skip $
     int name_start = *i;
+    
+    // $_ değişkeni için özel kontrol
+    if (input[name_start] == '_') {
+        (*i)++; // Skip _
+        if (shell->last_arg) {
+            ft_strcpy(processed + *proc_len, shell->last_arg);
+            *proc_len += ft_strlen(shell->last_arg);
+        }
+        return;
+    }
+    
     while (*i < end && (ft_isalnum(input[*i]) || input[*i] == '_') && 
            input[*i] != ' ' && input[*i] != '\t' && input[*i] != '"' && input[*i] != '\'') {
         (*i)++;
