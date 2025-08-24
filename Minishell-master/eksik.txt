@@ -1,0 +1,236 @@
+//minishell$ export a="cho a"
+//minishell$ e$a
+
+//export çalışmıyor ama export a=yns çalışıyor
+//düz export yazlınca da çıktı alınması lazım
+
+cat << $HOME
+> yunus
+> furkan
+> $HOME
+> 
+$HOME yazıldığında çıkması laızm /home/yayiker yazoılınca değil!!!
+
+//env yok
+
+"e"c'h'o" anan
+> '
+> "
+echo anan
+'
+: komut bulunamadı
+yayiker@k2m16s01:~/Masaüstü/minishell$ -> bash teki davranışı böyle. bir tırnak açık bırakıldığı zaman girdi almalı mı
+echo" anan -> gibi
+
+
+echo heredoc girdi almıyor
+cat << yunus
+yunus -> çalışıyor
+cat << $yunus -> çalışmıyor
+
+//minishell$ echo anan >> out.txt
+//anan
+//dosyaya içerik silmeden ekleme yapması lazım
+
+//echo anan > out.txt
+//anan    
+//aynı hikaye
+
+//ls -l | wc -l
+//ls -l | wc -l > out.txt
+
+/7minishell$ ps aux | grep bash | wc -l
+&&4
+
+minishell$ "e"c'h'o anan
+e: command not found
+çıtı vermeli echo çalışmalı
+kısmen çalışıyo
+
+minishell$ echo "'$HOME'"
+'$HOME'
+minishell$ echo "'$HOME'"'
+'$HOME' 
+minishell$ echo "'$HOME'"''
+'$HOME' 
+en dışta çif tırnak olduğu için expend edilmeli 
+tırnak kapanmazsa hata yazdırmalı
+
+
+
+
+
+//echo -nnnn hello
+-n flagi çalışmalı
+
+//declare -x _=/home/yayiker/Masaüstü/minishell/./minishell
+export ta gözükmeyecek
+
+//echo -n -n hello
+//-n yazmayacak
+
+minishell$ echo hello > a > b > c
+a b oluşmalı
+
+minishell$ echo hello >a>b>c
+redir görmüyor
+
+//oldpwd pwd güncellenmiyor
+
+//export sıralamıyor
+
+echo ~
+tilda expend edilmiyor
+
+minishell$ cat << ens
+> $HOME
+> ens
+$HOME
+//
+home dizini expend edilecek
+
+//yayiker@k1m10s03:~$ cat << "ens"
+> $HOME
+> ens
+$HOME
+//yayiker@k1m10s03:~$ cat << 'ens'
+> $HOME
+> ens
+$HOME
+
+//yayiker@k1m10s03:~$ echo $_
+weurghr
+//yayiker@k1m10s03:~$ echo $?
+0
+yayiker@k1m10s03:~$ hrwthwt | rwhtrtr yunus
+hrwthwt: komut bulunamadı
+rwhtrtr: komut bulunamadı
+yayiker@k1m10s03:~$ echo $_
+0
+
+//minishell$ cat << a << b << c
+> x
+> a
+> y
+> b
+> z
+> t 
+> c
+z
+yhtr
+b
+yunus 
+//
+sadece son heredoc içine yazılanlar yazdıralacak
+yayiker@k1m10s03:~$ cat << a << b << c
+> tsrhr
+> a
+> ndyj
+> b
+> yunus
+> c
+yunus
+
+minishell$ echo $HO"ME"
+/home/yayiker
+minishell$ echo $HO'ME'
+/home/yayiker
+minishell$ echo '$HOME'
+/home/yayiker
+minishell$ echo $HO'ME
+minishell: parse error: unclosed quote
+
+minishell$ -> new line kaldır
+doğru halleri;
+
+yayiker@k1m10s03:~$ echo '$HOME'
+$HOME
+yayiker@k1m10s03:~$ echo "$HOME"
+/home/yayiker
+yayiker@k1m10s03:~$ echo $HOME
+/home/yayiker
+yayiker@k1m10s03:~$ echo $HO"ME"
+ME
+yayiker@k1m10s03:~$ echo $HO'ME'
+ME
+
+yayiker@k2m14s02:~$ echo $anan $HOME
+/home/yayiker
+minishell$ echo $anan $HOME
+ /home/yayiker
+
+
+
+
+/*
+export a=
+declare -x a=""
+a= (env )
+
+export a=ssss
+declare -x a="ssss"
+a=ssss (env)
+
+
+export a=ffff
+declare -x a="ffff"
+export a
+declare -x a="ffff"
+// yeni değer atanmadığı müddetçe değişmemeli
+a=ffff      (env)
+
+export a=ffff
+declare -x a="ffff"
+export a=
+declare -x a=""
+a=   (env)
+*/
+
+
+EKSİKLER
+
+minishell$ echo $HO"ME"
+/home/yayiker
+minishell$ echo $HO'ME'
+/home/yayiker
+minishell$ echo '$HOME'
+/home/yayiker
+minishell$ echo $HO'ME
+minishell: parse error: unclosed quote
+
+yayiker@k2m14s02:~$ echo $anan $HOME
+/home/yayiker
+minishell$ echo $anan $HOME
+ /home/yayiker
+
+
+minishell$ echo $HO"ME"
+/home/yayiker
+minishell$ echo $HO'ME'
+/home/yayiker
+minishell$ echo '$HOME'
+/home/yayiker
+minishell$ echo $HO'ME
+minishell: parse error: unclosed quote
+
+minishell$ -> new line kaldır
+doğru halleri;
+
+
+minishell$ cat << "eof"
+> $HOME
+> eof
+/home/yayiker
+minishell$ cat << 'eof'
+> $HOME
+> eof
+/home/yayiker
+
+minishell$ ls -la| cat
+cat calışmadı
+
+minishell$ cat << '   a'
+>    a
+> a
+   a
+heredoc içi ecpender zaten yok
