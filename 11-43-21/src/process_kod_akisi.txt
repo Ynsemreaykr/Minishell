@@ -1,5 +1,7 @@
 
 
-                        -> handle_pipeline -> exec_pipeline -> first_heredoc_process // her şeyden önce heredocları işler
-                                                            
+                        -> handle_pipeline -> exec_pipeline -> first_heredoc_process -> multiple_heredoc_input //heredoc işler ve fd ye yazar
+                                                                                     -> read_heredoc_content // content leri okur yapıda saklar
+                                                            -> run_child_process -> setup_redirections_for_child -> setup_heredoc_stdin // son heredoc içeriğini stidin e bağlar
+                                                                                                                 -> setup_redir_list // redir listesini sırasıyla uygular                       
 

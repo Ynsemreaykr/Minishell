@@ -62,14 +62,17 @@ static t_input_result get_user_input(void)
 // Bu fonksiyon command_handlers.c dosyasında tanımlanmıştır
 
 // 3. Komutu işle
-static void process_command(t_cmd *cmds, t_shell *shell)
+static int process_command(t_cmd *cmds, t_shell *shell)
 {
     // Herhangi bir komut var mı kontrol et (argv yoksa da heredoc olabilir)
     if (!cmds) {
-        return;
+        return 1; // Başarılı (komut yok)
     }
     
-    determine_command_type(cmds, shell);
+    int result = determine_command_type(cmds, shell);
+    
+    // Hata durumunda 0, başarılı durumda 1 döndür
+    return result;
 }
 
 // Input validation yap
@@ -161,9 +164,11 @@ static int process_command_from_input(const char *input, t_shell *shell)
         return 0; // Error
     }
     
-    process_command(cmds, shell); // komutları çalıştırır
+    int result = process_command(cmds, shell); // komutları çalıştırır
     free_cmds(cmds);
-    return 1; // Success
+    
+    // Hata durumunda 0, başarılı durumda 1 döndür
+    return result;
 }
 
 // 4. Shell'i temizle
@@ -200,7 +205,9 @@ int main(int argc, char **argv, char **envp)
             continue; // Continue
         } else if (result == 2) {
             // Process command
-            if (!process_command_from_input(input_result.input, &shell)) {
+            int cmd_result = process_command_from_input(input_result.input, &shell);
+            if (cmd_result == 0) {
+                // Hata durumu - continue ile devam et
                 ft_free(input_result.input);
                 continue;
             }

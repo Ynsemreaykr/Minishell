@@ -30,20 +30,19 @@ void normal_signal_handler(int signo)
 void heredoc_signal_handler(int signo)
 {
     g_signal_number = signo;
-    
-    // Yeni satıra geç ve heredoc'tan çık
     write(STDOUT_FILENO, "\n", 1);
-    rl_on_new_line();
-    rl_redisplay();
     rl_done = 1;
-    // Heredoc'tan çık
+    rl_point = rl_end = 0;
+    rl_replace_line("", 0);
 }
 
 // Komut çalışırken sinyal handler'ı
 void command_signal_handler(int signo)
 {
     g_signal_number = signo;
-    write(STDOUT_FILENO, "\n", 1);
+    //rl_on_new_line();
+
+    //write(STDOUT_FILENO, "\n", 1);
     // Komut sinyal ile sonlandırıldı
 }
 

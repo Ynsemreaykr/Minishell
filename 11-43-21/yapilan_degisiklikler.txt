@@ -1,0 +1,196 @@
+diff --git a/11-43-21/include/minishell.h b/11-43-21/include/minishell.h
+index 4f8210a..fe0e25e 100644
+--- a/11-43-21/include/minishell.h
++++ b/11-43-21/include/minishell.h
+@@ -52,7 +52,6 @@ typedef struct s_cmd
+ typedef struct s_shell
+ {
+     t_cmd   *cmds;          // Komutların bağlı listesi
+-    char    **envp;         // Ortam değişkenleri
+     int     last_exit;      // Son komutun çıkış kodu ($?)
+     char    *last_arg;      // Son komutun son argümanı
+     char    **env;          // Environment variables
+@@ -170,8 +169,8 @@ char *read_line_dynamic(int fd);
+ // utils.c
+ void free_args(char **args);
+ void free_cmds(t_cmd *cmd);
+-char *find_path(char *cmd, char **envp);
+-char *optimize_path(char **envp);
++char *find_path(char *cmd, char **env);
++char *optimize_path(char **env);
+ void update_last_arg(char **argv, t_shell *shell);
+ 
+ // redirection utils
+@@ -190,7 +189,7 @@ int check_redirection_syntax(const char *input);
+ 
+ 
+ // executor.c
+-int exec_pipeline(t_cmd *cmds, char **envp, t_shell *shell);
++int exec_pipeline(t_cmd *cmds, t_shell *shell);
+ int exec_builtin_with_redirections(t_cmd *cmd, t_shell *shell);
+ 
+ // command_handlers.c
+diff --git a/11-43-21/src/command_handlers.c b/11-43-21/src/command_handlers.c
+index 7c44a6c..9941ede 100644
+--- a/11-43-21/src/command_handlers.c
++++ b/11-43-21/src/command_handlers.c
+@@ -5,7 +5,7 @@
+ // Pipeline komutlarını işle
+ int handle_pipeline(t_cmd *cmds, t_shell *shell)
+ {
+-    int status = exec_pipeline(cmds, shell->envp, shell);
++    int status = exec_pipeline(cmds, shell);
+     
+     if (status == 1) {
+         // Heredoc hatası (Ctrl+C)
+@@ -28,8 +28,7 @@ int handle_pipeline(t_cmd *cmds, t_shell *shell)
+ int handle_variable_assignment(t_cmd *cmds, t_shell *shell)
+ {
+     shell->last_exit = execute_variable_assignment(cmds->argv, shell);
+-    extern char **environ;
+-    shell->envp = environ; // Environment güncellendiği için environ'ı güncelle
++    // Environment güncellendiği için environ'ı güncelle
+     return 1; // Success
+ }
+ 
+@@ -40,8 +39,7 @@ int handle_builtin(t_cmd *cmds, t_shell *shell)
+     update_last_arg(cmds->argv, shell);
+     
+     if (ft_strcmp(cmds->argv[0], "export") == 0) {
+-        extern char **environ;
+-        shell->envp = environ;
++        // Environment güncellendiği için environ'ı güncelle
+     }
+     return 1; // Success
+ }
+@@ -49,7 +47,7 @@ int handle_builtin(t_cmd *cmds, t_shell *shell)
+ // Normal komutları işle (heredoc/redirection veya exec)
+ int handle_normal_command(t_cmd *cmds, t_shell *shell)
+ {
+-    int status = exec_pipeline(cmds, shell->envp, shell);
++    int status = exec_pipeline(cmds, shell);
+     
+     if (status == 1) {
+         // Heredoc hatası (Ctrl+C)
+diff --git a/11-43-21/src/executor.c b/11-43-21/src/executor.c
+index 54d4bdc..6a31c36 100644
+--- a/11-43-21/src/executor.c
++++ b/11-43-21/src/executor.c
+@@ -252,18 +252,12 @@ static void execute_command(t_cmd *cmd, char **envp)
+ }
+ 
+ // Child process'in ana fonksiyonu
+-static void run_child_process(t_cmd *cmd, char **envp, int fd_in, int *pipefd, t_shell *shell)
++static void run_child_process(t_cmd *cmd, int fd_in, int *pipefd, t_shell *shell)
+ {
+     // Signal handler'ları sıfırla
+     signal(SIGINT, SIG_DFL);
+     signal(SIGQUIT, SIG_DFL);
+     
+-    // minishell çinde minishell çalıştırılırsa güncel env export gibi bilgiler çocuğa geçmeli
+-    if (cmd->argv && cmd->argv[0] && ft_strcmp(cmd->argv[0], "./minishell") == 0) {
+-        // Environment'ı güncelle
+-        envp = shell->env;
+-    }
+-    
+     // Redirections'ları ayarla
+     setup_redirections(cmd, fd_in, pipefd);
+     
+@@ -283,7 +277,7 @@ static void run_child_process(t_cmd *cmd, char **envp, int fd_in, int *pipefd, t
+     }
+     
+     // Builtin değilse exec ile çalıştır
+-    execute_command(cmd, envp);
++    execute_command(cmd, shell->env);
+ }
+ 
+ // 4. Wait işlemi - Parent, child'ları bekler
+@@ -411,7 +405,7 @@ static void restore_builtin_redirections(t_cmd *cmd, int old_stdin, int old_stdo
+ }
+ 
+ // Pipeline execution - Ana execute fonksiyonu
+-int exec_pipeline(t_cmd *cmds, char **envp, t_shell *shell)
++int exec_pipeline(t_cmd *cmds, t_shell *shell)
+ {
+     int fd_in = 0; // ilk komutun stdin i : terminal
+     int pipefd[2]; // pipe[0] : okuma pipefd[1] : yazma ucu
+@@ -440,7 +434,7 @@ int exec_pipeline(t_cmd *cmds, char **envp, t_shell *shell)
+         if (pid == 0) 
+         {
+             // Child process
+-            run_child_process(cmd, envp, fd_in, pipefd, shell); // child lar komutu çalıştırır
++            run_child_process(cmd, fd_in, pipefd, shell); // child lar komutu çalıştırır
+         } 
+         else if (pid > 0) 
+         {
+diff --git a/11-43-21/src/main.c b/11-43-21/src/main.c
+index 88daa2b..6d6981e 100644
+--- a/11-43-21/src/main.c
++++ b/11-43-21/src/main.c
+@@ -15,7 +15,7 @@ volatile sig_atomic_t g_signal_number = 0;
+ static t_shell init_shell(char **envp)
+ {
+     t_shell shell;
+-    shell.envp = envp;
++    shell.cmds = NULL; // komutların bağlı listesi
+     shell.last_exit = 0; // son komutun çıkış kodu
+     shell.last_arg = NULL; // son argüman
+     shell.env = NULL; // environment variables
+@@ -121,10 +121,7 @@ static int handle_input(t_input_result input_result, t_shell *shell)
+         shell->last_exit = input_result.exit_code;
+     }
+     
+-    if (!ft_strcmp(input, "exit")) {
+-        ft_free(input);
+-        return 0; // Exit
+-    }
++    // exit komutu builtin olarak işleniyor, burada kontrol etmeye gerek yok
+     
+     // Input validation yap
+     if (!check_input(input, shell)) {
+diff --git a/11-43-21/src/utils.c b/11-43-21/src/utils.c
+index f741763..8e5dfb0 100644
+--- a/11-43-21/src/utils.c
++++ b/11-43-21/src/utils.c
+@@ -45,15 +45,15 @@ void free_cmds(t_cmd *cmd)
+ 
+ 
+ // PATH değişkenini optimize et - sadece ilk path'i al
+-char *optimize_path(char **envp)
++char *optimize_path(char **env)
+ {
+     int i;
+     char *env_path = NULL;
+     
+     // PATH değişkenini bul
+-    for (i = 0; envp[i]; i++) {
+-        if (!ft_strncmp(envp[i], "PATH=", 5)) {
+-            env_path = envp[i] + 5;
++    for (i = 0; env[i]; i++) {
++        if (!ft_strncmp(env[i], "PATH=", 5)) {
++            env_path = env[i] + 5;
+             break;
+         }
+     }
+@@ -78,7 +78,7 @@ char *optimize_path(char **envp)
+     return first_path;
+ }
+ 
+-char *find_path(char *cmd, char **envp)
++char *find_path(char *cmd, char **env)
+ {
+     char *env_path = NULL;
+     char *token;
+@@ -91,9 +91,9 @@ char *find_path(char *cmd, char **envp)
+     
+     if (strchr(cmd, '/'))
+         return ft_strdup(cmd);
+-    for (i = 0; envp[i]; i++)
+-        if (!ft_strncmp(envp[i], "PATH=", 5))
+-            env_path = envp[i] + 5;
++    for (i = 0; env[i]; i++)
++        if (!ft_strncmp(env[i], "PATH=", 5))
++            env_path = env[i] + 5;
+     if (!env_path)
+         return NULL;
+     env_path = ft_strdup(env_path);

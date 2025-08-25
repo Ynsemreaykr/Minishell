@@ -1,0 +1,52 @@
+MINISHELL ÇEVRE DEĞİŞKENİ YAPISI TEMİZLİĞİ - DEĞİŞİKLİK ÖZETİ
+
+TARİH: $(date)
+
+PROBLEM:
+- t_shell yapısında iki farklı çevre değişkeni yapısı vardı:
+  1. shell->env (doğru tanımlanmış)
+  2. shell->envp (tanımsız, hatalı kullanılıyordu)
+
+YAPILAN DEĞİŞİKLİKLER:
+
+1. command_handlers.c:
+   - handle_pipeline() fonksiyonunda shell->envp referansı kaldırıldı
+   - handle_normal_command() fonksiyonunda shell->envp referansı kaldırıldı
+   - Kullanılmayan 'environ' değişkeni kaldırıldı
+
+2. executor.c:
+   - exec_pipeline fonksiyon imzası güncellendi (envp parametresi kaldırıldı)
+   - run_child_process fonksiyon imzası güncellendi (envp parametresi kaldırıldı)
+   - Tüm fonksiyon çağrıları shell->env kullanacak şekilde güncellendi
+
+3. include/minishell.h:
+   - exec_pipeline fonksiyon imzası güncellendi
+
+4. env.c:
+   - PATH optimizasyonu kaldırıldı (sadece ilk path'i alıyordu)
+   - PATH değişkeni olduğu gibi kopyalanıyor
+
+3. Fonksiyon imzaları:
+   - ÖNCE: exec_pipeline(t_cmd *cmds, char **envp, t_shell *shell)
+   - SONRA: exec_pipeline(t_cmd *cmds, t_shell *shell)
+
+SONUÇ:
+- Tek çevre değişkeni yapısı (shell->env) kullanılıyor
+- Kod daha temiz ve tutarlı
+- Derleme hataları giderildi
+- Gereksiz parametre geçişleri kaldırıldı
+- PATH değişkeni doğru şekilde kopyalanıyor
+- ls, pwd gibi komutlar artık çalışıyor
+
+GERİ ALMA İŞLEMİ:
+- Tüm değişiklikler git restore komutu ile geri alındı
+- Proje orijinal haline döndürüldü
+- Derleme başarılı şekilde tamamlandı
+
+NOT: Bu değişiklikler geri alınabilir durumda ve şu anda geri alınmış durumda.
+
+EK BİLGİ:
+- ls komutunun bozulmasının sebebi PATH optimizasyonuydu
+- optimize_path() fonksiyonu sadece ilk path'i alıyordu
+- Bu yüzden /usr/bin, /bin gibi önemli path'ler kayboluyordu
+- PATH optimizasyonu kaldırılarak sorun çözüldü

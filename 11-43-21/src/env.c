@@ -2,62 +2,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-// g_env artık g_shell.env olarak kullanılıyor
-
-// Environment string'i oluştur
-static char *create_env_string(const char *name, const char *value)
-{
-    if (value) {
-        // Değeri olan değişken (boş string de olsa)
-        int name_len = ft_strlen(name);
-        int value_len = ft_strlen(value);
-        char *env_str = ft_malloc(name_len + value_len + 2, __FILE__, __LINE__);
-        if (!env_str)
-            return NULL;
-        ft_strcpy(env_str, name);
-        ft_strcat(env_str, "=");
-        ft_strcat(env_str, value);
-        return env_str;
-    } else {
-        // Sadece ismi olan değişken (export NAME gibi) - = karakteri yok
-        char *env_str = ft_malloc(ft_strlen(name) + 1, __FILE__, __LINE__);
-        if (!env_str)
-            return NULL;
-        ft_strcpy(env_str, name);
-        return env_str;
-    }
-}
-
-// Yeni environment variable ekle
-static int add_new_env_var(const char *name, const char *value, t_shell *shell)
-{
-    // Mevcut environment'ın boyutunu hesapla
-    int count = 0;
-    while (shell->env[count])
-        count++;
-    
-    // Yeni environment array'i oluştur
-    char **new_env = ft_malloc(sizeof(char *) * (count + 2), __FILE__, __LINE__);
-    if (!new_env)
-        return -1;
-    
-    // Mevcut değişkenleri kopyala
-    int i = 0;
-    while (i < count) {
-        new_env[i] = shell->env[i];
-        i++;
-    }
-    
-    // Yeni değişkeni ekle
-    new_env[count] = create_env_string(name, value);
-    new_env[count + 1] = NULL;
-    
-    // Eski environment'ı temizle ve yenisini ata
-    ft_free(shell->env);
-    shell->env = new_env;
-    
-    return 0;
-}
 
 // Temel environment değişkenlerini ekle
 static void add_basic_env_vars(t_shell *shell)
@@ -97,20 +41,12 @@ void init_env(char **envp, t_shell *shell)
     // Her string için ayrı yer aç ve PATH optimizasyonu yap
     int i = 0;
     while (i < count) {
-        // PATH değişkenini optimize et
+        // PATH değişkenini olduğu gibi kopyala (optimize etme)
         if (!ft_strncmp(envp[i], "PATH=", 5)) {
-            char *optimized_path = optimize_path(envp);
-            if (!optimized_path) {
-                // PATH optimize edilemezse hata ver ve çık
-                ft_putstr_fd("minishell: PATH optimization failed\n", 2);
-                return;
-            }
-            // PATH= + optimized_path
-            int len = 5 + ft_strlen(optimized_path);
+            // PATH'i optimize etmeden olduğu gibi kopyala
+            int len = ft_strlen(envp[i]);
             shell->env[i] = ft_malloc(len + 1, __FILE__, __LINE__);
-            ft_strcpy(shell->env[i], "PATH=");
-            ft_strcat(shell->env[i], optimized_path);
-            ft_free(optimized_path);
+            ft_strcpy(shell->env[i], envp[i]);
         } else {
             // Diğer environment variable'ları normal şekilde kopyala
             int len = ft_strlen(envp[i]);
@@ -123,19 +59,7 @@ void init_env(char **envp, t_shell *shell)
     shell->env[count] = NULL; // NULL terminator
 }
 
-// Environment variable'ları temizle
-void cleanup_env(t_shell *shell)
-{
-    if (shell->env) {
-        int i = 0;
-        while (shell->env[i]) {
-            ft_free(shell->env[i]);
-            i++;
-        }
-        ft_free(shell->env);
-        shell->env = NULL;
-    }
-}
+
 
 // Environment variable'ları al
 char **get_env(t_shell *shell)
@@ -159,63 +83,7 @@ char *get_env_var(const char *name, t_shell *shell)
     return NULL;
 }
 
-// Environment variable ekle/güncelle
-int set_env_var(const char *name, const char *value, t_shell *shell)
-{
-    if (!name)
-        return -1;
-    
-    // Önce mevcut değişkeni ara
-    int name_len = ft_strlen(name);
-    int existing_index = -1;
-    
-    int i = 0;
-    while (shell->env[i]) {
-        if (ft_strncmp(shell->env[i], name, name_len) == 0 && 
-            (shell->env[i][name_len] == '=' || shell->env[i][name_len] == '\0')) {
-            existing_index = i;
-            break;
-        }
-        i++;
-    }
-    
-    // Mevcut değişkeni güncelle
-    if (existing_index != -1) {
-        ft_free(shell->env[existing_index]);
-        shell->env[existing_index] = create_env_string(name, value);
-        return 0;
-    }
-    
-    // Yeni değişken ekle
-    return add_new_env_var(name, value, shell);
-}
 
-// Environment variable sil
-int unset_env_var(const char *name, t_shell *shell)
-{
-    if (!shell->env || !name)
-        return -1;
-    
-    int name_len = ft_strlen(name);
-    int i = 0;
-    while (shell->env[i]) {
-        // Hem = karakteri olan hem de olmayan değişkenleri kontrol et
-        if (ft_strncmp(shell->env[i], name, name_len) == 0 && 
-            (shell->env[i][name_len] == '=' || shell->env[i][name_len] == '\0')) {
-            // Değişkeni sil
-            ft_free(shell->env[i]);
-            // Sonraki değişkenleri öne kaydır
-            int j = i;
-            while (shell->env[j]) {
-                shell->env[j] = shell->env[j + 1];
-                j++;
-            }
-            return 0;
-        }
-        i++;
-    }
-    return -1;
-} 
 
 // SHLVL değişkenini güncelle
 void update_shlvl(t_shell *shell)

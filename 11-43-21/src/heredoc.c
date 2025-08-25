@@ -235,12 +235,7 @@ int multiple_heredoc_input(t_heredoc *heredoc, t_shell *shell)
     
     while (1) 
     {
-        // Ctrl+C kontrolü
-        if (g_signal_number == SIGINT) 
-        {
-            error_occurred = 1;
-            break;
-        }
+
         
         line = readline("> ");
         if (!line) {
@@ -249,9 +244,15 @@ int multiple_heredoc_input(t_heredoc *heredoc, t_shell *shell)
             break;
         }
         
-
+        // Ctrl+C kontrolü
+        if (g_signal_number == SIGINT) 
+        {
+            error_occurred = 1;
+            break;
+        }
         if (ft_strcmp(line, end_delimiter) == 0) // delimiter ile karşılaştır 
         {
+            error_occurred = 1;
             ft_free(line);
             break;
         }

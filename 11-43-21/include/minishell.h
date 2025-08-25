@@ -18,7 +18,6 @@ typedef enum e_redir_type
     REDIR_IN,           // <
     REDIR_OUT,          // >
     REDIR_APPEND,       // >>
-    REDIR_HEREDOC       // <<
 }   t_redir_type;
 
 // Tek bir redirection bilgisi
@@ -69,7 +68,7 @@ typedef struct s_input_result
 
 
 // Global sinyal numarası tanımı
-
+int first_heredoc_process(t_cmd *cmds, t_shell *shell);
 void normal_signal_handler(int signo);
 void heredoc_signal_handler(int signo);
 void command_signal_handler(int signo);
@@ -80,6 +79,12 @@ void setup_command_signals(void);
 void reset_signal_state(void);
 int check_signal_status(void);
 int count_tokens(const char *input);
+void cleanup_heredoc_content(t_cmd *cmds);
+int handle_redir_append(t_redir *redir);
+int handle_redir_out(t_redir *redir);
+int handle_redir_in(t_redir *redir);
+void setup_heredoc_stdin(t_cmd *cmd, int *input_redirected);
+void setup_redir_list(t_cmd *cmd, int *input_redirected, int *output_redirected);       
 
 int get_redirection_length(const char *input, int pos);
 int check_redirection_operator(const char *input, int pos);
@@ -92,6 +97,12 @@ void process_variable_expansion_in_quotes(const char *input, int *i, int end, ch
 void process_variable_expansion_outside_quotes(const char *input, int *i, int end, char *processed, int *proc_len, t_shell *shell);
 void process_literal_dollar(char *processed, int *proc_len, int *i);
 void process_regular_char(const char *input, int *i, char *processed, int *proc_len);
+
+void run_child_process(t_cmd *cmd, int fd_in, int *pipefd, t_shell *shell);
+void setup_redirections_for_child(t_cmd *cmd, int fd_in, int *pipefd);
+void execute_command(t_cmd *cmd, char **envp);
+int wait_for_children(void);
+pid_t create_child_process(void);
 
 // LIBFT functions
 size_t ft_strlen(const char *s);
@@ -187,20 +198,22 @@ int count_heredocs(t_heredoc *heredocs);
 
 int check_quotes(const char *input);
 int check_redirection_syntax(const char *input);
-
-
+void	redirect_heredoc_for_builtin(t_cmd *cmd, int *old_stdin, int *input_redirected);
+int  redir_append_builtin(t_redir *r, int *old_stdout, int *output_redirected, int *outfd);
+int  redir_out_builtin(t_redir *r, int *old_stdout, int *output_redirected, int *outfd);
+int  redir_in_builtin(t_redir *r, int *old_stdin, int *input_redirected);
 // executor.c
-int exec_pipeline(t_cmd *cmds, char **envp, t_shell *shell);
+int exec_pipeline(t_cmd *cmds, t_shell *shell);
 int exec_builtin_with_redirections(t_cmd *cmd, t_shell *shell);
-
+char *read_heredoc_content(int fd);
 // command_handlers.c
-int handle_pipeline(t_cmd *cmds, t_shell *shell);
 int handle_variable_assignment(t_cmd *cmds, t_shell *shell);
 int handle_builtin(t_cmd *cmds, t_shell *shell);
 int handle_normal_command(t_cmd *cmds, t_shell *shell);
 int determine_command_type(t_cmd *cmds, t_shell *shell);
 
 
+int exec_single_command(t_cmd *cmd, t_shell *shell);
 
 // builtin.c
 int ft_echo(char **argv);

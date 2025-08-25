@@ -139,7 +139,6 @@ void update_last_arg(char **argv, t_shell *shell)
 
 // exec_child fonksiyonu artık executor.c'de tanımlı
 
-// heredoc_input fonksiyonu kaldırıldı, multiple_heredoc_input kullanılıyor. 
 
 // Tırnak kontrolü için genel fonksiyon
 int check_quotes(const char *input)

@@ -1,0 +1,192 @@
+==1785406== Memcheck, a memory error detector
+==1785406== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==1785406== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==1785406== Command: ./minishell
+==1785406== Parent PID: 1763474
+==1785406== 
+==1787301== 
+==1787301== FILE DESCRIPTORS: 7 open (3 std) at exit.
+==1787301== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==1787301==    <inherited from parent>
+==1787301== 
+==1787301== Open AF_UNIX socket 41: <unknown>
+==1787301==    <inherited from parent>
+==1787301== 
+==1787301== Open file descriptor 40: /home/yayiker/.config/Code/logs/20250825T135948/ptyhost.log
+==1787301==    <inherited from parent>
+==1787301== 
+==1787301== Open file descriptor 3: /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/valgrind_log.txt
+==1787301==    <inherited from parent>
+==1787301== 
+==1787301== 
+==1787301== HEAP SUMMARY:
+==1787301==     in use at exit: 208,410 bytes in 235 blocks
+==1787301==   total heap usage: 1,046 allocs, 811 frees, 440,816 bytes allocated
+==1787301== 
+==1787301== LEAK SUMMARY:
+==1787301==    definitely lost: 0 bytes in 0 blocks
+==1787301==    indirectly lost: 0 bytes in 0 blocks
+==1787301==      possibly lost: 0 bytes in 0 blocks
+==1787301==    still reachable: 0 bytes in 0 blocks
+==1787301==         suppressed: 208,410 bytes in 235 blocks
+==1787301== 
+==1787301== For lists of detected and suppressed errors, rerun with: -s
+==1787301== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==1788831== 
+==1788831== FILE DESCRIPTORS: 7 open (3 std) at exit.
+==1788831== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==1788831==    <inherited from parent>
+==1788831== 
+==1788831== Open AF_UNIX socket 41: <unknown>
+==1788831==    <inherited from parent>
+==1788831== 
+==1788831== Open file descriptor 40: /home/yayiker/.config/Code/logs/20250825T135948/ptyhost.log
+==1788831==    <inherited from parent>
+==1788831== 
+==1788831== Open file descriptor 3: /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/valgrind_log.txt
+==1788831==    <inherited from parent>
+==1788831== 
+==1788831== 
+==1788831== HEAP SUMMARY:
+==1788831==     in use at exit: 208,496 bytes in 241 blocks
+==1788831==   total heap usage: 1,228 allocs, 987 frees, 444,700 bytes allocated
+==1788831== 
+==1788831== LEAK SUMMARY:
+==1788831==    definitely lost: 0 bytes in 0 blocks
+==1788831==    indirectly lost: 0 bytes in 0 blocks
+==1788831==      possibly lost: 0 bytes in 0 blocks
+==1788831==    still reachable: 0 bytes in 0 blocks
+==1788831==         suppressed: 208,496 bytes in 241 blocks
+==1788831== 
+==1788831== For lists of detected and suppressed errors, rerun with: -s
+==1788831== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==1789169== 
+==1789169== FILE DESCRIPTORS: 7 open (3 std) at exit.
+==1789169== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==1789169==    <inherited from parent>
+==1789169== 
+==1789169== Open AF_UNIX socket 41: <unknown>
+==1789169==    <inherited from parent>
+==1789169== 
+==1789169== Open file descriptor 40: /home/yayiker/.config/Code/logs/20250825T135948/ptyhost.log
+==1789169==    <inherited from parent>
+==1789169== 
+==1789169== Open file descriptor 3: /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/valgrind_log.txt
+==1789169==    <inherited from parent>
+==1789169== 
+==1789169== 
+==1789169== HEAP SUMMARY:
+==1789169==     in use at exit: 208,521 bytes in 244 blocks
+==1789169==   total heap usage: 1,275 allocs, 1,031 frees, 445,663 bytes allocated
+==1789169== 
+==1789169== LEAK SUMMARY:
+==1789169==    definitely lost: 0 bytes in 0 blocks
+==1789169==    indirectly lost: 0 bytes in 0 blocks
+==1789169==      possibly lost: 0 bytes in 0 blocks
+==1789169==    still reachable: 0 bytes in 0 blocks
+==1789169==         suppressed: 208,521 bytes in 244 blocks
+==1789169== 
+==1789169== For lists of detected and suppressed errors, rerun with: -s
+==1789169== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==1790163== 
+==1790163== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==1790163== Open file descriptor 5:
+==1790163==    at 0x49DC07D: pipe (pipe.c:29)
+==1790163==    by 0x404B95: exec_pipeline (in /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/minishell)
+==1790163==    by 0x4095BC: handle_normal_command (in /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/minishell)
+==1790163==    by 0x409785: determine_command_type (in /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/minishell)
+==1790163==    by 0x4018E3: process_command (in /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/minishell)
+==1790163==    by 0x401737: process_command_from_input (in /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/minishell)
+==1790163==    by 0x4013CA: main (in /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/minishell)
+==1790163== 
+==1790163== Open file descriptor 4:
+==1790163==    at 0x49DC07D: pipe (pipe.c:29)
+==1790163==    by 0x404B95: exec_pipeline (in /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/minishell)
+==1790163==    by 0x4095BC: handle_normal_command (in /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/minishell)
+==1790163==    by 0x409785: determine_command_type (in /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/minishell)
+==1790163==    by 0x4018E3: process_command (in /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/minishell)
+==1790163==    by 0x401737: process_command_from_input (in /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/minishell)
+==1790163==    by 0x4013CA: main (in /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/minishell)
+==1790163== 
+==1790163== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==1790163==    <inherited from parent>
+==1790163== 
+==1790163== Open AF_UNIX socket 41: <unknown>
+==1790163==    <inherited from parent>
+==1790163== 
+==1790163== Open file descriptor 40: /home/yayiker/.config/Code/logs/20250825T135948/ptyhost.log
+==1790163==    <inherited from parent>
+==1790163== 
+==1790163== Open file descriptor 3: /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/valgrind_log.txt
+==1790163==    <inherited from parent>
+==1790163== 
+==1790163== 
+==1790163== HEAP SUMMARY:
+==1790163==     in use at exit: 208,655 bytes in 250 blocks
+==1790163==   total heap usage: 1,418 allocs, 1,168 frees, 448,948 bytes allocated
+==1790163== 
+==1790163== LEAK SUMMARY:
+==1790163==    definitely lost: 0 bytes in 0 blocks
+==1790163==    indirectly lost: 0 bytes in 0 blocks
+==1790163==      possibly lost: 0 bytes in 0 blocks
+==1790163==    still reachable: 0 bytes in 0 blocks
+==1790163==         suppressed: 208,655 bytes in 250 blocks
+==1790163== 
+==1790163== For lists of detected and suppressed errors, rerun with: -s
+==1790163== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==1790615== 
+==1790615== FILE DESCRIPTORS: 7 open (3 std) at exit.
+==1790615== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==1790615==    <inherited from parent>
+==1790615== 
+==1790615== Open AF_UNIX socket 41: <unknown>
+==1790615==    <inherited from parent>
+==1790615== 
+==1790615== Open file descriptor 40: /home/yayiker/.config/Code/logs/20250825T135948/ptyhost.log
+==1790615==    <inherited from parent>
+==1790615== 
+==1790615== Open file descriptor 3: /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/valgrind_log.txt
+==1790615==    <inherited from parent>
+==1790615== 
+==1790615== 
+==1790615== HEAP SUMMARY:
+==1790615==     in use at exit: 208,716 bytes in 253 blocks
+==1790615==   total heap usage: 1,495 allocs, 1,242 frees, 450,764 bytes allocated
+==1790615== 
+==1790615== LEAK SUMMARY:
+==1790615==    definitely lost: 0 bytes in 0 blocks
+==1790615==    indirectly lost: 0 bytes in 0 blocks
+==1790615==      possibly lost: 0 bytes in 0 blocks
+==1790615==    still reachable: 0 bytes in 0 blocks
+==1790615==         suppressed: 208,716 bytes in 253 blocks
+==1790615== 
+==1790615== For lists of detected and suppressed errors, rerun with: -s
+==1790615== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==1785406== 
+==1785406== FILE DESCRIPTORS: 7 open (3 std) at exit.
+==1785406== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==1785406==    <inherited from parent>
+==1785406== 
+==1785406== Open AF_UNIX socket 41: <unknown>
+==1785406==    <inherited from parent>
+==1785406== 
+==1785406== Open file descriptor 40: /home/yayiker/.config/Code/logs/20250825T135948/ptyhost.log
+==1785406==    <inherited from parent>
+==1785406== 
+==1785406== Open file descriptor 3: /home/yayiker/Masaüstü/22-40-23/repo/11-43-21/valgrind_log.txt
+==1785406==    <inherited from parent>
+==1785406== 
+==1785406== 
+==1785406== HEAP SUMMARY:
+==1785406==     in use at exit: 208,246 bytes in 226 blocks
+==1785406==   total heap usage: 1,895 allocs, 1,669 frees, 459,234 bytes allocated
+==1785406== 
+==1785406== LEAK SUMMARY:
+==1785406==    definitely lost: 0 bytes in 0 blocks
+==1785406==    indirectly lost: 0 bytes in 0 blocks
+==1785406==      possibly lost: 0 bytes in 0 blocks
+==1785406==    still reachable: 0 bytes in 0 blocks
+==1785406==         suppressed: 208,246 bytes in 226 blocks
+==1785406== 
+==1785406== For lists of detected and suppressed errors, rerun with: -s
+==1785406== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2 from 2)
