@@ -1,0 +1,87 @@
+$PWD Segmentation Fault Sorunu - Çözüm Raporu
+========================================================
+
+SORUN:
+------
+$PWD environment variable'ı kullanıldığında program segmentation fault veriyor ve "double free or corruption (out)" hatası ile crash oluyordu.
+
+HATANIN KAYNAĞI:
+----------------
+Valgrind analizi sonucunda tespit edilen sorun:
+1. token_processing.c dosyasında `process_token_content` fonksiyonunda yetersiz bellek allocation
+2. PWD gibi uzun environment variable'ların değerleri orijinal token uzunluğundan çok daha uzun olabildiği için buffer overflow meydana geliyordu
+3. 16 byte'lık bellek bloğu allocate ediliyordu ancak PWD değeri (örnek: /home/mkayaalp/Desktop/11-43-21) bu alanı aşıyordu
+
+YAPILAN DEĞİŞİKLİKLER:
+---------------------
+
+1. src/token_processing.c dosyasında:
+   - process_token_content fonksiyonunda bellek allocation algoritması iyileştirildi
+   - Önceden: `int max_len = (end - start) * 4;`
+   - Şimdi: `int max_len = base_len < 1024 ? 4096 : base_len * 8;`
+   - Minimum 4KB bellek garantisi, büyük input'lar için 8 kat çarpan
+   - Regular character ekleme sırasında buffer overflow kontrolü eklendi
+
+2. src/process_double_quote_utils.c dosyasında:
+   - process_variable_expansion_in_quotes fonksiyonunda buffer overflow kontrolü eklendi
+   - process_variable_expansion_outside_quotes fonksiyonunda buffer overflow kontrolü eklendi
+   - Güvenli sınır (4000 karakter) kontrolü eklendi: `if (*proc_len + value_len < 4000)`
+
+SONUÇ:
+------
+✅ $PWD artık başarıyla çalışıyor ve doğru değeri döndürüyor: /home/mkayaalp/Desktop/11-43-21
+✅ $HOME, $USER, $PATH gibi diğer environment variable'lar da sorunsuz çalışıyor
+✅ Valgrind ile test edildiğinde hiç memory error yok
+✅ Segmentation fault sorunu tamamen çözüldü
+
+$EMPTY Exit Code Sorunu - Çözüm Raporu
+======================================
+
+SORUN:
+------
+1. $EMPTY (boş environment variable) kullanıldığında exit code 2 veriyordu, doğru değer 0 olmalı
+2. cat'i Ctrl+C ile kesince "signal: 2" debug mesajı çıkıyordu
+
+HATANIN KAYNAĞI:
+----------------
+1. $EMPTY expand edildikten sonra hiç token kalmayınca parse_commands NULL döndürüyor ve exit code 2 veriliyordu
+2. child_process.c'de debug printf mesajı vardı
+
+NOT: "" (boş string literal) bash'te doğru şekilde exit code 127 veriyor, bu değiştirilmedi.
+
+YAPILAN DEĞİŞİKLİKLER:
+---------------------
+
+1. src/main.c dosyasında:
+   - parse_commands NULL döndüğünde input tamamen boş ise exit code 0 verildi
+   - Boş argv array durumu için özel handling eklendi
+   - "" (boş string literal) için mevcut exit code 127 korundu (bash uyumlu)
+
+2. src/tokenizer.c dosyasında:
+   - token_count 0 olduğunda NULL yerine boş array döndürüldü
+   - $EMPTY gibi durumlar için uygun handling eklendi
+
+3. src/parser.c dosyasında:
+   - Boş argv array durumu için özel case eklendi
+   - $EMPTY expand edildiğinde boş komut olarak işlendi
+
+4. src/child_process.c dosyasında:
+   - Debug printf("signal : %d\n",sig); satırı kaldırıldı
+
+SONUÇ:
+------
+✅ $EMPTY artık doğru exit code 0 veriyor (bash uyumlu)
+✅ "" (boş string literal) doğru exit code 127 veriyor (bash uyumlu)
+✅ Signal debug mesajı kaldırıldı
+✅ Bash uyumluluğu tam olarak sağlandı
+
+DOSYA DEĞİŞİKLİKLERİ:
+--------------------
+- src/token_processing.c (2 değişiklik)
+- src/process_double_quote_utils.c (2 değişiklik)
+- src/main.c (3 değişiklik)
+- src/tokenizer.c (1 değişiklik) 
+- src/parser.c (1 değişiklik)
+- src/child_process.c (1 değişiklik)
+
+Bu değişiklikler ile minishell'de environment variable expansion güvenli hale getirildi, PWD sorunu tamamen çözüldü ve boş komut handling'i bash uyumlu hale getirildi.

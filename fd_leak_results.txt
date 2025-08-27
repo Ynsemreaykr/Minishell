@@ -1,0 +1,2046 @@
+=== FD Leak and Memory Leak Test ===
+>>> Testing: env
+==3171266== Memcheck, a memory error detector
+==3171266== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3171266== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==3171266== Command: ./minishell
+==3171266== 
+==3171268== 
+==3171268== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171268== 
+==3171268== HEAP SUMMARY:
+==3171268==     in use at exit: 208,314 bytes in 226 blocks
+==3171268==   total heap usage: 733 allocs, 507 frees, 257,375 bytes allocated
+==3171268== 
+==3171268== LEAK SUMMARY:
+==3171268==    definitely lost: 0 bytes in 0 blocks
+==3171268==    indirectly lost: 0 bytes in 0 blocks
+==3171268==      possibly lost: 0 bytes in 0 blocks
+==3171268==    still reachable: 0 bytes in 0 blocks
+==3171268==         suppressed: 208,314 bytes in 226 blocks
+==3171268== 
+==3171268== For lists of detected and suppressed errors, rerun with: -s
+==3171268== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171270== 
+==3171270== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171270== 
+==3171270== HEAP SUMMARY:
+==3171270==     in use at exit: 208,314 bytes in 226 blocks
+==3171270==   total heap usage: 775 allocs, 549 frees, 258,251 bytes allocated
+==3171270== 
+==3171270== LEAK SUMMARY:
+==3171270==    definitely lost: 0 bytes in 0 blocks
+==3171270==    indirectly lost: 0 bytes in 0 blocks
+==3171270==      possibly lost: 0 bytes in 0 blocks
+==3171270==    still reachable: 0 bytes in 0 blocks
+==3171270==         suppressed: 208,314 bytes in 226 blocks
+==3171270== 
+==3171270== For lists of detected and suppressed errors, rerun with: -s
+==3171270== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171281== 
+==3171281== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171281== 
+==3171281== HEAP SUMMARY:
+==3171281==     in use at exit: 208,314 bytes in 226 blocks
+==3171281==   total heap usage: 817 allocs, 591 frees, 259,127 bytes allocated
+==3171281== 
+==3171281== LEAK SUMMARY:
+==3171281==    definitely lost: 0 bytes in 0 blocks
+==3171281==    indirectly lost: 0 bytes in 0 blocks
+==3171281==      possibly lost: 0 bytes in 0 blocks
+==3171281==    still reachable: 0 bytes in 0 blocks
+==3171281==         suppressed: 208,314 bytes in 226 blocks
+==3171281== 
+==3171281== For lists of detected and suppressed errors, rerun with: -s
+==3171281== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171283== 
+==3171283== Process terminating with default action of signal 13 (SIGPIPE)
+==3171283==    at 0x49DB887: write (write.c:26)
+==3171283==    by 0x4951EEC: _IO_file_write@@GLIBC_2.2.5 (fileops.c:1180)
+==3171283==    by 0x49539E0: new_do_write (fileops.c:448)
+==3171283==    by 0x49539E0: _IO_new_do_write (fileops.c:425)
+==3171283==    by 0x49539E0: _IO_do_write@@GLIBC_2.2.5 (fileops.c:422)
+==3171283==    by 0x49526D4: _IO_new_file_xsputn (fileops.c:1243)
+==3171283==    by 0x49526D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==3171283==    by 0x493CFC9: outstring_func (vfprintf-internal.c:239)
+==3171283==    by 0x493CFC9: __vfprintf_internal (vfprintf-internal.c:1593)
+==3171283==    by 0x492779E: printf (printf.c:33)
+==3171283==    by 0x407A70: ft_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x408B22: exec_builtin (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x408E34: exec_pipeline (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x408C37: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171283== 
+==3171283== HEAP SUMMARY:
+==3171283==     in use at exit: 221,229 bytes in 482 blocks
+==3171283==   total heap usage: 849 allocs, 367 frees, 259,894 bytes allocated
+==3171283== 
+==3171283== 8 bytes in 1 blocks are still reachable in loss record 1 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40449F: create_env_string (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x404408: set_env_var (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4088DC: update_shlvl (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40142D: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 9 bytes in 3 blocks are still reachable in loss record 5 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40652D: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 9 bytes in 3 blocks are still reachable in loss record 6 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x406540: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 10 bytes in 1 blocks are still reachable in loss record 7 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40858C: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 10 bytes in 1 blocks are still reachable in loss record 8 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4085FE: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 12 bytes in 3 blocks are still reachable in loss record 15 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4023E6: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 16 bytes in 1 blocks are still reachable in loss record 20 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40449F: create_env_string (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x404408: set_env_var (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4088DC: update_shlvl (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40142D: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 21 bytes in 2 blocks are still reachable in loss record 23 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x406422: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 24 bytes in 2 blocks are still reachable in loss record 28 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4063F4: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 36 bytes in 2 blocks are still reachable in loss record 31 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x406422: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 36 bytes in 3 blocks are still reachable in loss record 32 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x406508: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 39 bytes in 3 blocks are still reachable in loss record 33 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401A3C: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 39 bytes in 3 blocks are still reachable in loss record 34 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402173: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 40 bytes in 1 blocks are still reachable in loss record 35 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40858C: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 40 bytes in 1 blocks are still reachable in loss record 36 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4085FE: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 40 bytes in 1 blocks are still reachable in loss record 37 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40449F: create_env_string (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x404408: set_env_var (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4088DC: update_shlvl (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40142D: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 45 bytes in 3 blocks are still reachable in loss record 38 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40894C: read_heredoc_content (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x407E89: heredoc_parent_process (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x407BD2: process_single_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x407ADD: handle_all_heredocs (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x408BF8: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 45 bytes in 3 blocks are still reachable in loss record 39 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40894C: read_heredoc_content (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x407E89: heredoc_parent_process (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x407BD2: process_single_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x407ADD: handle_all_heredocs (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x408BF8: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 48 bytes in 2 blocks are still reachable in loss record 43 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4063F4: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 48 bytes in 3 blocks are still reachable in loss record 44 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402173: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 54 bytes in 3 blocks are still reachable in loss record 45 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4023E6: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 54 bytes in 3 blocks are still reachable in loss record 46 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40652D: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 54 bytes in 3 blocks are still reachable in loss record 47 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x406540: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 80 bytes in 2 blocks are still reachable in loss record 51 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4063F4: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 80 bytes in 2 blocks are still reachable in loss record 52 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x406422: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 96 bytes in 3 blocks are still reachable in loss record 56 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401A3C: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 120 bytes in 3 blocks are still reachable in loss record 58 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401A3C: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 120 bytes in 3 blocks are still reachable in loss record 59 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402173: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 120 bytes in 3 blocks are still reachable in loss record 60 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4023E6: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 120 bytes in 3 blocks are still reachable in loss record 61 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x406508: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 120 bytes in 3 blocks are still reachable in loss record 62 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x406508: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 120 bytes in 3 blocks are still reachable in loss record 63 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40652D: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 120 bytes in 3 blocks are still reachable in loss record 64 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x406540: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 120 bytes in 3 blocks are still reachable in loss record 65 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40894C: read_heredoc_content (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x407E89: heredoc_parent_process (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x407BD2: process_single_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x407ADD: handle_all_heredocs (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x408BF8: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 194 bytes in 1 blocks are still reachable in loss record 69 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x4085FE: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 416 bytes in 1 blocks are still reachable in loss record 73 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x40858C: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 490 bytes in 49 blocks are still reachable in loss record 75 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x408665: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 1,869 bytes in 49 blocks are still reachable in loss record 91 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x408665: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== 1,960 bytes in 49 blocks are still reachable in loss record 92 of 120
+==3171283==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171283==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x408665: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171283== 
+==3171283== LEAK SUMMARY:
+==3171283==    definitely lost: 0 bytes in 0 blocks
+==3171283==    indirectly lost: 0 bytes in 0 blocks
+==3171283==      possibly lost: 0 bytes in 0 blocks
+==3171283==    still reachable: 6,882 bytes in 231 blocks
+==3171283==         suppressed: 214,347 bytes in 251 blocks
+==3171283== 
+==3171283== For lists of detected and suppressed errors, rerun with: -s
+==3171283== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171266== 
+==3171266== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171266== 
+==3171266== HEAP SUMMARY:
+==3171266==     in use at exit: 208,178 bytes in 222 blocks
+==3171266==   total heap usage: 852 allocs, 630 frees, 259,926 bytes allocated
+==3171266== 
+==3171266== LEAK SUMMARY:
+==3171266==    definitely lost: 0 bytes in 0 blocks
+==3171266==    indirectly lost: 0 bytes in 0 blocks
+==3171266==      possibly lost: 0 bytes in 0 blocks
+==3171266==    still reachable: 0 bytes in 0 blocks
+==3171266==         suppressed: 208,178 bytes in 222 blocks
+==3171266== 
+==3171266== For lists of detected and suppressed errors, rerun with: -s
+==3171266== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+=============================
+
+>>> Testing: unset FOO
+==3171287== Memcheck, a memory error detector
+==3171287== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3171287== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==3171287== Command: ./minishell
+==3171287== 
+==3171300== 
+==3171300== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171300== 
+==3171300== HEAP SUMMARY:
+==3171300==     in use at exit: 208,326 bytes in 226 blocks
+==3171300==   total heap usage: 740 allocs, 514 frees, 261,664 bytes allocated
+==3171300== 
+==3171300== LEAK SUMMARY:
+==3171300==    definitely lost: 0 bytes in 0 blocks
+==3171300==    indirectly lost: 0 bytes in 0 blocks
+==3171300==      possibly lost: 0 bytes in 0 blocks
+==3171300==    still reachable: 0 bytes in 0 blocks
+==3171300==         suppressed: 208,326 bytes in 226 blocks
+==3171300== 
+==3171300== For lists of detected and suppressed errors, rerun with: -s
+==3171300== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171301== 
+==3171301== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171301== 
+==3171301== HEAP SUMMARY:
+==3171301==     in use at exit: 208,326 bytes in 226 blocks
+==3171301==   total heap usage: 782 allocs, 556 frees, 262,540 bytes allocated
+==3171301== 
+==3171301== LEAK SUMMARY:
+==3171301==    definitely lost: 0 bytes in 0 blocks
+==3171301==    indirectly lost: 0 bytes in 0 blocks
+==3171301==      possibly lost: 0 bytes in 0 blocks
+==3171301==    still reachable: 0 bytes in 0 blocks
+==3171301==         suppressed: 208,326 bytes in 226 blocks
+==3171301== 
+==3171301== For lists of detected and suppressed errors, rerun with: -s
+==3171301== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171302== 
+==3171302== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171302== 
+==3171302== HEAP SUMMARY:
+==3171302==     in use at exit: 208,326 bytes in 226 blocks
+==3171302==   total heap usage: 824 allocs, 598 frees, 263,416 bytes allocated
+==3171302== 
+==3171302== LEAK SUMMARY:
+==3171302==    definitely lost: 0 bytes in 0 blocks
+==3171302==    indirectly lost: 0 bytes in 0 blocks
+==3171302==      possibly lost: 0 bytes in 0 blocks
+==3171302==    still reachable: 0 bytes in 0 blocks
+==3171302==         suppressed: 208,326 bytes in 226 blocks
+==3171302== 
+==3171302== For lists of detected and suppressed errors, rerun with: -s
+==3171302== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171304== 
+==3171304== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171304== 
+==3171304== HEAP SUMMARY:
+==3171304==     in use at exit: 208,344 bytes in 226 blocks
+==3171304==   total heap usage: 856 allocs, 630 frees, 264,183 bytes allocated
+==3171304== 
+==3171304== LEAK SUMMARY:
+==3171304==    definitely lost: 0 bytes in 0 blocks
+==3171304==    indirectly lost: 0 bytes in 0 blocks
+==3171304==      possibly lost: 0 bytes in 0 blocks
+==3171304==    still reachable: 0 bytes in 0 blocks
+==3171304==         suppressed: 208,344 bytes in 226 blocks
+==3171304== 
+==3171304== For lists of detected and suppressed errors, rerun with: -s
+==3171304== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171287== 
+==3171287== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171287== 
+==3171287== HEAP SUMMARY:
+==3171287==     in use at exit: 208,178 bytes in 222 blocks
+==3171287==   total heap usage: 859 allocs, 637 frees, 264,215 bytes allocated
+==3171287== 
+==3171287== LEAK SUMMARY:
+==3171287==    definitely lost: 0 bytes in 0 blocks
+==3171287==    indirectly lost: 0 bytes in 0 blocks
+==3171287==      possibly lost: 0 bytes in 0 blocks
+==3171287==    still reachable: 0 bytes in 0 blocks
+==3171287==         suppressed: 208,178 bytes in 222 blocks
+==3171287== 
+==3171287== For lists of detected and suppressed errors, rerun with: -s
+==3171287== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+=============================
+
+>>> Testing: pwd
+==3171308== Memcheck, a memory error detector
+==3171308== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3171308== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==3171308== Command: ./minishell
+==3171308== 
+==3171309== 
+==3171309== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171309== 
+==3171309== HEAP SUMMARY:
+==3171309==     in use at exit: 208,314 bytes in 226 blocks
+==3171309==   total heap usage: 733 allocs, 507 frees, 257,375 bytes allocated
+==3171309== 
+==3171309== LEAK SUMMARY:
+==3171309==    definitely lost: 0 bytes in 0 blocks
+==3171309==    indirectly lost: 0 bytes in 0 blocks
+==3171309==      possibly lost: 0 bytes in 0 blocks
+==3171309==    still reachable: 0 bytes in 0 blocks
+==3171309==         suppressed: 208,314 bytes in 226 blocks
+==3171309== 
+==3171309== For lists of detected and suppressed errors, rerun with: -s
+==3171309== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171310== 
+==3171310== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171310== 
+==3171310== HEAP SUMMARY:
+==3171310==     in use at exit: 208,314 bytes in 226 blocks
+==3171310==   total heap usage: 775 allocs, 549 frees, 258,251 bytes allocated
+==3171310== 
+==3171310== LEAK SUMMARY:
+==3171310==    definitely lost: 0 bytes in 0 blocks
+==3171310==    indirectly lost: 0 bytes in 0 blocks
+==3171310==      possibly lost: 0 bytes in 0 blocks
+==3171310==    still reachable: 0 bytes in 0 blocks
+==3171310==         suppressed: 208,314 bytes in 226 blocks
+==3171310== 
+==3171310== For lists of detected and suppressed errors, rerun with: -s
+==3171310== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171311== 
+==3171311== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171311== 
+==3171311== HEAP SUMMARY:
+==3171311==     in use at exit: 208,314 bytes in 226 blocks
+==3171311==   total heap usage: 817 allocs, 591 frees, 259,127 bytes allocated
+==3171311== 
+==3171311== LEAK SUMMARY:
+==3171311==    definitely lost: 0 bytes in 0 blocks
+==3171311==    indirectly lost: 0 bytes in 0 blocks
+==3171311==      possibly lost: 0 bytes in 0 blocks
+==3171311==    still reachable: 0 bytes in 0 blocks
+==3171311==         suppressed: 208,314 bytes in 226 blocks
+==3171311== 
+==3171311== For lists of detected and suppressed errors, rerun with: -s
+==3171311== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171313== 
+==3171313== Process terminating with default action of signal 13 (SIGPIPE)
+==3171313==    at 0x49DB887: write (write.c:26)
+==3171313==    by 0x4951EEC: _IO_file_write@@GLIBC_2.2.5 (fileops.c:1180)
+==3171313==    by 0x49539E0: new_do_write (fileops.c:448)
+==3171313==    by 0x49539E0: _IO_new_do_write (fileops.c:425)
+==3171313==    by 0x49539E0: _IO_do_write@@GLIBC_2.2.5 (fileops.c:422)
+==3171313==    by 0x49526D4: _IO_new_file_xsputn (fileops.c:1243)
+==3171313==    by 0x49526D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==3171313==    by 0x493CFC9: outstring_func (vfprintf-internal.c:239)
+==3171313==    by 0x493CFC9: __vfprintf_internal (vfprintf-internal.c:1593)
+==3171313==    by 0x492779E: printf (printf.c:33)
+==3171313==    by 0x4076AE: ft_pwd (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x408AEB: exec_builtin (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x408E34: exec_pipeline (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x408C37: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171313== 
+==3171313== HEAP SUMMARY:
+==3171313==     in use at exit: 221,229 bytes in 482 blocks
+==3171313==   total heap usage: 849 allocs, 367 frees, 259,894 bytes allocated
+==3171313== 
+==3171313== 8 bytes in 1 blocks are still reachable in loss record 1 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40449F: create_env_string (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x404408: set_env_var (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4088DC: update_shlvl (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40142D: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 9 bytes in 3 blocks are still reachable in loss record 5 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40652D: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 9 bytes in 3 blocks are still reachable in loss record 6 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x406540: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 10 bytes in 1 blocks are still reachable in loss record 7 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40858C: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 10 bytes in 1 blocks are still reachable in loss record 8 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4085FE: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 12 bytes in 3 blocks are still reachable in loss record 15 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4023E6: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 16 bytes in 1 blocks are still reachable in loss record 20 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40449F: create_env_string (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x404408: set_env_var (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4088DC: update_shlvl (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40142D: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 21 bytes in 2 blocks are still reachable in loss record 23 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x406422: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 24 bytes in 2 blocks are still reachable in loss record 28 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4063F4: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 36 bytes in 2 blocks are still reachable in loss record 31 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x406422: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 36 bytes in 3 blocks are still reachable in loss record 32 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x406508: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 39 bytes in 3 blocks are still reachable in loss record 33 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401A3C: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 39 bytes in 3 blocks are still reachable in loss record 34 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402173: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 40 bytes in 1 blocks are still reachable in loss record 35 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40858C: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 40 bytes in 1 blocks are still reachable in loss record 36 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4085FE: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 40 bytes in 1 blocks are still reachable in loss record 37 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40449F: create_env_string (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x404408: set_env_var (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4088DC: update_shlvl (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40142D: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 45 bytes in 3 blocks are still reachable in loss record 38 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40894C: read_heredoc_content (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x407E89: heredoc_parent_process (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x407BD2: process_single_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x407ADD: handle_all_heredocs (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x408BF8: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 45 bytes in 3 blocks are still reachable in loss record 39 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40894C: read_heredoc_content (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x407E89: heredoc_parent_process (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x407BD2: process_single_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x407ADD: handle_all_heredocs (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x408BF8: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 48 bytes in 2 blocks are still reachable in loss record 43 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4063F4: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 48 bytes in 3 blocks are still reachable in loss record 44 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402173: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 54 bytes in 3 blocks are still reachable in loss record 45 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4023E6: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 54 bytes in 3 blocks are still reachable in loss record 46 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40652D: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 54 bytes in 3 blocks are still reachable in loss record 47 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x406540: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 80 bytes in 2 blocks are still reachable in loss record 51 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4063F4: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 80 bytes in 2 blocks are still reachable in loss record 52 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x406422: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 96 bytes in 3 blocks are still reachable in loss record 56 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401A3C: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 120 bytes in 3 blocks are still reachable in loss record 58 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401A3C: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 120 bytes in 3 blocks are still reachable in loss record 59 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402173: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 120 bytes in 3 blocks are still reachable in loss record 60 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4023E6: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 120 bytes in 3 blocks are still reachable in loss record 61 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x406508: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 120 bytes in 3 blocks are still reachable in loss record 62 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x406508: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 120 bytes in 3 blocks are still reachable in loss record 63 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40652D: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 120 bytes in 3 blocks are still reachable in loss record 64 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x406540: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 120 bytes in 3 blocks are still reachable in loss record 65 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40894C: read_heredoc_content (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x407E89: heredoc_parent_process (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x407BD2: process_single_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x407ADD: handle_all_heredocs (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x408BF8: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 194 bytes in 1 blocks are still reachable in loss record 69 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x4085FE: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 416 bytes in 1 blocks are still reachable in loss record 73 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x40858C: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 490 bytes in 49 blocks are still reachable in loss record 75 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x408665: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 1,869 bytes in 49 blocks are still reachable in loss record 91 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x408665: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== 1,960 bytes in 49 blocks are still reachable in loss record 92 of 120
+==3171313==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171313==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x408665: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171313== 
+==3171313== LEAK SUMMARY:
+==3171313==    definitely lost: 0 bytes in 0 blocks
+==3171313==    indirectly lost: 0 bytes in 0 blocks
+==3171313==      possibly lost: 0 bytes in 0 blocks
+==3171313==    still reachable: 6,882 bytes in 231 blocks
+==3171313==         suppressed: 214,347 bytes in 251 blocks
+==3171313== 
+==3171313== For lists of detected and suppressed errors, rerun with: -s
+==3171313== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171308== 
+==3171308== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171308== 
+==3171308== HEAP SUMMARY:
+==3171308==     in use at exit: 208,178 bytes in 222 blocks
+==3171308==   total heap usage: 852 allocs, 630 frees, 259,926 bytes allocated
+==3171308== 
+==3171308== LEAK SUMMARY:
+==3171308==    definitely lost: 0 bytes in 0 blocks
+==3171308==    indirectly lost: 0 bytes in 0 blocks
+==3171308==      possibly lost: 0 bytes in 0 blocks
+==3171308==    still reachable: 0 bytes in 0 blocks
+==3171308==         suppressed: 208,178 bytes in 222 blocks
+==3171308== 
+==3171308== For lists of detected and suppressed errors, rerun with: -s
+==3171308== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+=============================
+
+>>> Testing: export FOO=123
+==3171317== Memcheck, a memory error detector
+==3171317== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3171317== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==3171317== Command: ./minishell
+==3171317== 
+==3171329== 
+==3171329== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171329== 
+==3171329== HEAP SUMMARY:
+==3171329==     in use at exit: 208,336 bytes in 226 blocks
+==3171329==   total heap usage: 740 allocs, 514 frees, 261,684 bytes allocated
+==3171329== 
+==3171329== LEAK SUMMARY:
+==3171329==    definitely lost: 0 bytes in 0 blocks
+==3171329==    indirectly lost: 0 bytes in 0 blocks
+==3171329==      possibly lost: 0 bytes in 0 blocks
+==3171329==    still reachable: 0 bytes in 0 blocks
+==3171329==         suppressed: 208,336 bytes in 226 blocks
+==3171329== 
+==3171329== For lists of detected and suppressed errors, rerun with: -s
+==3171329== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171330== 
+==3171330== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171330== 
+==3171330== HEAP SUMMARY:
+==3171330==     in use at exit: 208,336 bytes in 226 blocks
+==3171330==   total heap usage: 782 allocs, 556 frees, 262,560 bytes allocated
+==3171330== 
+==3171330== LEAK SUMMARY:
+==3171330==    definitely lost: 0 bytes in 0 blocks
+==3171330==    indirectly lost: 0 bytes in 0 blocks
+==3171330==      possibly lost: 0 bytes in 0 blocks
+==3171330==    still reachable: 0 bytes in 0 blocks
+==3171330==         suppressed: 208,336 bytes in 226 blocks
+==3171330== 
+==3171330== For lists of detected and suppressed errors, rerun with: -s
+==3171330== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171331== 
+==3171331== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171331== 
+==3171331== HEAP SUMMARY:
+==3171331==     in use at exit: 208,336 bytes in 226 blocks
+==3171331==   total heap usage: 824 allocs, 598 frees, 263,436 bytes allocated
+==3171331== 
+==3171331== LEAK SUMMARY:
+==3171331==    definitely lost: 0 bytes in 0 blocks
+==3171331==    indirectly lost: 0 bytes in 0 blocks
+==3171331==      possibly lost: 0 bytes in 0 blocks
+==3171331==    still reachable: 0 bytes in 0 blocks
+==3171331==         suppressed: 208,336 bytes in 226 blocks
+==3171331== 
+==3171331== For lists of detected and suppressed errors, rerun with: -s
+==3171331== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171333== 
+==3171333== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171333== 
+==3171333== HEAP SUMMARY:
+==3171333==     in use at exit: 208,354 bytes in 226 blocks
+==3171333==   total heap usage: 865 allocs, 639 frees, 264,807 bytes allocated
+==3171333== 
+==3171333== LEAK SUMMARY:
+==3171333==    definitely lost: 0 bytes in 0 blocks
+==3171333==    indirectly lost: 0 bytes in 0 blocks
+==3171333==      possibly lost: 0 bytes in 0 blocks
+==3171333==    still reachable: 0 bytes in 0 blocks
+==3171333==         suppressed: 208,354 bytes in 226 blocks
+==3171333== 
+==3171333== For lists of detected and suppressed errors, rerun with: -s
+==3171333== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171317== 
+==3171317== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171317== 
+==3171317== HEAP SUMMARY:
+==3171317==     in use at exit: 208,178 bytes in 222 blocks
+==3171317==   total heap usage: 859 allocs, 637 frees, 264,235 bytes allocated
+==3171317== 
+==3171317== LEAK SUMMARY:
+==3171317==    definitely lost: 0 bytes in 0 blocks
+==3171317==    indirectly lost: 0 bytes in 0 blocks
+==3171317==      possibly lost: 0 bytes in 0 blocks
+==3171317==    still reachable: 0 bytes in 0 blocks
+==3171317==         suppressed: 208,178 bytes in 222 blocks
+==3171317== 
+==3171317== For lists of detected and suppressed errors, rerun with: -s
+==3171317== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+=============================
+
+>>> Testing: exit
+==3171337== Memcheck, a memory error detector
+==3171337== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3171337== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==3171337== Command: ./minishell
+==3171337== 
+==3171349== 
+==3171349== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171349== 
+==3171349== HEAP SUMMARY:
+==3171349==     in use at exit: 208,316 bytes in 226 blocks
+==3171349==   total heap usage: 733 allocs, 507 frees, 257,379 bytes allocated
+==3171349== 
+==3171349== LEAK SUMMARY:
+==3171349==    definitely lost: 0 bytes in 0 blocks
+==3171349==    indirectly lost: 0 bytes in 0 blocks
+==3171349==      possibly lost: 0 bytes in 0 blocks
+==3171349==    still reachable: 0 bytes in 0 blocks
+==3171349==         suppressed: 208,316 bytes in 226 blocks
+==3171349== 
+==3171349== For lists of detected and suppressed errors, rerun with: -s
+==3171349== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171350== 
+==3171350== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171350== 
+==3171350== HEAP SUMMARY:
+==3171350==     in use at exit: 208,316 bytes in 226 blocks
+==3171350==   total heap usage: 775 allocs, 549 frees, 258,255 bytes allocated
+==3171350== 
+==3171350== LEAK SUMMARY:
+==3171350==    definitely lost: 0 bytes in 0 blocks
+==3171350==    indirectly lost: 0 bytes in 0 blocks
+==3171350==      possibly lost: 0 bytes in 0 blocks
+==3171350==    still reachable: 0 bytes in 0 blocks
+==3171350==         suppressed: 208,316 bytes in 226 blocks
+==3171350== 
+==3171350== For lists of detected and suppressed errors, rerun with: -s
+==3171350== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171351== 
+==3171351== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171351== 
+==3171351== HEAP SUMMARY:
+==3171351==     in use at exit: 208,316 bytes in 226 blocks
+==3171351==   total heap usage: 817 allocs, 591 frees, 259,131 bytes allocated
+==3171351== 
+==3171351== LEAK SUMMARY:
+==3171351==    definitely lost: 0 bytes in 0 blocks
+==3171351==    indirectly lost: 0 bytes in 0 blocks
+==3171351==      possibly lost: 0 bytes in 0 blocks
+==3171351==    still reachable: 0 bytes in 0 blocks
+==3171351==         suppressed: 208,316 bytes in 226 blocks
+==3171351== 
+==3171351== For lists of detected and suppressed errors, rerun with: -s
+==3171351== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171353== 
+==3171353== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171353== 
+==3171353== HEAP SUMMARY:
+==3171353==     in use at exit: 215,217 bytes in 457 blocks
+==3171353==   total heap usage: 849 allocs, 392 frees, 259,898 bytes allocated
+==3171353== 
+==3171353== 8 bytes in 1 blocks are still reachable in loss record 1 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40449F: create_env_string (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x404408: set_env_var (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4088DC: update_shlvl (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40142D: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 9 bytes in 3 blocks are still reachable in loss record 4 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40652D: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 9 bytes in 3 blocks are still reachable in loss record 5 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x406540: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 10 bytes in 1 blocks are still reachable in loss record 6 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40858C: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 10 bytes in 1 blocks are still reachable in loss record 7 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4085FE: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 13 bytes in 3 blocks are still reachable in loss record 12 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4023E6: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 16 bytes in 1 blocks are still reachable in loss record 16 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40449F: create_env_string (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x404408: set_env_var (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4088DC: update_shlvl (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40142D: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 21 bytes in 2 blocks are still reachable in loss record 19 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x406422: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 24 bytes in 2 blocks are still reachable in loss record 22 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4063F4: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 36 bytes in 2 blocks are still reachable in loss record 24 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x406422: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 36 bytes in 3 blocks are still reachable in loss record 25 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x406508: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 39 bytes in 3 blocks are still reachable in loss record 26 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401A3C: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 39 bytes in 3 blocks are still reachable in loss record 27 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402173: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 40 bytes in 1 blocks are still reachable in loss record 28 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40858C: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 40 bytes in 1 blocks are still reachable in loss record 29 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4085FE: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 40 bytes in 1 blocks are still reachable in loss record 30 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40449F: create_env_string (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x404408: set_env_var (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4088DC: update_shlvl (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40142D: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 45 bytes in 3 blocks are still reachable in loss record 31 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40894C: read_heredoc_content (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x407E89: heredoc_parent_process (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x407BD2: process_single_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x407ADD: handle_all_heredocs (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x408BF8: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 45 bytes in 3 blocks are still reachable in loss record 32 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40894C: read_heredoc_content (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x407E89: heredoc_parent_process (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x407BD2: process_single_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x407ADD: handle_all_heredocs (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x408BF8: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 48 bytes in 2 blocks are still reachable in loss record 36 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4063F4: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 48 bytes in 3 blocks are still reachable in loss record 37 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402173: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 54 bytes in 3 blocks are still reachable in loss record 38 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4023E6: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 54 bytes in 3 blocks are still reachable in loss record 39 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40652D: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 54 bytes in 3 blocks are still reachable in loss record 40 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x406540: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 80 bytes in 2 blocks are still reachable in loss record 44 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4063F4: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 80 bytes in 2 blocks are still reachable in loss record 45 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x406422: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 96 bytes in 3 blocks are still reachable in loss record 49 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401A3C: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 120 bytes in 3 blocks are still reachable in loss record 50 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401A3C: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 120 bytes in 3 blocks are still reachable in loss record 51 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402173: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 120 bytes in 3 blocks are still reachable in loss record 52 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4023E6: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 120 bytes in 3 blocks are still reachable in loss record 53 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x406508: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 120 bytes in 3 blocks are still reachable in loss record 54 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x406508: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 120 bytes in 3 blocks are still reachable in loss record 55 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40652D: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 120 bytes in 3 blocks are still reachable in loss record 56 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x406540: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 120 bytes in 3 blocks are still reachable in loss record 57 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40894C: read_heredoc_content (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x407E89: heredoc_parent_process (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x407BD2: process_single_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x407ADD: handle_all_heredocs (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x408BF8: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 194 bytes in 1 blocks are still reachable in loss record 60 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x4085FE: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 416 bytes in 1 blocks are still reachable in loss record 62 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x40858C: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 490 bytes in 49 blocks are still reachable in loss record 63 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x408665: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 1,869 bytes in 49 blocks are still reachable in loss record 78 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x408665: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== 1,960 bytes in 49 blocks are still reachable in loss record 79 of 106
+==3171353==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171353==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x408665: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171353== 
+==3171353== LEAK SUMMARY:
+==3171353==    definitely lost: 0 bytes in 0 blocks
+==3171353==    indirectly lost: 0 bytes in 0 blocks
+==3171353==      possibly lost: 0 bytes in 0 blocks
+==3171353==    still reachable: 6,883 bytes in 231 blocks
+==3171353==         suppressed: 208,334 bytes in 226 blocks
+==3171353== 
+==3171353== For lists of detected and suppressed errors, rerun with: -s
+==3171353== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171337== 
+==3171337== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171337== 
+==3171337== HEAP SUMMARY:
+==3171337==     in use at exit: 208,178 bytes in 222 blocks
+==3171337==   total heap usage: 852 allocs, 630 frees, 259,930 bytes allocated
+==3171337== 
+==3171337== LEAK SUMMARY:
+==3171337==    definitely lost: 0 bytes in 0 blocks
+==3171337==    indirectly lost: 0 bytes in 0 blocks
+==3171337==      possibly lost: 0 bytes in 0 blocks
+==3171337==    still reachable: 0 bytes in 0 blocks
+==3171337==         suppressed: 208,178 bytes in 222 blocks
+==3171337== 
+==3171337== For lists of detected and suppressed errors, rerun with: -s
+==3171337== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+=============================
+
+>>> Testing: echo selam
+==3171357== Memcheck, a memory error detector
+==3171357== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3171357== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==3171357== Command: ./minishell
+==3171357== 
+==3171358== 
+==3171358== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171358== 
+==3171358== HEAP SUMMARY:
+==3171358==     in use at exit: 208,328 bytes in 226 blocks
+==3171358==   total heap usage: 740 allocs, 514 frees, 261,668 bytes allocated
+==3171358== 
+==3171358== LEAK SUMMARY:
+==3171358==    definitely lost: 0 bytes in 0 blocks
+==3171358==    indirectly lost: 0 bytes in 0 blocks
+==3171358==      possibly lost: 0 bytes in 0 blocks
+==3171358==    still reachable: 0 bytes in 0 blocks
+==3171358==         suppressed: 208,328 bytes in 226 blocks
+==3171358== 
+==3171358== For lists of detected and suppressed errors, rerun with: -s
+==3171358== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171359== 
+==3171359== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171359== 
+==3171359== HEAP SUMMARY:
+==3171359==     in use at exit: 208,328 bytes in 226 blocks
+==3171359==   total heap usage: 782 allocs, 556 frees, 262,544 bytes allocated
+==3171359== 
+==3171359== LEAK SUMMARY:
+==3171359==    definitely lost: 0 bytes in 0 blocks
+==3171359==    indirectly lost: 0 bytes in 0 blocks
+==3171359==      possibly lost: 0 bytes in 0 blocks
+==3171359==    still reachable: 0 bytes in 0 blocks
+==3171359==         suppressed: 208,328 bytes in 226 blocks
+==3171359== 
+==3171359== For lists of detected and suppressed errors, rerun with: -s
+==3171359== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171360== 
+==3171360== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171360== 
+==3171360== HEAP SUMMARY:
+==3171360==     in use at exit: 208,328 bytes in 226 blocks
+==3171360==   total heap usage: 824 allocs, 598 frees, 263,420 bytes allocated
+==3171360== 
+==3171360== LEAK SUMMARY:
+==3171360==    definitely lost: 0 bytes in 0 blocks
+==3171360==    indirectly lost: 0 bytes in 0 blocks
+==3171360==      possibly lost: 0 bytes in 0 blocks
+==3171360==    still reachable: 0 bytes in 0 blocks
+==3171360==         suppressed: 208,328 bytes in 226 blocks
+==3171360== 
+==3171360== For lists of detected and suppressed errors, rerun with: -s
+==3171360== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171362== 
+==3171362== Process terminating with default action of signal 13 (SIGPIPE)
+==3171362==    at 0x49DB887: write (write.c:26)
+==3171362==    by 0x4951EEC: _IO_file_write@@GLIBC_2.2.5 (fileops.c:1180)
+==3171362==    by 0x49539E0: new_do_write (fileops.c:448)
+==3171362==    by 0x49539E0: _IO_new_do_write (fileops.c:425)
+==3171362==    by 0x49539E0: _IO_do_write@@GLIBC_2.2.5 (fileops.c:422)
+==3171362==    by 0x49526D4: _IO_new_file_xsputn (fileops.c:1243)
+==3171362==    by 0x49526D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==3171362==    by 0x493C14C: outstring_func (vfprintf-internal.c:239)
+==3171362==    by 0x493C14C: __vfprintf_internal (vfprintf-internal.c:1263)
+==3171362==    by 0x492779E: printf (printf.c:33)
+==3171362==    by 0x407334: ft_echo (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x408A85: exec_builtin (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x408E34: exec_pipeline (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x408C37: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171362== 
+==3171362== HEAP SUMMARY:
+==3171362==     in use at exit: 221,316 bytes in 485 blocks
+==3171362==   total heap usage: 856 allocs, 371 frees, 264,187 bytes allocated
+==3171362== 
+==3171362== 8 bytes in 1 blocks are still reachable in loss record 1 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40449F: create_env_string (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x404408: set_env_var (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4088DC: update_shlvl (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40142D: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 9 bytes in 3 blocks are still reachable in loss record 5 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40652D: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 9 bytes in 3 blocks are still reachable in loss record 6 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x406540: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 10 bytes in 1 blocks are still reachable in loss record 7 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40858C: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 10 bytes in 1 blocks are still reachable in loss record 8 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4085FE: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 16 bytes in 1 blocks are still reachable in loss record 19 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40449F: create_env_string (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x404408: set_env_var (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4088DC: update_shlvl (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40142D: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 19 bytes in 4 blocks are still reachable in loss record 21 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4023E6: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 21 bytes in 2 blocks are still reachable in loss record 23 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x406422: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 24 bytes in 2 blocks are still reachable in loss record 28 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4063F4: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 36 bytes in 2 blocks are still reachable in loss record 31 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x406422: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 36 bytes in 3 blocks are still reachable in loss record 32 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x406508: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 39 bytes in 3 blocks are still reachable in loss record 33 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401A3C: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 39 bytes in 3 blocks are still reachable in loss record 34 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402173: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 40 bytes in 1 blocks are still reachable in loss record 35 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40858C: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 40 bytes in 1 blocks are still reachable in loss record 36 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4085FE: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 40 bytes in 1 blocks are still reachable in loss record 37 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40449F: create_env_string (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x404408: set_env_var (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4088DC: update_shlvl (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40142D: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 45 bytes in 3 blocks are still reachable in loss record 38 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40894C: read_heredoc_content (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x407E89: heredoc_parent_process (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x407BD2: process_single_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x407ADD: handle_all_heredocs (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x408BF8: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 45 bytes in 3 blocks are still reachable in loss record 39 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40894C: read_heredoc_content (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x407E89: heredoc_parent_process (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x407BD2: process_single_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x407ADD: handle_all_heredocs (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x408BF8: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 48 bytes in 2 blocks are still reachable in loss record 43 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4063F4: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 54 bytes in 3 blocks are still reachable in loss record 44 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40652D: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 54 bytes in 3 blocks are still reachable in loss record 45 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x406540: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 56 bytes in 3 blocks are still reachable in loss record 46 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402173: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 72 bytes in 4 blocks are still reachable in loss record 49 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4023E6: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 80 bytes in 2 blocks are still reachable in loss record 51 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4063F4: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 80 bytes in 2 blocks are still reachable in loss record 52 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x406422: create_redir (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402214: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 96 bytes in 3 blocks are still reachable in loss record 56 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401A3C: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 120 bytes in 3 blocks are still reachable in loss record 58 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401A3C: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 120 bytes in 3 blocks are still reachable in loss record 59 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402173: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 120 bytes in 3 blocks are still reachable in loss record 60 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x406508: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 120 bytes in 3 blocks are still reachable in loss record 61 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x406508: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 120 bytes in 3 blocks are still reachable in loss record 62 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40652D: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 120 bytes in 3 blocks are still reachable in loss record 63 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x406540: create_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x402399: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 120 bytes in 3 blocks are still reachable in loss record 64 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40894C: read_heredoc_content (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x407E89: heredoc_parent_process (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x407BD2: process_single_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x407ADD: handle_all_heredocs (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x408BF8: execute_command_main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401953: process_command (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4017B4: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 160 bytes in 4 blocks are still reachable in loss record 66 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4095D4: ft_strdup (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4023E6: parse_redirections_and_heredoc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401CF8: parse_commands (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4015C3: process_command_from_input (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40139A: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 194 bytes in 1 blocks are still reachable in loss record 69 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x4085FE: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 416 bytes in 1 blocks are still reachable in loss record 73 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x40858C: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 490 bytes in 49 blocks are still reachable in loss record 75 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x408247: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x408665: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 1,869 bytes in 49 blocks are still reachable in loss record 91 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081CB: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x408665: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== 1,960 bytes in 49 blocks are still reachable in loss record 92 of 120
+==3171362==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3171362==    by 0x4081F1: ft_malloc (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x408665: init_env (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401424: init_shell (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362==    by 0x401346: main (in /home/yayiker/Masaüstü/15-45-26/15-45-26/11-43-21/minishell)
+==3171362== 
+==3171362== LEAK SUMMARY:
+==3171362==    definitely lost: 0 bytes in 0 blocks
+==3171362==    indirectly lost: 0 bytes in 0 blocks
+==3171362==      possibly lost: 0 bytes in 0 blocks
+==3171362==    still reachable: 6,955 bytes in 234 blocks
+==3171362==         suppressed: 214,361 bytes in 251 blocks
+==3171362== 
+==3171362== For lists of detected and suppressed errors, rerun with: -s
+==3171362== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171357== 
+==3171357== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171357== 
+==3171357== HEAP SUMMARY:
+==3171357==     in use at exit: 208,178 bytes in 222 blocks
+==3171357==   total heap usage: 859 allocs, 637 frees, 264,219 bytes allocated
+==3171357== 
+==3171357== LEAK SUMMARY:
+==3171357==    definitely lost: 0 bytes in 0 blocks
+==3171357==    indirectly lost: 0 bytes in 0 blocks
+==3171357==      possibly lost: 0 bytes in 0 blocks
+==3171357==    still reachable: 0 bytes in 0 blocks
+==3171357==         suppressed: 208,178 bytes in 222 blocks
+==3171357== 
+==3171357== For lists of detected and suppressed errors, rerun with: -s
+==3171357== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+=============================
+
+>>> Testing: cd .
+==3171366== Memcheck, a memory error detector
+==3171366== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3171366== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==3171366== Command: ./minishell
+==3171366== 
+==3171380== 
+==3171380== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171380== 
+==3171380== HEAP SUMMARY:
+==3171380==     in use at exit: 208,316 bytes in 226 blocks
+==3171380==   total heap usage: 739 allocs, 513 frees, 261,612 bytes allocated
+==3171380== 
+==3171380== LEAK SUMMARY:
+==3171380==    definitely lost: 0 bytes in 0 blocks
+==3171380==    indirectly lost: 0 bytes in 0 blocks
+==3171380==      possibly lost: 0 bytes in 0 blocks
+==3171380==    still reachable: 0 bytes in 0 blocks
+==3171380==         suppressed: 208,316 bytes in 226 blocks
+==3171380== 
+==3171380== For lists of detected and suppressed errors, rerun with: -s
+==3171380== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171381== 
+==3171381== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171381== 
+==3171381== HEAP SUMMARY:
+==3171381==     in use at exit: 208,316 bytes in 226 blocks
+==3171381==   total heap usage: 781 allocs, 555 frees, 262,488 bytes allocated
+==3171381== 
+==3171381== LEAK SUMMARY:
+==3171381==    definitely lost: 0 bytes in 0 blocks
+==3171381==    indirectly lost: 0 bytes in 0 blocks
+==3171381==      possibly lost: 0 bytes in 0 blocks
+==3171381==    still reachable: 0 bytes in 0 blocks
+==3171381==         suppressed: 208,316 bytes in 226 blocks
+==3171381== 
+==3171381== For lists of detected and suppressed errors, rerun with: -s
+==3171381== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171382== 
+==3171382== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171382== 
+==3171382== HEAP SUMMARY:
+==3171382==     in use at exit: 208,316 bytes in 226 blocks
+==3171382==   total heap usage: 823 allocs, 597 frees, 263,364 bytes allocated
+==3171382== 
+==3171382== LEAK SUMMARY:
+==3171382==    definitely lost: 0 bytes in 0 blocks
+==3171382==    indirectly lost: 0 bytes in 0 blocks
+==3171382==      possibly lost: 0 bytes in 0 blocks
+==3171382==    still reachable: 0 bytes in 0 blocks
+==3171382==         suppressed: 208,316 bytes in 226 blocks
+==3171382== 
+==3171382== For lists of detected and suppressed errors, rerun with: -s
+==3171382== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171384== 
+==3171384== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171384== 
+==3171384== HEAP SUMMARY:
+==3171384==     in use at exit: 208,334 bytes in 226 blocks
+==3171384==   total heap usage: 861 allocs, 635 frees, 264,358 bytes allocated
+==3171384== 
+==3171384== LEAK SUMMARY:
+==3171384==    definitely lost: 0 bytes in 0 blocks
+==3171384==    indirectly lost: 0 bytes in 0 blocks
+==3171384==      possibly lost: 0 bytes in 0 blocks
+==3171384==    still reachable: 0 bytes in 0 blocks
+==3171384==         suppressed: 208,334 bytes in 226 blocks
+==3171384== 
+==3171384== For lists of detected and suppressed errors, rerun with: -s
+==3171384== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3171366== 
+==3171366== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==3171366== 
+==3171366== HEAP SUMMARY:
+==3171366==     in use at exit: 208,178 bytes in 222 blocks
+==3171366==   total heap usage: 858 allocs, 636 frees, 264,163 bytes allocated
+==3171366== 
+==3171366== LEAK SUMMARY:
+==3171366==    definitely lost: 0 bytes in 0 blocks
+==3171366==    indirectly lost: 0 bytes in 0 blocks
+==3171366==      possibly lost: 0 bytes in 0 blocks
+==3171366==    still reachable: 0 bytes in 0 blocks
+==3171366==         suppressed: 208,178 bytes in 222 blocks
+==3171366== 
+==3171366== For lists of detected and suppressed errors, rerun with: -s
+==3171366== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+=============================
+

@@ -1,0 +1,94 @@
+yunus-emre@yunus-emre:~/Downloads/16-23-21$ unset PATH
+echo hi
+hi
+yunus-emre@yunus-emre:~/Downloads/16-23-21$ bash
+bash: bash: No such file or directory
+yunus-emre@yunus-emre:~/Downloads/16-23-21$ 
+-> path silinip echo çalıştıırlınca hata vermesi lazım
+
+Herodocta tırnaklı durum kontrol edilecek
+env -i ile başlatılabilecğei için env değişkenleri null yapılacak 
+./minishell çalıştırma kontrolü
+Evoda çektiğimiz fotoğraflar
+Enesin attığı redir testleri 
+Sinyal kontrollerini her fonksiyonun en başında yap
+Çıkış kodları
+Path : muhabbeti
+env yanına parametre gelirse hata vermeli 
+Türkçe İngilizce hata mesajları tutarsız
+
+
++export TEST+=" added value" -> env nin sonuna eklenmesi lazım
+
+export wrong%=wrong correct=correct
+export correct=aaa
+correct güncellenmiyor
+
+echo $'\n'
+echo $'\r'
+echo $'\t'
+
+echo $" t hi t "
+echo $' t hi t '
+
++echo $ANA_VAR with spaces in var value
++değişen sonrası çıktı başında bir tane space var
+
++""
++" "
++''
++' '
++   leak var ve çıktı yanlış
+
++cd ""
++cd " "
+
+~
+echo ~
+echo ~/path
+
+echo hola | asd
+exit kodunda hata var 127 yazması lazım
+
+> pppp
+pppp dosyasını boş oluşturmalı
+>> pppp
+aynı mantık
+
+echo hi > file2 > file hi
+file2 dosyayı boş oluşturulacak ( hiç oluşturulmuyor )
+file dosyasına yazılacak 
+echo hi > "doble"quote / >'simple'quote / >'with spaces'
+aradaki dosyalar oluşturulmuyor
+
+echo hi > folder (folder bir klasör)
+folder : Is a directions
+
+echo hola < noperm
+çıkış kodu yanlış
+
+ecminishell$ echo hola < file
+hola
+minishell$ hi
+hi: command not found
+minishell$ exit -> exiti kendi kendine yazıyor
+
+sleep 1 | ddd
+çıkış kodu hatalı
+
+
+minishell$ echo hi | sdf
+sdf: command not found
+minishell$ echo $?
+0
+son komutun çıkış kodu basılmalı yani 127
+
+minishell$ echo hiii < nofile | echo hi
+nofile: No such file or directory
+hi
+minishell$ 
+çıktı yanlış
+
+
+echo hi > x.txt >> y.txt | cat > z.txt 
+kapanmamış dosyamız var
