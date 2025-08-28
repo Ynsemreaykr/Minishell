@@ -1,0 +1,350 @@
+==39092== Memcheck, a memory error detector
+==39092== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==39092== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==39092== Command: ./minishell
+==39092== Parent PID: 38729
+==39092== 
+==39101== 
+==39101== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==39101== Open file descriptor 63:
+==39101==    <inherited from parent>
+==39101== 
+==39101== Open file descriptor 62:
+==39101==    <inherited from parent>
+==39101== 
+==39101== Open file descriptor 3: /home/yunus-emre/Desktop/15-45-26/11-43-21/vg_logs/case_8.log
+==39101==    <inherited from parent>
+==39101== 
+==39101== 
+==39101== HEAP SUMMARY:
+==39101==     in use at exit: 198,914 bytes in 220 blocks
+==39101==   total heap usage: 657 allocs, 437 frees, 260,740 bytes allocated
+==39101== 
+==39101== LEAK SUMMARY:
+==39101==    definitely lost: 0 bytes in 0 blocks
+==39101==    indirectly lost: 0 bytes in 0 blocks
+==39101==      possibly lost: 0 bytes in 0 blocks
+==39101==    still reachable: 0 bytes in 0 blocks
+==39101==         suppressed: 198,914 bytes in 220 blocks
+==39101== 
+==39101== For lists of detected and suppressed errors, rerun with: -s
+==39101== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==39092== 
+==39092== Process terminating with default action of signal 13 (SIGPIPE)
+==39092==    at 0x49DE574: write (write.c:26)
+==39092==    by 0x10CFD7: wait_for_children (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10D87F: exec_pipeline (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x11224E: execute_pipeline (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x11229F: execute_command_main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x111BAD: handle_normal_command (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x111BD6: determine_command_type (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109716: process_command (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109A66: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==39092== Open file descriptor 63:
+==39092==    <inherited from parent>
+==39092== 
+==39092== Open file descriptor 62:
+==39092==    <inherited from parent>
+==39092== 
+==39092== Open file descriptor 3: /home/yunus-emre/Desktop/15-45-26/11-43-21/vg_logs/case_8.log
+==39092==    <inherited from parent>
+==39092== 
+==39092== 
+==39092== HEAP SUMMARY:
+==39092==     in use at exit: 216,066 bytes in 455 blocks
+==39092==   total heap usage: 657 allocs, 202 frees, 260,740 bytes allocated
+==39092== 
+==39092== 8 bytes in 1 blocks are still reachable in loss record 2 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110DEA: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10C725: create_env_string (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10CA46: set_env_var (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x111567: update_shlvl (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1095EA: init_shell (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B0A: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 9 bytes in 1 blocks are still reachable in loss record 5 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110DEA: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x112482: ft_strdup (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10E92C: create_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109F7F: handle_in_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A2A8: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 10 bytes in 1 blocks are still reachable in loss record 6 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E61: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x111230: init_env (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1095DE: init_shell (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B0A: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 10 bytes in 1 blocks are still reachable in loss record 7 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E61: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1112D1: init_env (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1095DE: init_shell (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B0A: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 12 bytes in 1 blocks are still reachable in loss record 15 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E61: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10E905: create_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109F7F: handle_in_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A2A8: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 16 bytes in 1 blocks are still reachable in loss record 17 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E61: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10C725: create_env_string (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10CA46: set_env_var (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x111567: update_shlvl (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1095EA: init_shell (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B0A: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 18 bytes in 1 blocks are still reachable in loss record 20 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E61: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x112482: ft_strdup (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10E92C: create_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109F7F: handle_in_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A2A8: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 18 bytes in 2 blocks are still reachable in loss record 21 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110DEA: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x112482: ft_strdup (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10E92C: create_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A194: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 21 bytes in 5 blocks are still reachable in loss record 23 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110DEA: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x112482: ft_strdup (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A3D1: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 24 bytes in 1 blocks are still reachable in loss record 27 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110DEA: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10E905: create_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109F7F: handle_in_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A2A8: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 24 bytes in 2 blocks are still reachable in loss record 28 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E61: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10E905: create_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A194: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 26 bytes in 2 blocks are still reachable in loss record 29 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E61: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A5AA: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 26 bytes in 2 blocks are still reachable in loss record 30 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E61: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A10F: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 36 bytes in 2 blocks are still reachable in loss record 35 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E61: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x112482: ft_strdup (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10E92C: create_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A194: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 40 bytes in 1 blocks are still reachable in loss record 36 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E09: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x111230: init_env (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1095DE: init_shell (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B0A: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 40 bytes in 1 blocks are still reachable in loss record 37 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E09: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1112D1: init_env (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1095DE: init_shell (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B0A: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 40 bytes in 1 blocks are still reachable in loss record 38 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E09: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10C725: create_env_string (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10CA46: set_env_var (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x111567: update_shlvl (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1095EA: init_shell (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B0A: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 40 bytes in 1 blocks are still reachable in loss record 39 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E09: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10E905: create_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109F7F: handle_in_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A2A8: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 40 bytes in 1 blocks are still reachable in loss record 40 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E09: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x112482: ft_strdup (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10E92C: create_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109F7F: handle_in_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A2A8: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 48 bytes in 2 blocks are still reachable in loss record 44 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110DEA: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10E905: create_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A194: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 56 bytes in 2 blocks are still reachable in loss record 47 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110DEA: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A10F: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 64 bytes in 2 blocks are still reachable in loss record 48 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110DEA: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A5AA: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 80 bytes in 2 blocks are still reachable in loss record 50 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E09: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A5AA: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 80 bytes in 2 blocks are still reachable in loss record 51 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E09: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A10F: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 80 bytes in 2 blocks are still reachable in loss record 52 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E09: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10E905: create_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A194: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 80 bytes in 2 blocks are still reachable in loss record 53 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E09: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x112482: ft_strdup (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10E92C: create_redir (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A194: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 90 bytes in 5 blocks are still reachable in loss record 54 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E61: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x112482: ft_strdup (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A3D1: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 198 bytes in 1 blocks are still reachable in loss record 59 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110DEA: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1112D1: init_env (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1095DE: init_shell (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B0A: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 200 bytes in 5 blocks are still reachable in loss record 60 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E09: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x112482: ft_strdup (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A3D1: parse_redirections_and_heredoc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x10A8C4: parse_commands (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1098BE: process_command_from_input (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B78: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 440 bytes in 1 blocks are still reachable in loss record 64 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110DEA: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x111230: init_env (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1095DE: init_shell (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B0A: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 520 bytes in 52 blocks are still reachable in loss record 66 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E61: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x11136A: init_env (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1095DE: init_shell (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B0A: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 2,080 bytes in 52 blocks are still reachable in loss record 79 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110E09: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x11136A: init_env (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1095DE: init_shell (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B0A: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== 3,639 bytes in 52 blocks are still reachable in loss record 84 of 104
+==39092==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39092==    by 0x110DEA: ft_malloc (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x11136A: init_env (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x1095DE: init_shell (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092==    by 0x109B0A: main (in /home/yunus-emre/Desktop/15-45-26/11-43-21/minishell)
+==39092== 
+==39092== LEAK SUMMARY:
+==39092==    definitely lost: 0 bytes in 0 blocks
+==39092==    indirectly lost: 0 bytes in 0 blocks
+==39092==      possibly lost: 0 bytes in 0 blocks
+==39092==    still reachable: 8,113 bytes in 210 blocks
+==39092==         suppressed: 207,953 bytes in 245 blocks
+==39092== 
+==39092== For lists of detected and suppressed errors, rerun with: -s
+==39092== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

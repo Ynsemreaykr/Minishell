@@ -1,0 +1,40 @@
+==39313== Memcheck, a memory error detector
+==39313== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==39313== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==39313== Command: ./minishell
+==39313== Parent PID: 39139
+==39313== 
+==39313== 
+==39313== Process terminating with default action of signal 2 (SIGINT)
+==39313==    at 0x4025B6F: __open_nocancel (open64_nocancel.c:39)
+==39313==    by 0x4005CBB: open_verify.constprop.0 (dl-load.c:1623)
+==39313==    by 0x4006299: open_path (dl-load.c:1863)
+==39313==    by 0x40095F2: _dl_map_object (dl-load.c:2100)
+==39313==    by 0x4002A2C: openaux (dl-deps.c:64)
+==39313==    by 0x400151B: _dl_catch_exception (dl-catch.c:237)
+==39313==    by 0x4002E66: _dl_map_object_deps (dl-deps.c:232)
+==39313==    by 0x402241B: dl_main (rtld.c:1965)
+==39313==    by 0x401EF45: _dl_sysdep_start (dl-sysdep.c:140)
+==39313==    by 0x402075D: _dl_start_final (rtld.c:494)
+==39313==    by 0x402075D: _dl_start (rtld.c:581)
+==39313==    by 0x401F547: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+==39313== 
+==39313== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==39313== Open file descriptor 63:
+==39313==    <inherited from parent>
+==39313== 
+==39313== Open file descriptor 62:
+==39313==    <inherited from parent>
+==39313== 
+==39313== Open file descriptor 3: /home/yunus-emre/Desktop/15-45-26/11-43-21/vg_logs/case_6.log
+==39313==    <inherited from parent>
+==39313== 
+==39313== 
+==39313== HEAP SUMMARY:
+==39313==     in use at exit: 0 bytes in 0 blocks
+==39313==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==39313== 
+==39313== All heap blocks were freed -- no leaks are possible
+==39313== 
+==39313== For lists of detected and suppressed errors, rerun with: -s
+==39313== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

@@ -1,0 +1,9 @@
+
+strcuter stat -> bir dosyannın bilgilerini tutar 
+
+stat(dosya_yolu , struct stat *buf)
+dosya bilgilerini *buf a yazar
+
+acces -> dosya çalıştıırlabilir mi/dosya var mı
+
+I_SDIR -> bu bir dizin mi/klasör mü
