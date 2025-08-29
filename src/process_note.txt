@@ -1,4 +1,17 @@
 
+
+chdir -> çalışma dizinini günceller. cd minishell yazıldı
+chdir(minishell) ile minishell dizinine girilir
+
+expport -> shell de hangi değişkenler export edilmiş, aday listeyi gösterir
+env -> Şu an environment’ta gerçekten hangi değişkenler var
+
+stat -> dosya dizini hakkındaki bilgileri sat structerına atar
+access -> dosya var mı mevcut mu
+S_ISDIR -> hedef bir klasör mü
+
+
+
 0 : stdin 
 1 : stdout
 
@@ -25,6 +38,37 @@ if ( fd_in != 0 )→ önceki komuttan gelen pipe vardır → bu pipe’ı bu kom
 
 dosya açılır 
 dup2 ile yönelndirme yapılır
-artık dosyaya yazı yazılması/okunması için; o dosyanın açık olmasına gerek kalmaz
+artık dosyaya yazı yazılması/okunması içi   n; o dosyanın açık olmasına gerek kalmaz
 
 pipe(pipefd) -> bir dosya var. kernel tarafından iki modda çalıştırılır biri sadece okumaya diğeri ise sadece yazmaya izin verilen iki file descriptor tutar
+
+parent yazmaz, sadece okur
+
+
+
+Adım adım örnek (A | B | C)
+
+A için
+
+Pipe aç: [pipefd[0], pipefd[1]]
+
+Child-A: dup2(pipefd[1], STDOUT_FILENO) → yazmayı üstlenir.
+
+Parent: close(pipefd[1]), fd_in = pipefd[0].
+
+B için
+
+Yeni pipe aç: [pipefd[0], pipefd[1]]
+
+Child-B: dup2(fd_in, STDIN_FILENO) (A’nın çıktısını alır)
+dup2(pipefd[1], STDOUT_FILENO) (çıktısını yeni pipe’a yazar)
+
+Parent: close(fd_in) (artık kullanılmaz), close(pipefd[1]), fd_in = pipefd[0].
+
+C için
+
+Son komut olduğu için yeni pipe açılmaz.
+
+Child-C: dup2(fd_in, STDIN_FILENO) (B’nin çıktısını alır).
+
+Parent: close(fd_in).

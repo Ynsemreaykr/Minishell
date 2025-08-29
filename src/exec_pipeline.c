@@ -38,20 +38,20 @@ static void	child_setup(t_cmd *cmd, int fd_in, int *pipefd)
 static void	handle_child(t_cmd *cmd, int fd_in, int *pipefd, t_shell *shell)
 {
 	child_setup(cmd, fd_in, pipefd);
+	setup_command_signals();
+
 	if (!cmd->argv || !cmd->argv[0])
 	{
-		setup_command_signals();
 		cleanup_shell_for_child(shell);
 		ft_mem_cleanup();
 		exit(0);
 	}
-	setup_command_signals();
 	if (is_builtin(cmd->argv[0]))
 	{
-		exec_builtin(cmd, shell);
+		int exit_code = exec_builtin(cmd, shell);
 		cleanup_shell_for_child(shell);
 		ft_mem_cleanup();
-		exit(0);
+		exit(exit_code);
 	}
 	else
 	{

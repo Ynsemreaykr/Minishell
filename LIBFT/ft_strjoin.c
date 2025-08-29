@@ -1,6 +1,5 @@
 #include "../include/minishell.h"
 
-// İki string'i birleştir
 char *ft_strjoin(const char *s1, const char *s2)
 {
     char *result;

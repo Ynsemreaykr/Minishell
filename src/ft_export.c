@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static int	is_valid_identifier(const char *name)
+int	is_valid_identifier(const char *name)
 {
 	int	i;
 
@@ -32,13 +32,13 @@ static int	is_valid_identifier(const char *name)
 	return (1);
 }
 
-static char	*extract_var_name(const char *arg)
+char	*extract_var_name(const char *arg)
 {
 	char	*eq;
 	char	*name;
 	int		len;
 
-	eq = strchr(arg, '=');
+	eq = ft_strchr(arg, '=');
 	if (eq)
 	{
 		len = eq - arg;
@@ -51,7 +51,7 @@ static char	*extract_var_name(const char *arg)
 	return (name);
 }
 
-static void	sort_env(char **env, int count)
+void	sort_env(char **env, int count)
 {
 	int		j;
 	int		k;
@@ -75,7 +75,7 @@ static void	sort_env(char **env, int count)
 	}
 }
 
-static void	print_sorted_env(char **env, int count)
+void	print_sorted_env(char **env, int count)
 {
 	int		j;
 	char	*eq;
@@ -83,7 +83,7 @@ static void	print_sorted_env(char **env, int count)
 	j = 0;
 	while (j < count)
 	{
-		eq = strchr(env[j], '=');
+		eq = ft_strchr(env[j], '=');
 		if (eq)
 		{
 			*eq = '\0';
@@ -97,7 +97,7 @@ static void	print_sorted_env(char **env, int count)
 	}
 }
 
-static int	handle_no_args_export(t_shell *shell)
+int	handle_no_args_export(t_shell *shell)
 {
 	char	**env;
 	char	**sorted_env;
@@ -125,13 +125,13 @@ static int	handle_no_args_export(t_shell *shell)
 	return (0);
 }
 
-static int	process_single_export_arg(char *arg, t_shell *shell)
+int	process_single_export_arg(char *arg, t_shell *shell)
 {
 	char	*var_name;
 	char	*eq;
 
 	var_name = extract_var_name(arg);
-	eq = strchr(arg, '=');
+	eq = ft_strchr(arg, '=');
 	if (!is_valid_identifier(var_name))
 	{
 		ft_putstr_fd("minishell: export: `", 2);
@@ -152,20 +152,3 @@ static int	process_single_export_arg(char *arg, t_shell *shell)
 	return (0);
 }
 
-int	ft_export(char **argv, t_shell *shell)
-{
-	int	i;
-	int	res;
-
-	i = 1;
-	if (!argv[i])
-		return (handle_no_args_export(shell));
-	res = 0;
-	while (argv[i])
-	{
-		if (process_single_export_arg(argv[i], shell) != 0)
-			res = 1;
-		i++;
-	}
-	return (res);
-}

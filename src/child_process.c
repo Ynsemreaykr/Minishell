@@ -1,7 +1,6 @@
 #include "../include/minishell.h"
 #include <sys/wait.h>
-#include <sys/stat.h>
-    
+#include <stdio.h>
 
 // Child process'in ana fonksiyonu
 void run_child_process(t_cmd *cmd, int fd_in, int *pipefd, t_shell *shell)
@@ -62,7 +61,6 @@ int wait_for_children(void)
     return last_status;
 }
 
-// 1. Fork işlemi - Yeni process yarat
 pid_t create_child_process(void)
 {
     pid_t pid = fork();
@@ -71,49 +69,6 @@ pid_t create_child_process(void)
         perror("fork");
         return -1;
     }
-    return pid;
+    return pid; 
 }
 
-
-// 3. Execve işlemi - Komutu çalıştır
-void execute_command(t_cmd *cmd, char **envp)
-{
-    char **splitted_path = parse_path(envp);
-    char *full_path = NULL;
-    int result;
-    
-    result = is_accessable(cmd->argv[0], splitted_path, &full_path);
-    
-    if (splitted_path)
-        ft_split_free(splitted_path);
-    if (result != 0) {
-        if (result == -3) {
-            ft_putstr_fd(cmd->argv[0], 2);
-            ft_putstr_fd(": Is a directory\n", 2);
-            ft_mem_cleanup();
-            exit(126);
-        } else if (result == -4) {
-            ft_putstr_fd(cmd->argv[0], 2);
-            ft_putstr_fd("minishell : No such file or directory\n", 2);
-            ft_mem_cleanup();
-            exit(127);
-        } else if (result == -2) {
-            ft_putstr_fd(cmd->argv[0], 2);
-            ft_putstr_fd(": Permission denied\n", 2);
-            ft_mem_cleanup();
-            exit(126);
-        } else {
-            ft_putstr_fd(cmd->argv[0], 2);
-            ft_putstr_fd(": command not found\n", 2);
-            ft_mem_cleanup();
-            exit(127);
-        }
-    }
-    
-    // Komutu çalıştır
-    execve(full_path, cmd->argv, envp);
-    perror("execve");
-    ft_free(full_path);
-    ft_mem_cleanup();
-    exit(127);
-}

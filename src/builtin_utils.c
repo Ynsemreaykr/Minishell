@@ -1,7 +1,5 @@
 #include "../include/minishell.h"
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 
 static const char	*cd_get_path(char **argv, int argc)
@@ -68,16 +66,15 @@ int ft_unset(char **argv, t_shell *shell)
     return 0;
 }
 
-int ft_env(char **argv, t_shell *shell)
+int ft_env(t_shell *shell)
 {
-    (void)argv;
     char **env;
     int i;
 
     env = get_env(shell);
     i = 0;
     while (env && env[i]) {
-        if (strchr(env[i], '='))
+        if (ft_strchr(env[i], '='))
             printf("%s\n", env[i]);
         i++;
     }

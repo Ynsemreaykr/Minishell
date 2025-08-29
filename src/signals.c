@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/29 02:44:05 by mkayaalp          #+#    #+#             */
+/*   Updated: 2025/08/29 02:46:14 by mkayaalp         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <signal.h>
 #include <stdio.h>
 #include <readline/readline.h>
@@ -5,29 +17,18 @@
 #include <sys/wait.h>
 #include "../include/minishell.h"
 
-// Global sinyal numarası
-extern volatile sig_atomic_t g_signal_number;
+extern volatile sig_atomic_t	g_signal_number;
 
-// Normal durum sinyal handler'ı (prompt'ta)
-void normal_signal_handler(int signo)
+void	normal_signal_handler(int signo)
 {
-    g_signal_number = signo;
-    
-    // Önce yeni satıra geç
-    write(STDOUT_FILENO, "\n", 1);
-    
-    // Satırı tamamen temizle
-    rl_replace_line("", 0);
-    
-    // Yeni satıra geç
-    rl_on_new_line();
-    
-    // Prompt'u yeniden göster
-    rl_redisplay();
+	g_signal_number = signo;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }
 
-// Heredoc sinyal handler'ı
-void heredoc_signal_handler(int signo)
+void	heredoc_signal_handler(int signo)
 {
 	(void)signo;
 	g_signal_number = 1;
@@ -35,8 +36,7 @@ void heredoc_signal_handler(int signo)
 	close(STDIN_FILENO);
 }
 
-// Heredoc interrupt handler (child process için)
-void heredoc_interrupt_handler(int signum)
+void	heredoc_interrupt_handler(int signum)
 {
 	(void)signum;
 	g_signal_number = 1;
@@ -44,68 +44,53 @@ void heredoc_interrupt_handler(int signum)
 	close(STDIN_FILENO);
 }
 
-// Komut çalışırken sinyal handler'ı
-void command_signal_handler(int signo)
+void	command_signal_handler(int signo)
 {
-    g_signal_number = signo;
-    write(STDOUT_FILENO, "\n", 1);
-    // Komut sinyal ile sonlandırıldı
+	g_signal_number = signo;
+	write(STDOUT_FILENO, "\n", 1);
 }
 
-// SIGQUIT handler'ı
-void handle_sigquit(int signo)
+void	handle_sigquit(int signo)
 {
-    g_signal_number = signo;
-    // SIGQUIT için özel işlem yapılmaz, sadece kaydedilir
+	g_signal_number = signo;
+}
+	
+void	handle_sigpipe(int signo)
+{
+	g_signal_number = signo;
+	ft_mem_cleanup();
+	exit(141);
 }
 
-// SIGPIPE handler'ı - child process'lerde cleanup yapar
-void handle_sigpipe(int signo)
+void	setup_normal_signals(void)
 {
-    g_signal_number = signo;
-    // SIGPIPE ile sonlanırken sadece memory cleanup yap
-    // Shell cleanup child process'lerde zaten yapılıyor
-    ft_mem_cleanup();
-    exit(141); // SIGPIPE exit code
+	signal(SIGINT, normal_signal_handler);
+	signal(SIGQUIT, handle_sigquit);
 }
 
-// Normal sinyalleri kur (prompt'ta)
-void setup_normal_signals(void)
+void	setup_heredoc_signals(void)
 {
-    signal(SIGINT, normal_signal_handler);
-    signal(SIGQUIT, handle_sigquit);
+	signal(SIGINT, heredoc_signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 }
 
-// Heredoc sinyallerini kur
-void setup_heredoc_signals(void)
+void	setup_command_signals(void)
 {
-    signal(SIGINT, heredoc_signal_handler);
-    signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, command_signal_handler);
+	signal(SIGQUIT, handle_sigquit);
+	signal(SIGPIPE, handle_sigpipe);
 }
 
-// Komut sinyallerini kur
-void setup_command_signals(void)
+void	reset_signal_state(void)
 {
-    signal(SIGINT, command_signal_handler);
-    signal(SIGQUIT, handle_sigquit);
-    signal(SIGPIPE, handle_sigpipe);
+	g_signal_number = 0;
 }
 
-// Sinyal durumunu sıfırla
-void reset_signal_state(void)
+int	check_signal_status(void)
 {
-    g_signal_number = 0;
+	if (g_signal_number == SIGINT)
+		return (130);
+	else if (g_signal_number == SIGQUIT)
+		return (131);
+	return (0);
 }
-
-
-
-// Sinyal durumunu kontrol et ve gerekli exit code'u döndür
-int check_signal_status(void)
-{
-    if (g_signal_number == SIGINT) {
-        return 130; // SIGINT için exit code
-    } else if (g_signal_number == SIGQUIT) {
-        return 131; // SIGQUIT için exit code
-    }
-    return 0; // Sinyal yok
-} 

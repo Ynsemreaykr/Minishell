@@ -6,3 +6,8 @@ int ft_isalnum(int c)
             (c >= 'A' && c <= 'Z') || 
             (c >= 'a' && c <= 'z'));
 } 
+
+int ft_isalpha(int c)
+{
+    return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
+}

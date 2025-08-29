@@ -1,13 +1,5 @@
 #include "../include/minishell.h"
-
-void ft_putstr(const char *str)
-{
-    if (!str)
-        return;
-    
-    while (*str)
-        write(1, str++, 1);
-}
+#include<unistd.h>
 
 void ft_putstr_fd(const char *str, int fd)
 {

@@ -115,7 +115,7 @@ static int	detect_quote_clean_delimiter(char **delimiter)
 	return (0);
 }
 
-static void	process_output_redir(t_cmd *cmd, int *i, int *position)
+static void	process_output_redir(t_cmd *cmd, int *i)
 {
 	t_redir	*redir;
 
@@ -123,7 +123,7 @@ static void	process_output_redir(t_cmd *cmd, int *i, int *position)
 	{
 		if (cmd->argv[*i + 1])
 		{
-			redir = create_redir(REDIR_OUT, cmd->argv[*i + 1], (*position)++);
+			redir = create_redir(REDIR_OUT, cmd->argv[*i + 1]);
 			if (redir)
 				add_redir(cmd, redir);
 		}
@@ -133,7 +133,7 @@ static void	process_output_redir(t_cmd *cmd, int *i, int *position)
 	{
 		if (cmd->argv[*i + 1])
 		{
-			redir = create_redir(REDIR_APPEND, cmd->argv[*i + 1], (*position)++);
+			redir = create_redir(REDIR_APPEND, cmd->argv[*i + 1]);
 			if (redir)
 				add_redir(cmd, redir);
 		}
@@ -141,34 +141,34 @@ static void	process_output_redir(t_cmd *cmd, int *i, int *position)
 	}
 }
 
-static void	handle_in_redir(t_cmd *cmd, char **argv, int *i, int *position)
+static void	handle_in_redir(t_cmd *cmd, char **argv, int *i)
 {
 	t_redir	*redir;
 
 	if (argv[*i + 1])
 	{
-		redir = create_redir(REDIR_IN, argv[*i + 1], (*position)++);
+		redir = create_redir(REDIR_IN, argv[*i + 1]);
 		if (redir)
 			add_redir(cmd, redir);
 		*i += 2;
 	}
 }
 
-static void	process_input_redir(t_cmd *cmd, int *i, char **new_argv, int *j, int *position)
+static void	process_input_redir(t_cmd *cmd, int *i, char **new_argv, int *j)
 {
 	int			quote_type;
 	char		*original;
 	t_heredoc	*heredoc;
 
 	if (!ft_strcmp(cmd->argv[*i], "<"))
-		handle_in_redir(cmd, cmd->argv, i, position);
+		handle_in_redir(cmd, cmd->argv, i);
 	else if (!ft_strcmp(cmd->argv[*i], "<<"))
 	{
 		if (cmd->argv[*i + 1])
 		{
 			original = ft_strdup(cmd->argv[*i + 1]);
 			quote_type = detect_quote_clean_delimiter(&cmd->argv[*i + 1]);
-			heredoc = create_heredoc(original, cmd->argv[*i + 1], quote_type, (*position)++);
+			heredoc = create_heredoc(original, cmd->argv[*i + 1], quote_type);
 			if (heredoc)
 				add_heredoc(cmd, heredoc);
 			ft_free(original);
@@ -200,7 +200,7 @@ static int	count_non_redir_args(char **argv)
 	return (argc);
 }
 
-static void	process_argv_elements(t_cmd *cmd, char **new_argv, int *position)
+static void	process_argv_elements(t_cmd *cmd, char **new_argv)
 {
 	int	i;
 	int	j;
@@ -210,9 +210,9 @@ static void	process_argv_elements(t_cmd *cmd, char **new_argv, int *position)
 	while (cmd->argv && cmd->argv[i])
 	{
 		if (!ft_strcmp(cmd->argv[i], ">") || !ft_strcmp(cmd->argv[i], ">>"))
-			process_output_redir(cmd, &i, position);
+			process_output_redir(cmd, &i);
 		else
-			process_input_redir(cmd, &i, new_argv, &j, position);
+			process_input_redir(cmd, &i, new_argv, &j);
 	}
 	new_argv[j] = NULL;
 }
@@ -234,14 +234,14 @@ static void	cleanup_and_replace_argv(t_cmd *cmd, char **new_argv, int argc)
 		cmd->argv = new_argv;
 }
 
-static void	parse_redirections_and_heredoc(t_cmd *cmd, int *position)
+static void	parse_redirections_and_heredoc(t_cmd *cmd)
 {
 	int		argc;
 	char	**new_argv;
 
 	argc = count_non_redir_args(cmd->argv);
 	new_argv = ft_malloc(sizeof(char *) * (argc + 1), __FILE__, __LINE__);
-	process_argv_elements(cmd, new_argv, position);
+	process_argv_elements(cmd, new_argv);
 	cleanup_and_replace_argv(cmd, new_argv, argc);
 }
 
@@ -328,11 +328,11 @@ static int	validate_redirection_syntax(t_cmd *cmd)
 	return (1);
 }
 
-static int	process_regular_cmd(t_cmd_data *data, t_cmd **head, t_cmd **last, int *position)
+static int	process_regular_cmd(t_cmd_data *data, t_cmd **head, t_cmd **last)
 {
 	if (!validate_redirection_syntax(data->cmd))
 		return (0);
-	parse_redirections_and_heredoc(data->cmd, position);
+	parse_redirections_and_heredoc(data->cmd);
 	if (!data->cmd->argv && !data->cmd->heredocs && !data->cmd->redirs)
 		return (0);
 	data->cmd->next = NULL;
@@ -343,7 +343,6 @@ static int	process_regular_cmd(t_cmd_data *data, t_cmd **head, t_cmd **last, int
 static int	process_cmd_loop(t_cmd_data *data, t_cmd **head, t_cmd **last)
 {
 	int	c;
-	int position = 0; // Her komut için position counter'ı başlat
 
 	c = -1;
 	while (++c < data->cmd_count)
@@ -360,7 +359,7 @@ static int	process_cmd_loop(t_cmd_data *data, t_cmd **head, t_cmd **last)
 			c++;
 			continue ;
 		}
-		if (!process_regular_cmd(data, head, last, &position))
+		if (!process_regular_cmd(data, head, last))
 		{
 			cleanup_and_return_null(data->cmd, data->cmd_strings,
 				data->cmd_count);
