@@ -1,0 +1,63 @@
+main -> handle_input -> check_input => input boş mu
+                                       açılan tırnaklar kapatıldı mı
+
+                        check_input -> redirection_synstax => tırnak içinde olmayan redirler için; 
+                                                              eğer ki redir sayısı peş peşe 2 den fazlaysa hata mesajı ver
+                                                              eğer ki redir sayısı 2 ise ancak >< karışık kullanıldıysa kontrol et
+                                                              inputun sonunda redir kullanıldıysa kontrol et
+                                
+main -> process_command_form_input -> parse_commands => tırnak içerisinde olma durumuna göre pipe ile başlama, bitme, boş pipe durumu kontrol edilir
+
+                                      parse_commands -> split_by_pipes -> count_pipes => tırnak içinde olmayan pipe ları sayar. pipe sayısının bir fazlası komut sayımızdır.
+                                                        split_by_pipes -> parse_pipe_loop => tırnak içinde olmayan her pipe tan önceki stringi cmd listesine atar.
+                                                        split_by_pipes -> add_commmand_to_array => son pipe tan null olana kadarki stringi cmd listesine atar
+                                      parse_commands -> cmd_strings için null check 
+
+                    --- buraya kadar pipe lar parçalandı ve komut listesine (cmd ye) atıldı. ---
+                    --- sırada her komutu token larına parçalamak var (pipe lara ayıracağız) ---
+
+                                      parse_commands -> split_tokens -> count_tokens => boşluklar atlanır
+                                                                                        tırnak içinde olmayan pipe işareti görülürse token_count++ yapılır
+                                                                                        tırnak içinde olmayan redir görürse token_count++ yapılır
+
+                    --- ne kadar token var saydık. ve bu sayıya göre bellekte yer ayıracağız ---
+
+
+                                    parse_commands -> split_tokens => malloc ile token_count+1 kadar yer açıldı
+                                                                      boşluklar atlandı
+                                                                   -> process_redirection_token => redirection operaötörü (tekli veya ikili) redir_token a eklendi
+
+
+                                                   -> parse_redirection_and_herodoc => syntax kontrolü
+                                                                                       
+
+
+
+
+dup2( hangi dosyaya yönlenecek , yönlenecek kısım stdin/stdout )
+dup2( pipefd[1] , 1)                       : (1=stdout) (pipfd[1]=pipe ın yazma ucu)   printf("selam") artık çıktıları terminale değil; pipe içine yazar. stdout, pipe olarak değiştirilir
+dup2( pipefd[0] , 0 )                      : (0=stdin)  (pipfd[0]=pipe ın okuma ucu)   scanf("%d",i)   artık girdiler terminalden değil; pipe içinden okunur. stdin, pipe olarak değiştirilir.
+pipefd[0] -> pipe ın okuma ucu : stdin ile değiştirilir
+pipefd[1] -> pipe ın yazma ucu : stdout ile değiştirilir
+her pipe ın bu şekilde iki ucu vardır. kullanılmayan uçlar close ile kapatılmalıdır
+
+         pipe0                                                             pipe1                                                                        pipe2
+
+stdin(0) → komut  →  pipe1[1]             |          pipe1[0]              → komut          → pipe2[1]                  |           pipe2[0]             → komut → stdout(1)
+                     pipe1 in okuduğu uç             pipe1 in okuma ucu                       pipe2 nin okuduğu uç                  pipe2 nin okuma ucu
+                     pipe0 ın yazdığı uç                                                      pipe1 in yazdığı uç                               
+
+
+tek komut : ls
+stdin (0)  → [ ls ] → stdout (1)
+
+ls | wc
+stdin(0) → [ ls ] → pipefd[1] ===== pipefd[0] → [ wc ] → stdout(1)
+
+cat file | grep foo | sort
+stdin(0) → [ cat ] → pipe1[1] ===== pipe1[0] → [ grep ] → pipe2[1] ===== pipe2[0] → [ sort ] → stdout(1)
+
+
+
+/home/yayiker/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/yayiker/francinette:/home/yayiker/francinette/francinette-env/bin
+/home/yayiker/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/yayiker/francinette:/home/yayiker/francinette/francinette-env/bin:/home/yayiker/francinette:/home/yayiker/francinette/francinette-env/bin

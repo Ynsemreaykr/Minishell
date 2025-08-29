@@ -1,0 +1,146 @@
+# Minishell Exit Code Düzeltme Değişiklikleri
+
+## Sorun
+Projede `echo hi | >./outfiles/outfile01 echo bye >./test_files/invalid_permission` komutu çalıştırıldığında:
+- `setup_Redirection_for_child` fonksiyonundan `exit(1)` ile çıkılıyor
+- Ancak shell exit code 0 veriyor (beklenen: 1)
+- Debug çıktısında 256 (1 << 8) görünüyor
+
+## Çözüm
+`son_shell` projesindeki mantığı kullanarak `wait_for_all_children` fonksiyonu entegre edildi.
+
+## Yapılan Değişiklikler
+
+### 1. src/child_process.c
+```c
+// Yeni fonksiyon: Tüm child'ları bekle ve exit code'ları doğru şekilde işle
+int wait_for_all_children(t_cmd *cmds)
+{
+    int cmd_count;
+    int i;
+    pid_t pid;
+    int status;
+    int exit_code;
+    
+    // Komut sayısını bul
+    cmd_count = 0;
+    t_cmd *temp = cmds;
+    while (temp) {
+        cmd_count++;
+        temp = temp->next;
+    }
+    
+    exit_code = 0;
+    
+    // Tüm child process'leri bekle
+    for (i = 0; i < cmd_count; i++) {
+        pid = wait(&status);
+        if (pid == -1)
+            break;
+        
+        if (WIFEXITED(status)) {
+            int child_exit = WEXITSTATUS(status);
+            if (i == cmd_count - 1) { // Son komut
+                exit_code = child_exit;
+            } else if (child_exit != 0) { // Pipeline'da hata varsa
+                exit_code = child_exit;
+            }
+        } else if (WIFSIGNALED(status)) {
+            int sig = WTERMSIG(status);
+            if (sig == SIGINT) {
+                write(STDOUT_FILENO, "\n", 1);
+                exit_code = 130;
+            } else if (sig == SIGQUIT) {
+                exit_code = 131;
+            } else {
+                exit_code = 128 + sig;
+            }
+        }
+    }
+    
+    return exit_code;
+}
+```
+
+### 2. include/minishell.h
+```c
+// Fonksiyon prototipi eklendi
+int wait_for_all_children(t_cmd *cmds);
+```
+
+### 3. src/handle_pipeline.c
+```c
+// wait_for_children yerine wait_for_all_children kullanıldı
+int result = wait_for_all_children(cmds);
+```
+
+### 4. src/command_handlers.c
+```c
+// exec_pipeline'dan dönen değer shell->last_exit'e aktarıldı
+if (cmds->next){ 
+    int result = exec_pipeline(cmds, shell);
+    shell->last_exit = result;
+    return result == 0 ? 0 : 1;
+}
+```
+
+### 5. src/main.c
+```c
+// process_command fonksiyonunda shell->last_exit güncellendi
+static int process_command(t_cmd *cmds, t_shell *shell)
+{
+    if (!cmds) {
+        return 1;
+    }
+    
+    int result = execute_command_main(cmds, shell);
+    
+    // Shell'in exit code'unu güncelle
+    shell->last_exit = result;
+    
+    return result;
+}
+
+// Main fonksiyonu shell.last_exit döndürüyor
+int main(int argc, char **argv, char **envp)
+{
+    // ... diğer kodlar ...
+    
+    cleanup_shell(&shell);
+    
+    return shell.last_exit;  // Exit code'u döndür
+}
+```
+
+## Ana Mantık
+1. **Komut Sayısı Hesaplama**: `cmd->next` ile komut sayısını bul
+2. **Tüm Child'ları Bekleme**: `cmd_count` kadar `wait()` çağrısı yap
+3. **Exit Code Mantığı**: 
+   - Son komutun exit code'u ana exit code olur
+   - Pipeline'da hata varsa o hata kodu kullanılır
+4. **Shell Exit Code Güncelleme**: Her seviyede `shell->last_exit` güncellenir
+5. **Main Return**: `main` fonksiyonu `shell.last_exit` değerini döndürür
+
+## Test Sonuçları
+
+### ✅ Hata Durumu
+```bash
+echo hi | >./outfiles/outfile01 echo bye >./test_files/invalid_permission
+```
+- **Minishell**: Exit code 1
+- **Bash**: Exit code 1
+
+### ✅ Normal Durum
+```bash
+echo hello
+```
+- **Minishell**: Exit code 0 (başarılı)
+
+### ✅ Argüman Kontrolü
+```bash
+./minishell test_arg
+```
+- **Minishell**: "minishell: test_arg: ikili dosya çalıştırılamıyor" (Exit code 126)
+
+## Sonuç
+Artık proje bash ile aynı exit code davranışını gösteriyor. `setup_Redirection_for_child` fonksiyonundan `exit(1)` ile çıkıldığında shell doğru şekilde exit code 1 veriyor. 

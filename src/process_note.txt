@@ -1,0 +1,30 @@
+
+0 : stdin 
+1 : stdout
+
+int pipefd[2]
+pipefd[0] : okuma
+pipefd[1] : yazma
+
+ls                          |           grep a                          | cat <<a
+çıktıyı pipefd[1] e yazar    grep pipefd[0] dan okur; pipefd[1] e yazar 
+
+çıktı her zaman STDOUT_FILENO ya yazılır
+dup2( pipefd[1], STDOUT_FILENO ) -> STDOUT_FILENO; pipe ın yazma ucuna yönelndirlir. bu yüzden artık yazma ucuyla işimiz yok kapatabilirz. Yazılan verilen direk olarak yazma ucuna yönelndirilecek
+close(pipefd[1]);
+
+dup2 fonksiyonu ile stdin/out uçları pipelara bağlanır
+
+normalde çıktılar terminale yönlendilir. dup2 fonksiyonu; artık çıktıların pipefd[1] e yönlendirileceğini söyler. artık veriler direk olarak pipfd[1] içine yazılacağı için yazma ucuna gerek kalmaz. çünkü termiane verilecek veriler zaten yazma ucuna pipefd[1] e gerek kalmadan yazılır
+
+
+dup2 ( fd_in , STDIN_FILENO) -> stdin=fd_in olsun.
+
+fd_in == 0 → önceki komut yok, stdin terminaldir → hiçbir şey yapma.
+if ( fd_in != 0 )→ önceki komuttan gelen pipe vardır → bu pipe’ı bu komutun stdin’ine bağla. 
+
+dosya açılır 
+dup2 ile yönelndirme yapılır
+artık dosyaya yazı yazılması/okunması için; o dosyanın açık olmasına gerek kalmaz
+
+pipe(pipefd) -> bir dosya var. kernel tarafından iki modda çalıştırılır biri sadece okumaya diğeri ise sadece yazmaya izin verilen iki file descriptor tutar
