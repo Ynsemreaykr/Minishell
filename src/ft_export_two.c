@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_two.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/05 02:45:12 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:22:34 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/09/05 02:45:12 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:22:34 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* export komut argümanı işleme yardımcı modülü.
+** Eğer argümanı varsa (export A=1 veya export A) ayrıştırılıp eklenmesi sağlanır. */
+
 #include "../include/minishell.h"
 
+/* export ile gelen tek bir argümanın ('export VAR=val') analizini ve kaydını yapar.
+** `=` işaretini bulur ve öncesini var_name, sonrasını değer kabul eder.
+** is_valid_identifier kuralına uymayan geçersiz isimlerde hata basar, 1 döner.
+** Belirtilen env yoksa listeye yeni eleman olarak the set_env_var ile atar.
+** Zaten varsa değerini ezerek günceller. */
 static int	process_single_export_arg(char *arg, t_shell *shell)
 {
 	char	*var_name;
@@ -39,6 +47,10 @@ static int	process_single_export_arg(char *arg, t_shell *shell)
 	return (0);
 }
 
+/* export builtin komutunun giriş noktası.
+** Eğer argümansız çağrıldıysa handle_no_args_export() ile değişkenleri basar.
+** Argüman varsa birden fazla argüman olabileceği (export A=1 B=2 vs)
+** için döngüyle beraber tek tek process_single_export_arg() fonksiyonuna verir. */
 int	ft_export(char **argv, t_shell *shell)
 {
 	int	i;

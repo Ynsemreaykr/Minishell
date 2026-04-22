@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 17:15:37 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:23:03 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 17:15:37 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:23:03 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Ana döngü yardımcı fonksiyonları.
+** Kullanıcı girdisi parse edildikten sonra komut çalıştırma
+** ve özel durumların yönetimini içerir. */
+
 #include "../include/minishell.h"
 
+/* Komut listesini execute_command_main'e iletir.
+** cmds NULL ise 1 (boş komut), aksi hâlde execute_command_main sonucu döner. */
 static int	process_command(t_cmd *cmds, t_shell *shell)
 {
 	if (!cmds)
@@ -19,6 +25,10 @@ static int	process_command(t_cmd *cmds, t_shell *shell)
 	return (execute_command_main(cmds, shell));
 }
 
+/* Boş string komut durumunu ele alır ("" gibi).
+** - Yalnızca boşluktan sonra "" geliyorsa → hata 127 (komut bulunamadı)
+** - Aksi hâlde last_exit = 0 atanır.
+** Her iki durumda da cmds listesi serbest bırakılır. */
 static int	handle_empty_string_cmd(t_cmd *cmds,
 				const char *input, t_shell *shell)
 {
@@ -38,6 +48,12 @@ static int	handle_empty_string_cmd(t_cmd *cmds,
 	return (1);
 }
 
+/* Boş veya geçersiz komut listesini kontrol eder:
+** - cmds NULL ise girişin tamamen boşluktan mı oluştuğunu inceler,
+**   buna göre last_exit = 0 veya 2 atar ve 1 döndürür.
+** - cmds->argv ve cmds->redirs ikisi de NULL ise → listesi temizle, 1 döndür.
+** - argv[0] NULL ve redirs yoksa → handle_empty_string_cmd çağır.
+** 0 döndürmesi → komutun işlenmeye devam etmesi gerektiğini belirtir. */
 static int	handle_empty_or_invalid_cmd(t_cmd *cmds,
 				const char *input, t_shell *shell)
 {
@@ -64,6 +80,11 @@ static int	handle_empty_or_invalid_cmd(t_cmd *cmds,
 	return (0);
 }
 
+/* Özel durum komutlarını kontrol eder:
+** - Boş (sıfır uzunluklu) argv[0] → "command not found" + 127
+** - "./minishell ./minishell" → binary çalıştırılamaz + 126
+** Bu durumlardan biri oluşursa cmds serbest bırakılır ve 1 döndürülür.
+** Normal durumda 0 döndürülür. */
 static int	handle_special_cases(t_cmd *cmds, t_shell *shell)
 {
 	if (cmds->argv && cmds->argv[0] && ft_strlen(cmds->argv[0]) == 0)
@@ -86,6 +107,13 @@ static int	handle_special_cases(t_cmd *cmds, t_shell *shell)
 	return (0);
 }
 
+/* Ham giriş dizisinden komutu ayrıştırıp çalıştırır.
+** Akış:
+**   1. parse_commands() ile t_cmd bağlı listesi oluşturulur.
+**   2. handle_empty_or_invalid_cmd() → boş/geçersiz komut kontrolü.
+**   3. handle_special_cases() → özel durum kontrolü.
+**   4. process_command() → execute_command_main() çağrısı.
+**   5. cmds listesi serbest bırakılır. */
 int	process_command_from_input(const char *input, t_shell *shell)
 {
 	t_cmd	*cmds;

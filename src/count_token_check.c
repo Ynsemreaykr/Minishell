@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   count_token_check.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 16:12:21 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:21:57 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 16:12:21 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:21:57 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Komut stringinin içinde kaç tane token (kelime/operatör)
+** olduğunu sayan yardımcı fonksiyonların bulunduğu modül.
+** Token dizisi malloc edilecekken kullanılacak eleman sayısını hesaplar. */
+
 #include "../include/minishell.h"
 
+/* Karakterin yönlendirme operatörü olup olmadığını ve
+** tek ya da çift karakter (< vs << veya > vs >>)  olup olmadığını anlar.
+** Uzunluğu (1 veya 2) olarak döndürür. Eğer değilse 0 döner. */
 int	get_redirection_length(const char *input, int pos)
 {
 	if (input[pos] == '<')
@@ -29,6 +36,8 @@ int	get_redirection_length(const char *input, int pos)
 	return (0);
 }
 
+/* İstenilen pozisyondaki karakterin sadece yönlendirme operatörü
+** başlangıcı olup olmadığını kontrol eder. Evetse 1, hayırsa 0 döner. */
 int	check_redirection_operator(const char *input, int pos)
 {
 	if (input[pos] == '<' || input[pos] == '>')
@@ -41,6 +50,8 @@ int	check_redirection_operator(const char *input, int pos)
 	return (0);
 }
 
+/* Boşlukları (Space ve Tab) atlayarak geçerli ilk karakterin
+** dizinini döndürür. */
 int	skip_whitespace(const char *input, int pos)
 {
 	while (input[pos] == ' ' || input[pos] == '\t')
@@ -48,6 +59,8 @@ int	skip_whitespace(const char *input, int pos)
 	return (pos);
 }
 
+/* Sayma işlemi sırasında tırnak içini bütün tek bir token olarak varsayar,
+** bu yüzden tırnak durumunu açık-kapalı olarak günceller. */
 void	update_quote_state(const char *input, int *pos,
 			int *in_quote, char *quote_char)
 {
@@ -67,6 +80,8 @@ void	update_quote_state(const char *input, int *pos,
 		(*pos)++;
 }
 
+/* Verilen komut dizesinde (tırnaklar ve işaretler hesaba katılarak)
+** toplamda kaç tane geçerli token olduğunu hesaplar. */
 int	count_tokens(const char *input)
 {
 	int		i;

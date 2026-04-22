@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   process_expansion_outside_quotes.c                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/05 01:55:00 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:23:26 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/09/05 01:55:00 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:23:26 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Tırnakların dışında kalan ortam değişkeni kullanımlarının ($VAR)
+** genişletilmesi için (expansion) yazılan yardımcı modül. */
+
 #include "../include/minishell.h"
 
+/* Tırnak dışarısında bulunmuş ortam değişkeninin karşılığını arar.
+** Ortam değişkeni değeri varsa işlenmiş (processed) tampona kopyalar. */
 static void	handle_env_variable_case_outside(t_proc_ctx *ctx, int name_start)
 {
 	int		name_length;
@@ -36,6 +41,8 @@ static void	handle_env_variable_case_outside(t_proc_ctx *ctx, int name_start)
 	}
 }
 
+/* Tırnak dışarısındaki $VAR ifadesindeki isim bölümünü okur
+** ve handle_env_variable_case_outside ile yerine orijinal içeriği yazar. */
 void	process_variable_expansion_outside_quotes(t_proc_ctx *ctx)
 {
 	int	name_start;

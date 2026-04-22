@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   expand_env_content.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/05 02:45:12 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:22:28 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/09/05 02:45:12 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:22:28 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Ortam değişkeninin ismine göre değerini dizeye ekleme işlemi. */
+
 #include "../include/minishell.h"
 
+/* Gelen ortam değişkeni ismini (var_name), shell'in env dizisinde bulur.
+** Eğer bulunursa değerin başlangıç adresini, bulunamazsa NULL döndürür. */
 static char	*find_env_variable(char *var_name, t_shell *shell)
 {
 	char	**envp;
@@ -36,6 +40,8 @@ static char	*find_env_variable(char *var_name, t_shell *shell)
 	return (var_value);
 }
 
+/* Bulunan değişken değerini expanded stringindeki uygun konuma kopyalar.
+** Eklenen karakter sayısını (uzunluğu) döndürür. */
 static int	copy_var_value(char *var_value, char *expanded, int exp_pos)
 {
 	int	len;
@@ -50,6 +56,8 @@ static int	copy_var_value(char *var_value, char *expanded, int exp_pos)
 	return (len);
 }
 
+/* Ortam değişkeni adını stringden okur, değerini bulur
+** ve expanded adlı oluşturulan buffer'a yazar. */
 int	expand_environment_variable(const char *line, int start,
 					t_shell *shell, char *expanded)
 {

@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/29 01:08:56 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:23:50 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/29 01:08:56 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:23:50 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Ana tokenizer modülü.
+** Bir komut segmentini (pipe sonrası tek komut string'ini) token'lara böler.
+** Tırnak ve değişken genişletme farkındalığıyla çalışır. */
+
 #include "../include/minishell.h"
 
+/* Token dizisini başlatır.
+** token_count <= 0 ise tek elemanlı boş dizi döner (should_return=1).
+** Aksi hâlde token_count+1 boyutlu boş dizi döner. */
 static char	**initialize_token_array(int token_count, int *should_return)
 {
 	char	**args;
@@ -28,8 +35,11 @@ static char	**initialize_token_array(int token_count, int *should_return)
 	return (args);
 }
 
+/* Yönlendirme token'ını işler (<, >, <<, >>).
+** get_redirection_length ile uzunluk hesaplanır, string kopyalanır.
+** << operatörü sonrasında heredoc delimiter token'ı da okunur. */
 static void	handle_redirection_token(const char *input, int *i,
-								char **args, int *argc)
+							char **args, int *argc)
 {
 	int		redir_len;
 	char	*redir_token;
@@ -47,8 +57,13 @@ static void	handle_redirection_token(const char *input, int *i,
 	}
 }
 
+/* Token bölme döngüsü.
+** Her iterasyonda bir token okunur:
+** - Boşluklar atlanır (skip_whitespace)
+** - Yönlendirme operatörü → handle_redirection_token
+** - Normal/tırnaklı token → process_regular_quoted_token */
 static void	process_token_loop(const char *input, t_shell *shell,
-			char **args, int *argc)
+		char **args, int *argc)
 {
 	int		i;
 	char	*token;
@@ -70,6 +85,10 @@ static void	process_token_loop(const char *input, t_shell *shell,
 	}
 }
 
+/* Ana tokenize fonksiyonu.
+** count_tokens ile kaç token olduğu öğrenilir, dizi hazırlanır,
+** process_token_loop ile tokenler doldurulur, NULL ile sonlandırılır.
+** Tırnak içi ve dışı değişken genişletme bu süreçte gerçekleşir. */
 char	**split_tokens(const char *input, t_shell *shell)
 {
 	char	**args;
@@ -85,6 +104,10 @@ char	**split_tokens(const char *input, t_shell *shell)
 	return (args);
 }
 
+/* Tek tırnak içindeki içeriği olduğu gibi (genişletme yapmadan) kopyalar.
+** ctx->i açılış tırnağından sonrayı gösterir; kapanış tırnağına kadar
+** tüm karakterler ctx->processed tamponuna yazılır.
+** Kapanış tırnağı varsa i ilerletilir. */
 char	*process_single_quote(t_proc_ctx *ctx)
 {
 	(*(ctx->i))++;

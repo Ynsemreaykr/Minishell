@@ -3,18 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/30 08:21:36 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:21:37 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/30 08:21:36 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:21:37 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* Komut için gereken fork mantığını standartlaştıran ve çocuk işlemlerin statüsünü
+** yakalayarak asıl çıkış kodunu çıkaran modül. */
 
 #include "../include/minishell.h"
 #include <sys/wait.h>
 #include <stdio.h>
 #include <unistd.h>
 
+/* Normal standart bir fork çağrısı atar ve işlem hatasında uyarı vererek
+** -1 döner. Başarılı fork da PID döner. */
 pid_t	create_child_process(void)
 {
 	pid_t	pid;
@@ -28,6 +33,10 @@ pid_t	create_child_process(void)
 	return (pid);
 }
 
+/* Pipeline'da yakalanmış son çocuğun statüsünü alır ve
+** dışarıdan bir sinyal ile mi öldü (örnek: Ctrl+C yani SIGINT 130)
+** yoksa doğal yoldan hata veya başarıyla bitirip exit ile mi çıktı bakar.
+** Buna mukabil shell in genel return değeri için uygun çıkış kodunu ayarlar. */
 static int	get_exit_code(int last_status)
 {
 	int	sig;
@@ -46,6 +55,10 @@ static int	get_exit_code(int last_status)
 	return (last_status);
 }
 
+/* Pipe segmentleri ardışık başlatıldığından parent tüm forkları beklemelidir.
+** Arka planda ölen tüm alt işlemleri süpürür ve bizim listemizin son çocuğunu
+** (binaenaleyh asıl ekrana yansıyacak çıkış değerinin de sahibi) tespit ederek
+** ona ait doğru çıkış kodunu döndürür. */
 int	wait_for_pipeline(pid_t last_pid)
 {
 	int		status;

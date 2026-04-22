@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 16:02:53 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:21:41 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 16:02:53 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:21:41 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Ek temizlik yardımcıları.
+** Heredoc içerik temizliği, env temizliği ve child process temizliği. */
+
 #include "../include/minishell.h"
 
+/* Tüm komut listesinde heredoc içeriklerini serbest bırakır.
+** Her t_redir listesinde HEREDOC tipli olanların content alanı temizlenir.
+** Pipeline tamamlandıktan sonra çağrılır (içerik artık kullanılmaz). */
 void	cleanup_heredoc_content(t_cmd *cmds)
 {
 	t_cmd	*current;
@@ -37,6 +43,8 @@ void	cleanup_heredoc_content(t_cmd *cmds)
 	}
 }
 
+/* shell->env dizisinin tüm elemanlarını ve diziyi serbest bırakır.
+** shell NULL ise hemen döner. Temizleme sonrası shell->env = NULL yapılır. */
 void	cleanup_env(t_shell *shell)
 {
 	int	i;
@@ -56,6 +64,10 @@ void	cleanup_env(t_shell *shell)
 	}
 }
 
+/* Child process sonlanmadan önce shell kaynaklarını temizler.
+** cleanup_env ile ortam değişkenleri, ft_mem_cleanup ile
+** tüm takip edilen bellek serbest bırakılır.
+** execve öncesi veya child'ın exit() çağrısından önce kullanılır. */
 void	cleanup_shell_for_child(t_shell *shell)
 {
 	if (!shell)
@@ -64,6 +76,9 @@ void	cleanup_shell_for_child(t_shell *shell)
 	ft_mem_cleanup();
 }
 
+/* Kısmi olarak oluşturulmuş bir t_cmd düğümünü serbest bırakır.
+** argv dizisi ve redir listesi ayrı ayrı temizlendikten sonra
+** düğümün kendisi ft_free ile kaldırılır. */
 static void	free_cmd_struct(t_cmd *cmd)
 {
 	int	i;
@@ -82,6 +97,9 @@ static void	free_cmd_struct(t_cmd *cmd)
 	ft_free(cmd);
 }
 
+/* Hata durumunda kısmen oluşturulmuş yapıları temizler.
+** cmd NULL değilse free_cmd_struct ile temizlenir.
+** cmd_strings NULL değilse cmd_count kadar eleman serbest bırakılır. */
 void	cleanup_and_return_null(t_cmd *cmd, char **cmd_strings, int cmd_count)
 {
 	int	i;

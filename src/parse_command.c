@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   parse_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 17:36:54 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:23:11 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 17:36:54 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:23:11 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Komut ayrıştırma ana modülü.
+** Ham giriş dizisini pipe'a göre böler ve her segment için
+** t_cmd düğümü oluşturarak bağlı liste döndürür. */
+
 #include "../include/minishell.h"
 
+/* cmd_strings dizisinin tüm elemanlarını ve diziyi serbest bırakır.
+** parse_commands() bittikten sonra geçici string dizisi temizlenir. */
 static void	cleanup_cmd_strings(char **cmd_strings, int cmd_count)
 {
 	int	c;
@@ -22,6 +28,9 @@ static void	cleanup_cmd_strings(char **cmd_strings, int cmd_count)
 	ft_free(cmd_strings);
 }
 
+/* Girişi pipe operatörüne göre böler (split_by_pipes).
+** Hata veya NULL sonuç durumunda pipe sözdizimi hatası mesajı yazar.
+** Geçerli cmd_strings dizisi döner veya NULL. */
 static char	**get_cmd_string(const char *input, int *cmd_count)
 {
 	char	**cmd_strings;
@@ -36,6 +45,13 @@ static char	**get_cmd_string(const char *input, int *cmd_count)
 	return (cmd_strings);
 }
 
+/* Ham giriş dizisini ayrıştırarak t_cmd bağlı listesi oluşturur.
+** Akış:
+**   1. validate_input_and_pipes → pipe sözdizimi geçerliliği
+**   2. get_cmd_string → pipe'a göre bölme
+**   3. process_cmd_loop → her segment için t_cmd oluşturma
+**   4. cleanup_cmd_strings → geçici string temizliği
+** Başarıda listenin başı (head), hata durumunda NULL döner. */
 t_cmd	*parse_commands(const char *input, t_shell *shell)
 {
 	t_cmd		*head;
@@ -60,6 +76,9 @@ t_cmd	*parse_commands(const char *input, t_shell *shell)
 	return (head);
 }
 
+/* Verilen komut adının dahili (builtin) komut olup olmadığını kontrol eder.
+** echo, cd, pwd, export, unset, env, exit → 1
+** Diğerleri → 0 */
 int	is_builtin_command(const char *cmd)
 {
 	if (!cmd)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 15:54:07 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:33:08 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 15:54:07 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:33:08 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,59 +19,59 @@
 
 typedef struct s_mem_block
 {
-	void				*ptr;
-	struct s_mem_block	*next;
+	void				*ptr; // Bellekte ayrılan alanın göstericisi
+	struct s_mem_block	*next; // Sıradaki bellek bloğuna işaretçi
 }	t_mem_block;
 
 typedef enum e_redir_type
 {
-	REDIR_IN,
-	REDIR_OUT,
-	REDIR_APPEND,
-	HEREDOC
+	REDIR_IN, // < operatörü
+	REDIR_OUT, // > operatörü
+	REDIR_APPEND, // >> operatörü
+	HEREDOC // << operatörü
 }	t_redir_type;
 
 typedef struct s_redir
 {
-	t_redir_type		type;
-	char				*filename;
-	char				*delimiter;
-	char				*cleaned_delimiter;
-	char				*content;
-	int					quoted_flag;
-	struct s_redir		*next;
+	t_redir_type		type; // Yönlendirme türü (IN, OUT, APPEND, HEREDOC)
+	char				*filename; // Hedef dosya adı (varsa)
+	char				*delimiter; // Heredoc için sınırlandırıcı kelime
+	char				*cleaned_delimiter; // Tırnaklarından arındırılmış sınırlandırıcı
+	char				*content; // Heredoc içerik metni
+	int					quoted_flag; // Heredoc delimiter tırnaklı mı bayrağı
+	struct s_redir		*next; // Sonraki yönlendirme
 }	t_redir;
 
 typedef struct s_cmd
 {
-	char				**argv;
-	t_redir				*redirs;
-	struct s_cmd		*next;
+	char				**argv; // Komut ve argüman dizisi (Örn: {"ls", "-l", NULL})
+	t_redir				*redirs; // Komuta bağlı yönlendirmelerin listesi
+	struct s_cmd		*next; // Pipe ile bağlı bir sonraki komut
 }	t_cmd;
 
 typedef struct s_shell
 {
-	t_cmd				*cmds;
-	int					last_exit;
-	char				**env;
+	t_cmd				*cmds; // Çözümlenmiş komutların bağlı listesi
+	int					last_exit; // Son çalıştırılan komutun çıkış kodu ($?)
+	char				**env; // Çevresel değişkenler dizisi (Environment)
 }	t_shell;
 
 typedef struct s_cmd_data
 {
-	t_cmd				*cmd;
-	char				**cmd_strings;
-	int					cmd_count;
-	t_shell				*shell;
+	t_cmd				*cmd; // İşlenmekte olan komut nesnesi
+	char				**cmd_strings; // Pipe'lara göre bölünmüş string dizisi
+	int					cmd_count; // Toplam pipe/komut sayısı
+	t_shell				*shell; // Genel shell durumu
 }	t_cmd_data;
 
 typedef struct s_proc_ctx
 {
-	const char			*input;
-	int					*i;
-	int					end;
-	char				*processed;
-	int					*proc_len;
-	t_shell				*shell;
+	const char			*input; // İşlenecek ham girdi (input)
+	int					*i; // Girdi üzerindeki mevcut indis
+	int					end; // İşlenecek alanın bitiş indisi
+	char				*processed; // Çözümlenip oluşturulan yeni metin tamponu
+	int					*proc_len; // Çözümlenmiş metnin o anki uzunluğu
+	t_shell				*shell; // Çevresel değişkenlere vs ulaşmak için shell state
 }	t_proc_ctx;
 
 int		ft_atoi(const char *str);

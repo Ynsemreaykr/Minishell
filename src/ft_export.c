@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 16:23:20 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:22:37 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 16:23:20 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:22:37 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* export (çevresel değişken bildirme) komutunun ana destek ve argümansız
+** çalıştırma kısımları. */
+
 #include "../include/minishell.h"
 
+/* Gelen ortam değişkeni isminin geçerli karakterler içerip içermediğini kontrol eder.
+** İsim harf veya alt çizgi ile başlamalıdır, rakamla başlayamaz.
+** Kalan kısmı alfanümerik veya alt çizgi olabilir. Belirtilen bu kurallara uyuyorsa
+** 1, uymuyorsa 0 döner. */
 int	is_valid_identifier(const char *name)
 {
 	int	i;
@@ -28,6 +35,9 @@ int	is_valid_identifier(const char *name)
 	return (1);
 }
 
+/* Girilen argümanın içerisinden sadece isim bölümünü,
+** `=` (eşittir) işaretine kadarki alanı koparıp döndürür.
+** Eğer `=` yoksa (sadece export VAR yapılmışsa) tamamını isim kabul eder. */
 char	*extract_var_name(const char *arg)
 {
 	char	*eq;
@@ -47,6 +57,10 @@ char	*extract_var_name(const char *arg)
 	return (name);
 }
 
+/* Hiçbir argüman verilmeden sadece `export` yazıldığında ortam değişkenlerinin
+** ASCII sırasına (alfabetik olarak) göre nasıl yazdırılacağını belirler.
+** Mevcut env dizisi geçici olarak kopyalanır, sort_env() ile alfabetik sıralanır,
+** print_sorted_env() ile istenen formatta ("declare -x ...") basılır ve sökülür. */
 int	handle_no_args_export(t_shell *shell)
 {
 	char	**env;

@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/05 00:10:00 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/05 00:10:00 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/09/05 00:10:00 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/05 00:10:00 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Libft: İki ayrı string dizisini birleştirerek yeni bir string üretir. */
+
 #include "../include/minishell.h"
 
+/* Gelen s1 ve s2 nin null durumlarını kontrol eder, ikisi de doluysa boylarını
+** hesaplayıp null payıyla birlikte ft_malloc atar. Sonrasında strcpy ve strcat
+** kullanarak ikisini sırayla kopyalar ve döndürür. */
 char	*ft_strjoin(const char *s1, const char *s2)
 {
 	char	*result;

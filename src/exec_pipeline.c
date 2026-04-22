@@ -3,16 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 17:01:02 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:22:18 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 17:01:02 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:22:18 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* Pipe ("|") operatörüyle birbirine zincirlenen komutların fork(), pipe() ve dup2()
+** kullanılarak birbirlerine bağlanması ve parallel yürütülmesi işlemlerini
+** koordine eden modüldür. */
 
 #include "../include/minishell.h"
 #include <unistd.h>
 
+/* Pipeline üzerindeki herbir child processin (çocuğun) file descriptor atamasını yapar.
+** Sinyalleri (Ctrl C vs) pipe içinde Default haline çeker.
+** cmd->next (sonraki komut) varsa, onun pipe ının yazma ucuna kendi standart
+** çıktısını (STDOUT) bağlar. (Kendi çıktısını sonrakinin stdin ine aktaracak).
+** fd_in doluysa, kendi standart girdisini öncekilerin aktardığı bu degere setler. */
 static void	child_setup(t_cmd *cmd, int fd_in, int *pipefd)
 {
 	signal(SIGINT, SIG_DFL);
@@ -31,6 +40,10 @@ static void	child_setup(t_cmd *cmd, int fd_in, int *pipefd)
 	setup_redirections_for_child(cmd, fd_in, pipefd);
 }
 
+/* Pipe segmentindeki bir komutun (child process) tamamen çalıştırıldığı noktadır.
+** fd (yönlendirme) ayarlamalarını child_setup a devrtettikten sonra
+** komutun builtin olup olmadığına bakar, dahiliyse process içinde execte eder,
+** hariciyse execute_command() ile fork üzerinden execute ettirir. */
 static void	handle_child(t_cmd *cmd, int fd_in, int *pipefd, t_shell *shell)
 {
 	int	exit_code;
@@ -56,6 +69,9 @@ static void	handle_child(t_cmd *cmd, int fd_in, int *pipefd, t_shell *shell)
 	}
 }
 
+/* Her fork'tan sonra parent process in yapacağı dosya/fd temizliğidir.
+** Pipe ın yazma ucu kapatılır, okuma ucu (fd_in) bir sonraki komutun kullanabilmesi
+** için sonraki iterasyona aktarılır. */
 static int	handle_parent(int fd_in, int *pipefd, t_cmd *cmd)
 {
 	if (fd_in != 0)
@@ -68,6 +84,9 @@ static int	handle_parent(int fd_in, int *pipefd, t_cmd *cmd)
 	return (fd_in);
 }
 
+/* cmd dizisi (linked listi) üzerindeki teker teker her bir pipe objesine komuta
+** ait fork() ve pipe() oluşturup çalıştırma döngüsüdür.
+** pidleri döndürür, dizideki en sonuncu çocuğun PID numarasını return eder. */
 static pid_t	pipeline_commands(t_cmd *cmds, t_shell *shell, int *fd_in_ptr)
 {
 	int		pipefd[2];
@@ -95,6 +114,9 @@ static pid_t	pipeline_commands(t_cmd *cmds, t_shell *shell, int *fd_in_ptr)
 	return (last_pid);
 }
 
+/* Pipeline ana fonksiyonudur. Commandler birbirlerine pipe yapılmışsa (cmds->next!=NULL)
+** burası devreye girer. Pipeline oluşturulup bitirildikten ve statüler
+** (return code) alındıktan sonra artık heredoc içeriği temizlenir ve çıkış alınır. */
 int	exec_pipeline(t_cmd *cmds, t_shell *shell)
 {
 	int		fd_in;

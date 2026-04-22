@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_quotes.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/30 09:40:57 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:22:48 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/30 09:40:57 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:22:48 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Heredoc ayrıştırıcı için tırnak temizleme ve tespit modülü.
+** Heredoc delimiter'ında tırnak olup olmadığını kontrol eder ve
+** varsa bu tırnakları delimiter'dan temizler. */
+
 #include "../include/minishell.h"
 
+/* Delimiter stringinin başındaki ve sonundaki tırnak karakterlerini siler.
+** Yeni temizlenmiş string için yer ayrılır, eski delimiter serbest bırakılır
+** ve pointer yeni stringe yönlendirilir. */
 static void	clean_quotes_from_delimiter(char **delimiter, int len)
 {
 	char	*delim;
@@ -25,6 +32,13 @@ static void	clean_quotes_from_delimiter(char **delimiter, int len)
 	*delimiter = cleaned;
 }
 
+/* Sınır kelimesinin (delimiter) tırnak içinde olup olmadığını tespit eder.
+** Eğer tırnak içindeyse, tırnakları temizler ve tırnak türünü döndürür:
+** - Tek tırnak ('') ise 1 döndürür.
+** - Çift tırnak ("") ise 2 döndürür.
+** - Tırnak yoksa 0 döndürür.
+** Bu bilgi, heredoc okunurken değişken genişletmesinin yapılıp yapılmayacağına
+** karar vermek için kullanılır. */
 int	detect_quote_clean_delimiter(char **delimiter)
 {
 	char	*delim;

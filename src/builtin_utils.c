@@ -3,16 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/30 08:18:16 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:21:28 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/30 08:18:16 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:21:28 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* Dahili (builtin) komutlara destek sağlayan ek yardımcı fonksiyonların olduğu modül.
+** cd, env gibi işlevlerin alt işlemleri bulunur. */
 
 #include "../include/minishell.h"
 #include <unistd.h>
 
+/* cd komutunun hedef dizin argümanını ayrıştırır.
+** Sadece 'cd' yazıldıysa veya argüman verilmediyse HOME env sine gidilecek yolu sağlar.
+** Çok fazla argüman varsa null döndürüp hata basar. */
 static const char	*cd_get_path(char **argv, int argc)
 {
 	const char	*path;
@@ -38,6 +44,10 @@ static const char	*cd_get_path(char **argv, int argc)
 	return (path);
 }
 
+/* cd (change directory) dahilî komutu.
+** Eski çalışma dizinini (getcwd) bulur ve OLDPWD içerisine kaydeder.
+** chdir() sistem çağırısıyla konumu değiştirir.
+** Başarılı olursa yeni konumu tekrar bulur ve PWD içerisine setler. */
 int	ft_cd(char **argv, t_shell *shell)
 {
 	int			argc;
@@ -67,6 +77,9 @@ int	ft_cd(char **argv, t_shell *shell)
 	return (0);
 }
 
+/* Çevresel değişkenlerin (environment variables) hepsini stdout'a yazar.
+** (Sadece değeri olan, '=' içeren değişkenler yazdırılır. Örn export A yapılınca
+** env'de gözükmemelidir; sadece export komutunda gözükür.) */
 int	ft_env(t_shell *shell)
 {
 	char	**env;
@@ -86,6 +99,7 @@ int	ft_env(t_shell *shell)
 	return (0);
 }
 
+/* Kabuğun env değişkenlerini barındıran dizinin pointerını getirir. */
 char	**get_env(t_shell *shell)
 {
 	return (shell->env);

@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   create_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 16:12:21 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:22:06 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 16:12:21 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:22:06 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* t_redir düğümü oluşturma ve bağlı listeye ekleme modülü. */
+
 #include "../include/minishell.h"
 
+/* Verilen token'ın geçerli bir yönlendirme hedefi olup olmadığını kontrol eder.
+** |, >, >>, <, << ise geçersizdir (yönlendirme operatörü) → 0 döner.
+** NULL ise → 0, normal string ise → 1 döner. */
 int	is_valid_redir_target(const char *token)
 {
 	if (!token)
@@ -25,6 +30,9 @@ int	is_valid_redir_target(const char *token)
 	return (1);
 }
 
+/* Komutun yönlendirme listesinin sonuna yeni bir t_redir düğümü ekler.
+** Liste boşsa direkt olarak cmd->redirs yapılır.
+** Aksi hâlde son düğüme kadar ilerlenip oraya eklenir. */
 void	add_redir(t_cmd *cmd, t_redir *redir)
 {
 	t_redir	*current;
@@ -42,6 +50,9 @@ void	add_redir(t_cmd *cmd, t_redir *redir)
 	}
 }
 
+/* REDIR_IN, REDIR_OUT veya REDIR_APPEND tipi için t_redir düğümü oluşturur.
+** filename alanı ft_strdup ile kopyalanır.
+** delimiter, cleaned_delimiter, content → NULL; quoted_flag → 0 */
 t_redir	*create_redir(t_redir_type type, char *filename)
 {
 	t_redir	*redir;
@@ -59,8 +70,13 @@ t_redir	*create_redir(t_redir_type type, char *filename)
 	return (redir);
 }
 
+/* HEREDOC tipi için t_redir düğümü oluşturur.
+** - delimiter: ham (tırnaklı) delimiter string kopyası
+** - cleaned_delimiter: tırnakları temizlenmiş versiyon
+** - quoted_flag: 1 = tek tırnak, 2 = çift tırnak, 0 = tırnaksız
+** filename → NULL; content → NULL (heredoc okuma sonrası doldurulur) */
 t_redir	*create_heredoc_redir(char *delimiter,
-			char *cleaned_delimiter, int quoted_flag)
+		char *cleaned_delimiter, int quoted_flag)
 {
 	t_redir	*redir;
 

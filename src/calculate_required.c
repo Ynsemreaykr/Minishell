@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   calculate_required.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/05 02:45:12 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:21:34 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/09/05 02:45:12 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:21:34 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Token genişletme aşamasında hafıza tahsisi için gereken boyutu
+** yaklaşık olarak hesaplama modülü. */
+
 #include "../include/minishell.h"
 
+/* Ortam değişkenleri arasındaki en uzun değeri bulur.
+** Gerekli genişletme belleğini güvenli bir şekilde büyük tutmak için kullanılır. */
 static int	get_max_env_variable_size(t_shell *shell)
 {
 	char	**envp;
@@ -37,6 +42,9 @@ static int	get_max_env_variable_size(t_shell *shell)
 	return (max_size);
 }
 
+/* Değişken genişletmesi veya tırnak içeren tokenlar için
+** tahmini bellek miktarını max_env_size faktörüyle hesaplar.
+** Yeterli büyüklükte bir alan açılmasına olanak tanır. */
 static int	calculate_token_memory_size(int base_len,
 				int has_variable_expansion,
 				int has_single_quotes,
@@ -57,6 +65,8 @@ static int	calculate_token_memory_size(int base_len,
 		return (base_len + 1);
 }
 
+/* Verilen token segmenti [start, end) için ne kadar bellek
+** gerektiğini öngörür. İçinde $ veya tek tırnak olup olmadığına bakar. */
 int	calculate_required_memory(const char *input, int start, int end,
 				t_shell *shell)
 {

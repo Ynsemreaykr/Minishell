@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   expand_heredoc_size.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/30 09:27:38 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:22:31 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/30 09:27:38 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:22:31 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Heredoc okuması sırasında değişkenin genişletilmiş halinin
+** tam olarak ne kadar byte yer tutacağını hesaplama fonksiyonları. */
+
 #include "../include/minishell.h"
 
+/* Satırdaki konumdan başlayarak ortam değişkeni ismini ayrıştırır,
+** ismin string halini oluşturup (malloc) döndürür. */
 static char	*get_var_name_from_line(const char *line, int *i)
 {
 	int		start;
@@ -30,6 +35,8 @@ static char	*get_var_name_from_line(const char *line, int *i)
 	return (var_name);
 }
 
+/* Ayrıştırılan değişkenin env listesinde değerini bulup
+** ortam değişkeninin uzunluğunu (byte cinsinden) döndürür. */
 static int	get_var_size(const char *line, int *i, t_shell *shell)
 {
 	char	*var_name;
@@ -57,12 +64,15 @@ static int	get_var_size(const char *line, int *i, t_shell *shell)
 	return (size);
 }
 
+/* Sadece boyutu ve indeksi birer ilerletir (normal karakterler için). */
 static void	increment_size_and_index(int *size, int *i)
 {
 	(*size)++;
 	(*i)++;
 }
 
+/* $ sembolünden başlayan kısmın boyut hesabını yapar.
+** $? ise çıkış kodu uzunluğu, $VAR ise değişken boyutu olarak yansıtır. */
 static int	dollar_expansion_size(const char *line, int *i, t_shell *shell)
 {
 	int	size;
@@ -81,6 +91,8 @@ static int	dollar_expansion_size(const char *line, int *i, t_shell *shell)
 	return (size);
 }
 
+/* Tüm heredoc satırının (genişletilmeler dahil) boyutunu
+** malloc edebilmek için byte hesabı gerçekleştirir. */
 int	calculate_expansion_size(const char *line, t_shell *shell)
 {
 	int	size;

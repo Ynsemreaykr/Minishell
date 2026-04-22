@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/05 02:45:12 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:23:39 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/09/05 02:45:12 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:23:39 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* env ortam değişkenlerini alfabetik ASCII sırasında sıralamak
+** ve export modunda bash ile paralel bir standartla basmak için yazılmış modül. */
+
 #include "../include/minishell.h"
 
+/* Kopyalanmış env dizisine, Bubble Sort algoritmasına benzer bir şekilde,
+** alfabetik sıralama uygular. */
 void	sort_env(char **env, int count)
 {
 	int		j;
@@ -36,6 +41,9 @@ void	sort_env(char **env, int count)
 	}
 }
 
+/* Belirtilen env değerini bash standartına uygun formata bürür.
+** '_' değişkeni basılmaz. Eğer bir env nin atalı değeri varsa
+** declare -x VAR="değer" formatıyla basılır, atalı değilse sadece declare -x VAR olur. */
 static void	print_single_env(char *entry)
 {
 	char	*eq;
@@ -62,6 +70,8 @@ static void	print_single_env(char *entry)
 	}
 }
 
+/* Sıralı olarak kaydedilmiş çevresel değişken arrayinin bütününde gezinir,
+** her biri için print_single_env'i çağırarak basım yapılmasını sağlar. */
 void	print_sorted_env(char **env, int count)
 {
 	int	j;

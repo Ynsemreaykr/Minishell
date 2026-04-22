@@ -3,17 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   command_executors.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 16:07:32 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:33:15 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 16:07:32 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:33:15 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* Tek komut (pipe içermeyen) yapıların dahili/harici (builtin/external)
+** olarak çalıştırılmasını ve fork() işlemlerini idare eden modül. */
 
 #include "../include/minishell.h"
 #include <sys/wait.h>
 #include <unistd.h>
 
+/* Komutun dahili komutlardan biri (echo, cd, export vs.) olup olmadığını
+** kontrol ederek ilgili komut fonksiyonunu çağırır.
+** Bilinmeyen dahililer (ft_dot vb.) hatalarla sonuçlanabilir. */
 int	exec_builtin(t_cmd *cmd, t_shell *shell)
 {
 	if (ft_strcmp(cmd->argv[0], "echo") == 0)
@@ -35,6 +41,11 @@ int	exec_builtin(t_cmd *cmd, t_shell *shell)
 	return (1);
 }
 
+/* Pipe içermeyen TEK bir dahili komutun çalıştırılmasından sorumludur.
+** Fork işlemi _yapılmaz_! Bu sayede (cd, export gibi) komutların
+** shell ortamını kalıcı olarak değiştirmesi sağlanır.
+** Orijinal stdin ve stdout saklanır, yönlendirmeler dup2() ile
+** builtin öncesi ayarlanıp sonrasında eski haline getirilir. */
 int	execute_single_builtin(t_cmd *cmd, t_shell *shell)
 {
 	int	old_stdin;
@@ -55,6 +66,9 @@ int	execute_single_builtin(t_cmd *cmd, t_shell *shell)
 	return (result);
 }
 
+/* Parent process sinyalleri yoksayar, çocuğunu (pid) bekler (waitpid) ve
+** onun nasıl sonlandığını (WIFEXITED / WIFSIGNALED) analiz edip
+** çıkış kodunu döndürür. (Ctrl+C => 130, Ctrl+\ => 131 vs.) */
 static int	handle_parent_process(pid_t pid)
 {
 	int	status;
@@ -81,6 +95,10 @@ static int	handle_parent_process(pid_t pid)
 	return (1);
 }
 
+/* Pipe içermeyen TEK dış (external) komutun (örn. ls, cat)
+** fork ile child processte çalıştırılmasını başlatır.
+** Child: Yönlendirmeleri kurup, sinyallere varsayılan değeri atayıp çalışır.
+** Parent: process'i bekleyerek geri dönüş çıkış kodunu döndürür. */
 int	execute_single_external(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;

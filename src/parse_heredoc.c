@@ -3,20 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   parse_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 17:36:54 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:23:13 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 17:36:54 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:23:13 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Komut argv listesindeki yönlendirme ve heredoc token'larını t_redir
+** listesine dönüştüren modül. Yönlendirme sonrası argv güncellenir. */
+
 #include "../include/minishell.h"
 
+/* < veya << operatörünü işler:
+** - "<" → handle_in_redir ile REDIR_IN düğümü oluşturulur
+** - "<<" → delimiter tırnak kontrolü (detect_quote_clean_delimiter),
+**   create_heredoc_redir ile HEREDOC düğümü oluşturulur ve cmd'ye eklenir
+** - Diğer token'lar → new_argv'ye kopyalanır */
 static void	process_input_redir(t_cmd *cmd, int *i, char **new_argv, int *j)
 {
-	int			quote_type;
-	char		*original;
-	t_redir		*heredoc_redir;
+	int		quote_type;
+	char	*original;
+	t_redir	*heredoc_redir;
 
 	if (!ft_strcmp(cmd->argv[*i], "<"))
 		handle_in_redir(cmd, cmd->argv, i);
@@ -40,6 +48,8 @@ static void	process_input_redir(t_cmd *cmd, int *i, char **new_argv, int *j)
 		new_argv[(*j)++] = ft_strdup(cmd->argv[(*i)++]);
 }
 
+/* Eski argv'nin tüm elemanlarını serbest bırakır ve new_argv'yi atar.
+** argc == 0 ise new_argv de serbest bırakılır ve cmd->argv = NULL yapılır. */
 static void	cleanup_and_replace_argv(t_cmd *cmd, char **new_argv, int argc)
 {
 	int	k;
@@ -57,6 +67,10 @@ static void	cleanup_and_replace_argv(t_cmd *cmd, char **new_argv, int argc)
 		cmd->argv = new_argv;
 }
 
+/* argv'nin tüm elemanlarını tarar:
+** - ">" veya ">>" → process_output_redir (REDIR_OUT / REDIR_APPEND)
+** - "<", "<<" veya normal arg → process_input_redir
+** Yönlendirme olmayan token'lar new_argv'ye kopyalanır. */
 static void	process_argv_elements(t_cmd *cmd, char **new_argv)
 {
 	int	i;
@@ -74,6 +88,9 @@ static void	process_argv_elements(t_cmd *cmd, char **new_argv)
 	new_argv[j] = NULL;
 }
 
+/* Yönlendirme olmayan argüman sayısını hesaplar.
+** <, <<, >, >> token'larından sonra gelen geçerli hedef token'ı da
+** sayılmaz; bunlar two-token operatör olarak atlanır. */
 static int	count_non_redir_args(char **argv)
 {
 	int	i;
@@ -100,6 +117,11 @@ static int	count_non_redir_args(char **argv)
 	return (argc);
 }
 
+/* Komut argv listesindeki yönlendirme token'larını t_redir listesine taşır.
+** 1. count_non_redir_args → yeni argv boyutu
+** 2. new_argv dizisi oluşturulur
+** 3. process_argv_elements → operatörler t_redir'e, argümanlar new_argv'ye
+** 4. cleanup_and_replace_argv → eski argv temizlenir, new_argv atanır */
 void	parse_redirections_and_heredoc(t_cmd *cmd)
 {
 	int		argc;

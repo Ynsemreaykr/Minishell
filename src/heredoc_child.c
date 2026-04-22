@@ -3,12 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_child.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/05 02:45:12 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:22:43 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/09/05 02:45:12 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:22:43 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* Heredoc child process modülü.
+** Fork sonrası child process'te readline ile satır satır giriş okur
+** ve pipe yazma ucuna yazar. */
 
 #include "../include/minishell.h"
 #include <unistd.h>
@@ -16,6 +20,9 @@
 
 extern volatile sig_atomic_t	g_signal_number;
 
+/* Heredoc satırındaki değişkenleri ($VAR, $?) genişletir.
+** calculate_expansion_size ile gereken tampon boyutu hesaplanır,
+** process_expansion_loop ile genişletilmiş string oluşturulur. */
 static char	*expand_variable_in_heredoc(const char *line, t_shell *shell)
 {
 	char	*expanded;
@@ -27,6 +34,8 @@ static char	*expand_variable_in_heredoc(const char *line, t_shell *shell)
 	return (expanded);
 }
 
+/* İşlenmiş bir heredoc satırını pipe yazma ucuna yazar.
+** Satırın kendisi + "\n" yazılır, ardından line serbest bırakılır. */
 static void	write_heredoc_line(int fd, char *line)
 {
 	write(fd, line, ft_strlen(line));
@@ -34,6 +43,14 @@ static void	write_heredoc_line(int fd, char *line)
 	ft_free(line);
 }
 
+/* Kullanıcıdan heredoc satırlarını readline ile okur.
+** "> " prompt'u ile her satır alınır.
+** Döngü şu durumlarda sonlanır:
+** - g_signal_number (Ctrl+C) alındıysa
+** - EOF (Ctrl+D) → uyarı mesajı
+** - Delimiter ile eşleşen satır
+** quoted_flag != 0 ise değişken genişletme yapılmaz (tırnaklı delimiter).
+** Aksi hâlde expand_variable_in_heredoc çağrılır. */
 static void	process_heredoc_input(int *pipefd,
 	t_redir *heredoc_redir, t_shell *shell)
 {
@@ -63,6 +80,12 @@ static void	process_heredoc_input(int *pipefd,
 	}
 }
 
+/* Child process heredoc giriş döngüsü giriş noktası.
+** 1. Sinyal kurulumu: SIGINT → heredoc_signal_handler, SIGQUIT → SIG_IGN
+** 2. Okuma ucu kapatılır (child yalnızca yazma yapar)
+** 3. process_heredoc_input ile satır loop çalışır
+** 4. Yazma ucu kapatılır
+** 5. g_signal_number != 0 ise exit(130), aksi hâlde exit(0) */
 void	heredoc_child_process(int *pipefd,
 	t_redir *heredoc_redir, t_shell *shell)
 {

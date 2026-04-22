@@ -3,17 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 15:54:07 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:21:31 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 15:54:07 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:21:31 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* Dahili (builtin) komutların genel implementasyon modülü.
+** pwd, exit, . gibi bazı builtin fonksiyonların kaynak denetimleri burada bulunur. */
 
 #include "../include/minishell.h"
 #include <stdio.h>
 #include <unistd.h>
 
+/* exit komutu için verilen argümanın boşluklardan (space ve tab)
+** temizlenmiş başlangıç ve bitiş kısımlarını belirler. */
 static void	trim_space(const char *str, const char **start, const char **end)
 {
 	int	i;
@@ -27,6 +32,8 @@ static void	trim_space(const char *str, const char **start, const char **end)
 		(*end)--;
 }
 
+/* trim_space işleminden geçen stringin tamamen numaralardan
+** (veya en başta opsiyonel bir + / - den) oluşup oluşmadığını sınar. */
 static int	is_valid_number(const char *str)
 {
 	int			i;
@@ -52,6 +59,11 @@ static int	is_valid_number(const char *str)
 	return (1);
 }
 
+/* exit dahili komutunun implementasyonu.
+** - Argümansız çağrılırsa programı kapatır.
+** - Argüman rakam değilse exit 2 basar.
+** - 1'den fazla argüman varsa hata verir ve kapatmaz.
+** - 1 geçerli rakam argümanı varsa, shell i argüman çıkış koduyla exiter. */
 int	ft_exit(char **argv)
 {
 	int	arg_count;
@@ -80,6 +92,9 @@ int	ft_exit(char **argv)
 	exit(code);
 }
 
+/* pwd(print working directory) dahili komutunun implementasyonu.
+** PWD env değişkenini bulabilirse onu, yoksa getcwd kullanarak
+** bulunduğumuz dosya yolunu yazdırır. */
 int	ft_pwd(t_shell *shell)
 {
 	char	*pwd_env;
@@ -104,6 +119,9 @@ int	ft_pwd(t_shell *shell)
 	return (0);
 }
 
+/* Bir komut isminin dahiller listesinde olup olmadığını kontrol eder.
+** (Dahili = fork yapılmadan veya dahili komut olarak çağrılması gerekenler)
+** Evetse 1, hayırsa 0 döner. Boş komutları da 1 sayarak ilerlemeyi keser. */
 int	is_builtin(const char *cmd)
 {
 	if (!cmd || ft_strlen(cmd) == 0)

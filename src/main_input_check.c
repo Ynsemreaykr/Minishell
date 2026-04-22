@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   main_input_check.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 17:15:37 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:23:00 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 17:15:37 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:23:00 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Kullanıcıdan gelen ham giriş dizisinin sözdizimi kontrolünü yapan modül.
+** Tırnak çifti doğrulama, yönlendirme operatörü doğrulama ve
+** yalnızca boşluklardan oluşan giriş tespiti burada gerçekleşir. */
+
 #include "../include/minishell.h"
 
+/* Tırnak durumunu günceller (tek veya çift tırnak açma/kapama).
+** in_quote = 0 iken tırnak görülürse → tırnak açılır, quote_char ayarlanır.
+** in_quote = 1 iken eşleşen tırnak görülürse → tırnak kapanır. */
 static void	update_quote_flags(char c, int *in_quote, char *quote_char)
 {
 	if (*in_quote == 0 && (c == '"' || c == '\''))
@@ -26,6 +33,10 @@ static void	update_quote_flags(char c, int *in_quote, char *quote_char)
 	}
 }
 
+/* Yönlendirme operatörü (< >) sözdizimini doğrular.
+** Tırnak dışındaki her < veya > için check_redir_operator() çağrılır.
+** Giriş sonunda tek başına < veya > varsa sözdizimi hatası verilir.
+** Geçerli → 1, hatalı → 0 döndürür. */
 static int	check_redirection_syntax(const char *input)
 {
 	int		i;
@@ -55,6 +66,8 @@ static int	check_redirection_syntax(const char *input)
 	return (1);
 }
 
+/* Girişin tamamen boşluk (space/tab) karakterlerinden oluşup oluşmadığını
+** kontrol eder. Tamamen boşluksa 1, değilse 0 döndürür. */
 static int	is_only_whitespace(const char *input)
 {
 	int	i;
@@ -69,6 +82,10 @@ static int	is_only_whitespace(const char *input)
 	return (1);
 }
 
+/* Girişteki tırnak çiftlerinin kapalı olup olmadığını doğrular.
+** Tek tırnak ve çift tırnak sayacı tutulur; giriş biterken
+** herhangi biri hâlâ açıksa uygun hata mesajı yazılır ve 0 döndürülür.
+** Tüm tırnaklar kapalıysa 1 döndürülür. */
 static int	check_quotes(const char *input)
 {
 	int	in_single_quote;
@@ -93,6 +110,12 @@ static int	check_quotes(const char *input)
 	return (!(in_single_quote || in_double_quote));
 }
 
+/* Ham girişin işlenmeye hazır olup olmadığını kontrol eder.
+** Sırasıyla:
+**   1. Yalnızca boşluksa → 0 döndür (işlem yapma)
+**   2. Kapatılmamış tırnak varsa → last_exit=2, 0 döndür
+**   3. Hatalı yönlendirme sözdizimi varsa → last_exit=2, 0 döndür
+** Tüm kontroller geçilirse → 1 döndür (giriş geçerli) */
 int	check_input(const char *input, t_shell *shell)
 {
 	if (is_only_whitespace(input))

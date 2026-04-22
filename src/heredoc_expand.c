@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_expand.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/30 09:40:57 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:22:45 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/30 09:40:57 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:22:45 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Heredoc satırlarında ortam değişkenlerini genişletme modülü.
+** $VAR veya $? gibi ifadeleri gerçek değerleriyle değiştirir. */
+
 #include "../include/minishell.h"
 
+/* Tırnak açılışını ve kapanışını işler.
+** Eğer açılmamış bir tırnaksa (tek veya çift), tırnak başlangıcını kaydeder.
+** Eğer açık bir tırnağın kapanışıysa, tırnak durumunu sıfırlar.
+** Karakter tırnak ve durum değişikliği olduysa 1, aksi halde 0 döndürür. */
 static int	handle_quote_processing(const char *line, int i,
 					int *in_quote, char *quote_char)
 {
@@ -30,6 +37,9 @@ static int	handle_quote_processing(const char *line, int i,
 	return (0);
 }
 
+/* $? karakterlerini shell'in son çıkış koduyla genişletir.
+** Çıkış kodunu stringe çevirir, expand edilen stringe ekler.
+** İndeksi günceller ve eklenen uzunluğu döndürür. */
 static int	expand_exit_code(t_shell *shell, char *expanded, int *i)
 {
 	char	*exit_str;
@@ -47,6 +57,10 @@ static int	expand_exit_code(t_shell *shell, char *expanded, int *i)
 	return (len);
 }
 
+/* Ortam değişkeninin ismini okur ve değerini genişletir.
+** Karakterin alfanümerik veya altçizgi (_) olduğu sürece isim kabul eder.
+** expand_environment_variable ile değeri expanded stringine ekler
+** ve eklenen uzunluğu döndürür. */
 static int	process_variable_expansion(const char *line, int *i,
 						t_shell *shell, char *expanded)
 {
@@ -60,6 +74,10 @@ static int	process_variable_expansion(const char *line, int *i,
 	return (added_len);
 }
 
+/* $ işaretiyle başlayan genişletme işlemini yönlendirir.
+** $? ise çıkış kodu, $VAR ise değişken genişletilir.
+** Eğer sadece bir $ karakteri ise (sonrasında değişken yoksa),
+** karakter olarak ekler. Eklenen uzunluğu döndürür. */
 static int	dollar_expansion(const char *line, int *i,
 					t_shell *shell, char *expanded)
 {
@@ -79,6 +97,9 @@ static int	dollar_expansion(const char *line, int *i,
 	return (added_len);
 }
 
+/* Heredoc'tan okunan bir satırı tarar ve içindeki değişkenleri genişletip
+** expanded stringine aktarır. Tırnak içindeyse de genişletme yapar
+** (eğer tek tırnakla delimiter belirttiysek bu aşamaya hiç gelinmezdi). */
 void	process_expansion_loop(const char *line, t_shell *shell, char *expanded)
 {
 	char	quote_char;

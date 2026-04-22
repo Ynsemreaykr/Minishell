@@ -3,16 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   parse_path.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 17:36:54 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:23:15 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 17:36:54 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:23:15 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* Ortam değişkenleri üzerinden PATH'in bulunması ve içindeki her bir yolda
+** komut isminin aranmasını sağlayan modül. */
 
 #include "../include/minishell.h"
 #include <unistd.h>
 
+/* envp dizisinde "PATH=" önekiyle başlayan değeri bulur,
+** ':' karakterinden bölerek ft_split yardımıyla klasörleri diziye atar.
+** PATH yoksa (unset edildiyse vs) NULL döner. */
 char	**parse_path(char **envp)
 {
 	int		i;
@@ -34,6 +40,11 @@ char	**parse_path(char **envp)
 	return (ft_split(env_path, ':'));
 }
 
+/* parse_path ile ayrılan tüm klasör yollarının sonuna "/" ve aranılan komutun
+** kendisini strjoin ile birleştire birleştire ilerler (Örn /bin + / + ls).
+** Erişilebilir bir dosya bulunduğunda erişim kodunu geri yollar (0 = bulundu).
+** Tüm klasörler tükendiği halde çalıştırılabilir izne sahip bir komut denk gelmezse
+** -1 döner (Command not found). */
 int	search_in_path(char *command, char **splitted_path, char **full_path)
 {
 	int		i;

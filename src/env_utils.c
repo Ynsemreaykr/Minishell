@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 15:33:45 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:22:09 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 15:33:45 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:22:09 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Ortam değişkeni ekleme, güncelleme ve arama yardımcıları.
+** set_env_var() üst düzey çağrısına destek sağlar. */
+
 #include "../include/minishell.h"
 
+/* "NAME=VALUE" veya sadece "NAME" formatında bir env string oluşturur.
+** value NULL değilse "NAME=VALUE" string'i heap'te oluşturulur.
+** value NULL ise sadece "NAME" string'i oluşturulur (export NAME gibi). */
 static char	*create_env_string(const char *name, const char *value)
 {
 	int		name_len;
@@ -37,6 +43,10 @@ static char	*create_env_string(const char *name, const char *value)
 	return (env_str);
 }
 
+/* Env dizisine yeni bir değişken ekler.
+** Mevcut env dizisi kopyalanarak daha büyük bir dizi oluşturulur,
+** yeni değişken sona eklenir ve eski dizi serbest bırakılır.
+** Başarıda 0, başarısızlıkta -1 döner. */
 static int	add_new_env_var(const char *name, const char *value, t_shell *shell)
 {
 	int		count;
@@ -62,6 +72,9 @@ static int	add_new_env_var(const char *name, const char *value, t_shell *shell)
 	return (0);
 }
 
+/* Env dizisinde belirli bir ismi arar ve dizin numarasını döndürür.
+** Karşılaştırma "NAME=" veya "NAME\0" formatını destekler.
+** Bulunamazsa -1 döner. */
 static int	find_env_index(const char *name, char **env)
 {
 	int		i;
@@ -81,6 +94,10 @@ static int	find_env_index(const char *name, char **env)
 	return (-1);
 }
 
+/* Ortam değişkenini ayarlar veya günceller.
+** Değişken mevcutsa eski değeri serbest bırakıp yenisini yazar.
+** Mevcut değilse add_new_env_var() ile yeni girdi ekler.
+** Başarıda 0, hata durumunda -1 döner. */
 int	set_env_var(const char *name, const char *value, t_shell *shell)
 {
 	int	idx;

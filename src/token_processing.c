@@ -3,15 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   token_processing.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/05 01:55:00 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:23:44 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/09/05 01:55:00 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:23:44 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Token içerik işleme ana modülü.
+** Tırnak ve değişken genişletme mantığının çekirdeği burada yer alır.
+** process_token_content() → process_token_loop() → tüm genişletmeler */
+
 #include "../include/minishell.h"
 
+/* Çift tırnak içindeki içeriği işler.
+** Her karakter için:
+** - $ işareti varsa → değişken genişletme veya literal $ belirlenir
+** - Normal karakter → direkt kopyalanır
+** Kapanış " bulununca i ilerletilir. */
 static char	*process_double_quote(t_proc_ctx *ctx)
 {
 	(*(ctx->i))++;
@@ -41,6 +50,8 @@ static char	*process_double_quote(t_proc_ctx *ctx)
 	return (ctx->processed);
 }
 
+/* Tırnak dışında $? çıkış kodu genişletmesi yapar.
+** ft_itoa ile kod string'e çevrilir, processed tamponuna yazılır. */
 static void	process_exit_status_outside_quotes(t_proc_ctx *ctx)
 {
 	char	*exit_str;
@@ -55,6 +66,12 @@ static void	process_exit_status_outside_quotes(t_proc_ctx *ctx)
 	*(ctx->i) += 2;
 }
 
+/* Tırnak dışında $ işaretini işler:
+** - $" → çift tırnak içine girer (process_double_quote)
+** - $' → tek tırnak içine girer (process_single_quote)
+** - $? → çıkış kodu genişletmesi
+** - $VAR → değişken genişletmesi
+** - $ + diğer → literal $ */
 static char	*process_variable_outside_quotes(t_proc_ctx *ctx)
 {
 	if (*(ctx->i) + 1 < ctx->end
@@ -81,6 +98,12 @@ static char	*process_variable_outside_quotes(t_proc_ctx *ctx)
 	return (ctx->processed);
 }
 
+/* Token işleme döngüsü:
+** Her karakter için:
+** - " → çift tırnak işleme
+** - ' → tek tırnak işleme
+** - $ → değişken işleme (tırnak dışında)
+** - Diğer → max_len sınırı içinde direkt kopyalama */
 static void	process_token_loop(t_proc_ctx *ctx, int max_len)
 {
 	while (*(ctx->i) < ctx->end)
@@ -103,14 +126,20 @@ static void	process_token_loop(t_proc_ctx *ctx, int max_len)
 	}
 }
 
+/* Bir token segmentinin [start, end) aralığındaki içeriğini işler.
+** 1. calculate_required_memory ile gereken tampon boyutu hesaplanır
+** 2. Tampon ayrılır
+** 3. t_proc_ctx yapısı doldurulur
+** 4. process_token_loop ile içerik işlenir
+** 5. NULL sonlandırma yapılır, işlenmiş string döner */
 char	*process_token_content(const char *input,
-			int start, int end, t_shell *shell)
+		int start, int end, t_shell *shell)
 {
-	int				max_len;
-	char			*processed;
-	int				proc_len;
-	int				i;
-	t_proc_ctx		ctx;
+	int			max_len;
+	char		*processed;
+	int			proc_len;
+	int			i;
+	t_proc_ctx	ctx;
 
 	max_len = calculate_required_memory(input, start, end, shell);
 	processed = ft_malloc(max_len);

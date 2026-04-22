@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_check.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 17:36:54 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:23:18 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/28 17:36:54 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:23:18 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* Pipe operatörü sözdizimi doğrulama modülü.
+** Başta/sonda pipe, ardarda pipe ve tırnak içindeki pipe tespiti. */
+
 #include "../include/minishell.h"
 
+/* Belirtilen pozisyonun tırnak içinde olup olmadığını kontrol eder.
+** 0'dan pos'a kadar tırnak durumu takip edilir.
+** Tırnak içinde → 1, dışında → 0 döner. */
 static int	is_in_quotes(const char *input, int pos)
 {
 	int		i;
@@ -38,6 +44,11 @@ static int	is_in_quotes(const char *input, int pos)
 	return (in_quote);
 }
 
+/* Pipe operatörleri sözdizimini doğrular:
+** - Giriş sadece boşluklardan sonra | ile başlıyorsa → hata
+** - Giriş | ile bitiyorsa → hata
+** - İki ardışık tırnak dışı || varsa → hata
+** Geçerli → 1, hatalı → 0 döner. */
 static int	pipe_check(const char *input)
 {
 	int		len;
@@ -67,6 +78,8 @@ static int	pipe_check(const char *input)
 	return (1);
 }
 
+/* Tırnak içindeki pipe'lar hariç gerçek pipe sayısını sayar.
+** count_pipes sonucu split_by_pipes'ta dizi boyutu hesaplamak için kullanılır. */
 int	count_pipes(const char *input)
 {
 	int	pipe_count;
@@ -88,6 +101,8 @@ int	count_pipes(const char *input)
 	return (pipe_count);
 }
 
+/* Girişin pipe sözdizimini doğrular.
+** Geçersizse hata mesajı yazar ve 0 döndürür, geçerliyse 1 döndürür. */
 int	validate_input_and_pipes(const char *input)
 {
 	if (!pipe_check(input))

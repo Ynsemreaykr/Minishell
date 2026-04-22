@@ -3,16 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkayaalp <mkayaalp@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yayiker <yayiker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/30 08:43:06 by mkayaalp          #+#    #+#             */
-/*   Updated: 2025/09/10 10:58:05 by mkayaalp         ###   ########.fr       */
+/*   Created: 2025/08/30 08:43:06 by yayiker           #+#    #+#             */
+/*   Updated: 2025/09/10 10:58:05 by yayiker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* Ortam değişkeni yönetimi ana modülü.
+** Shell başlatıldığında envp'nin kopyalanması, temel env değişkenlerinin
+** ayarlanması ve SHLVL güncellenmesi işlemleri burada yapılır. */
 
 #include "../include/minishell.h"
 #include <unistd.h>
 
+/* envp NULL veya boş geldiğinde temel ortam değişkenlerini ayarlar:
+** - PWD: mevcut çalışma dizini (getcwd ile alınır)
+** - SHLVL: 0 olarak başlatılır (update_shlvl sonra 1 yapar)
+** - _: başlangıç değeri "./minishell"
+** - PATH: sistem PATH'i varsa kopyalanır */
 static void	add_basic_env_vars(t_shell *shell)
 {
 	char	cwd[1024];
@@ -27,6 +36,8 @@ static void	add_basic_env_vars(t_shell *shell)
 		set_env_var("PATH", existing_path, shell);
 }
 
+/* envp dizisindeki tek bir değişkeni shell->env[index]'e kopyalar.
+** ft_malloc ile alan açılır, ft_strcpy ile kopyalanır. */
 static void	copy_env_variable(char **env, char *envp_var, int index)
 {
 	int	len;
@@ -36,6 +47,10 @@ static void	copy_env_variable(char **env, char *envp_var, int index)
 	ft_strcpy(env[index], envp_var);
 }
 
+/* Shell ortam değişkenlerini başlatır.
+** - envp NULL veya boşsa → boş env oluşturur, add_basic_env_vars çağırır.
+** - Aksi hâlde envp'deki tüm değişkenleri shell->env dizisine kopyalar.
+** Dizi NULL ile sonlandırılır (C standart env formatı). */
 void	init_env(char **envp, t_shell *shell)
 {
 	int	count;
@@ -61,6 +76,9 @@ void	init_env(char **envp, t_shell *shell)
 	shell->env[count] = NULL;
 }
 
+/* Verilen ad için env dizisinde değerini arar ve döndürür.
+** "NAME=VALUE" formatındaki dizeden VALUE kısmını pointer olarak verir.
+** Bulunamazsa NULL döner. */
 char	*get_env_var(const char *name, t_shell *shell)
 {
 	int	name_len;
@@ -80,6 +98,10 @@ char	*get_env_var(const char *name, t_shell *shell)
 	return (NULL);
 }
 
+/* SHLVL ortam değişkenini bir artırır.
+** Mevcut değer okunur (get_env_var), integer'a çevrilir, 1 eklenir,
+** tekrar string'e çevrilerek (ft_itoa) set_env_var ile kaydedilir.
+** Negatif değer sıfırlanır. */
 void	update_shlvl(t_shell *shell)
 {
 	char	*shlvl_str;
